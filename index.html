@@ -1,0 +1,57 @@
+<!-- Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license. -->
+<!-- See LICENSE in the project root for license information -->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Makesbridge Sales Assistance</title>
+
+    <!-- Office JavaScript API -->
+    <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.debug.js"></script>
+
+    <!-- LOCAL -->
+    <link rel="stylesheet" href="node_modules/office-ui-fabric-js/dist/css/fabric.min.css" />
+    <link rel="stylesheet" href="node_modules/office-ui-fabric-js/dist/css/fabric.components.css" />
+
+    <link href="app.css" rel="stylesheet" type="text/css" />
+    <script src="https://localhost:1337/vorlon.js"></script>
+</head>
+
+<body class="ms-font-m ms-welcome">
+
+    <article class="login-wrap">
+        <div class="mksph_wrapper mksph_login_wrap">
+            <h2>Log In</h2>
+            <div class="mksph_cardbox">
+                <form>
+                    <input type="text" id="username" name="username" placeholder="Enter your username" value="">
+                    <input type="password" id="password" name="password" placeholder="Enter your password" value="">
+                    <button name="submit" type="button" class="mksph_login_btn mksph-pull-right ripple" id="submitForm">Login</button>
+                </form>
+            </div>
+        </div>
+    </article>
+    <main class="ms-welcome__main" style="display:none;">
+            <header class="ms-welcome__header ms-bgColor-neutralLighter ms-u-fadeIn500">
+                    <h1 class="ms-fontSize-su ms-fontWeight-light ms-fontColor-neutralPrimary">Hello Umair</h1>
+                </header>
+        <h2 class="ms-font-xl ms-fontWeight-semilight emailsfound ms-fontColor-neutralPrimary ms-u-slideUpIn20"> 0 Email Found </h2>
+        <div class="emails">
+          <ul>
+          </ul>
+        </div>
+        <div id="error">Error</div>
+    </main>
+
+    <script type="text/javascript" src="node_modules/core-js/client/core.js"></script>
+    <script type="text/javascript" src="node_modules/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="node_modules/office-ui-fabric-js/dist/js/fabric.js"></script>
+
+    <script type="text/javascript" src="app.js"></script>
+</body>
+
+</html>
