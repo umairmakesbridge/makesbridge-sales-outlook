@@ -184,7 +184,7 @@ Login form CSS
      margin-bottom: 10px;
     }
    .s_contact_found_wraper {
-     padding: 8px 18px 0px;
+     /* padding: 8px 18px 0px; */
     }
     .total-count-head {
     color: rgb(116, 133, 146);
@@ -317,6 +317,9 @@ Login form CSS
     margin-bottom: 30px;
 }
 
+.hide{
+  display: none !important;
+}
 
 /*================================================
         Color Pallete
@@ -489,12 +492,21 @@ Login form CSS
    }
 
    .alignloadingClass .spinner {
-       margin: 80px auto 0;
+       margin: 0px auto 0;
    }
    /*Ends of spinner*/
    /*================================================
        Clickers,Visitors,Contacts Switch Styling
    =================================================*/
+   .searchBar h2 {
+    font-weight: 100;
+    font-size: 18px;
+    line-height: 28px;
+    display: inline-block;
+    }
+    .searchBar input{
+      width: 90%;
+    }
    .last24{
        position: relative;
        top: 3px;

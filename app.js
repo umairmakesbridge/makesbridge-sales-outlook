@@ -141,6 +141,7 @@
                 $(this).addClass('active');
                 $('.mksSearchEmail').val('');
                 $('.searched_results_wrap').hide();
+                $('.searched_results_wrap .search_results_single_value').html('');
            });
          }
          return {
@@ -209,6 +210,15 @@
                               var password = $('#password').val();
                               loginAjaxCall({url:baseObject.baseUrl,username:username,password:password});
                             });
+
+                            $('#usernae,#password').keypress(function(event){
+                              if(event.which==13){
+                                commonModule.showLoadingMask({message:"Logging user...",container : '.mksph_login_wrap'});
+                                var username = $('#username').val();
+                                var password = $('#password').val();
+                                loginAjaxCall({url:baseObject.baseUrl,username:username,password:password});
+                              }
+                            })
                           };
 
                           return {
