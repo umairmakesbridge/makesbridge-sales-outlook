@@ -22,12 +22,13 @@
 </head>
 
 <body class="ms-font-m ms-welcome">
-
-    <article class="login-wrap">
+      <h2>Username : <span class="userName"></span></h2>
+      <article class="login-wrap">
         <div class="mksph_wrapper mksph_login_wrap">
             <h2>Log In</h2>
             <div class="mksph_cardbox">
                 <form>
+
                     <input type="text" id="username" name="username" placeholder="Enter your username" value="">
                     <input type="password" id="password" name="password" placeholder="Enter your password" value="">
                     <button name="submit" type="button" class="mksph_login_btn mksph-pull-right ripple" id="submitForm">Login</button>
@@ -36,14 +37,97 @@
         </div>
     </article>
     <main class="ms-welcome__main" style="display:none;">
-            <header class="ms-welcome__header ms-bgColor-neutralLighter ms-u-fadeIn500">
+            <!-- <header class="ms-welcome__header ms-bgColor-neutralLighter ms-u-fadeIn500">
                     <h1 class="ms-fontSize-su ms-fontWeight-light ms-fontColor-neutralPrimary">Hello Umair</h1>
-                </header>
-        <h2 class="ms-font-xl ms-fontWeight-semilight emailsfound ms-fontColor-neutralPrimary ms-u-slideUpIn20"> 0 Email Found </h2>
-        <div class="emails">
-          <ul>
-          </ul>
+
+                </header> -->
+        <div class="s_contact_found_wraper plc_marginbottom10 email_found_in_message">
+          <h2 class="total-count-head">
+            <strong class="badge total-count">0</strong>
+            <span class="total-text">emails found on page</span>
+          </h2>
+          <div class="custom-scroll " style="height: 188px;">
+            <div class="outer-container" style="height: 100%;">
+              <div class="custom-scrollbar">
+                <div class="custom-scroll-handle" style="height: 188px; top: 0px; display: none;">
+                  <div class="inner-handle"></div>
+                </div>
+              </div>
+              <div class="inner-container" style="height: 100%;">
+                <div class="content-wrapper" style="height: 100%; overflow-y: visible;">
+                  <div class="list_contact_found_wraper emails_lists_from_body">
+
+                    <div class="clr"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+        <!-- Search Section -->
+        <div class="s_contact_found_wraper">
+          <div class="top-header contact_found">
+            <span class="click-label">Last 24 hrs: </span>
+            <ul class="last24">
+              <li class="click_default ">
+                <span class="pclr23 badge">0</span>
+                Clickers
+              </li>
+              <li class="click_default ">
+                <span class="pclr19 badge">0</span>
+                Visitors
+              </li>
+            </ul>
+          </div>
+          <div class="container">
+            <div class="plc_marginbottom30"></div>
+          </div>
+          <div class="container">
+            <div class="searchBar">
+              <div class="YesF" style="width:150px;"></div>
+              <p>Open an email or search for a contact on Makesbridge</p>
+              <h2>Search</h2>
+              <div class="contacts-switch">
+                <div class="status_tgl">
+                  <a class="published toggletags active showtooltip">
+                    <i class="togglecontact-icon"></i>
+                    Contacts
+                  </a>
+                  <a class="draft toggletags showtooltip">
+                    <i class="toggletag-icon"></i>
+                    Tags
+                  </a>
+                </div>
+              </div>
+              <input type="text" placeholder="Enter name or email" class="mksSearchEmail" value="">
+              <span class="show mksph_icon_search" aria-hidden="true" data-icon="" style="cursor: pointer;"></span>
+              <span class="hide mksicon-Close" aria-hidden="true" style="cursor: pointer;"></span>
+            </div>
+            <div class="searched_results_wrap" style="display:none;">
+              <h2 class="total-count-head">
+                <strong class="badge total-count"></strong>
+                <span class="total-text"></span>
+              </h2>
+              <div class="custom-scroll " style="height: 188px;">
+                <div class="outer-container" style="height: 100%;">
+                  <div class="custom-scrollbar">
+                    <div class="custom-scroll-handle" style="height: 87.0542px; top: 0px; display: block;">
+                      <div class="inner-handle"></div>
+                    </div>
+                  </div>
+                  <div class="inner-container" style="height: 100%;">
+                    <div class="content-wrapper" style="height: 100%; overflow-y: visible;">
+                      <div class="plc_marginbottom30 search_results_single_value">
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </div>
+        <!-- End Search Section -->
         <div id="error">Error</div>
     </main>
 
