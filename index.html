@@ -18,6 +18,8 @@
     <link rel="stylesheet" href="node_modules/office-ui-fabric-js/dist/css/fabric.components.css" />
 
     <link href="app.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/plugin_font_icon.css" rel="stylesheet" type="text/css" />
+    <link href="app.css" rel="stylesheet" type="text/css" />
     <script src="https://localhost:1337/vorlon.js"></script>
 </head>
 
@@ -41,29 +43,30 @@
                     <h1 class="ms-fontSize-su ms-fontWeight-light ms-fontColor-neutralPrimary">Hello Umair</h1>
 
                 </header> -->
-        <div class="s_contact_found_wraper plc_marginbottom10 email_found_in_message">
+
+
+        <div class="s_contact_found_wraper plc_marginbottom10 email_found_in_message" style="">
           <h2 class="total-count-head">
             <strong class="badge total-count">0</strong>
             <span class="total-text">emails found on page</span>
           </h2>
-          <div class="custom-scroll " style="height: 188px;">
+          <div class="custom-scroll " >
             <div class="outer-container" style="height: 100%;">
               <div class="custom-scrollbar">
-                <div class="custom-scroll-handle" style="height: 188px; top: 0px; display: none;">
+                <div class="custom-scroll-handle" style="top: 0px; display: block;">
                   <div class="inner-handle"></div>
                 </div>
               </div>
               <div class="inner-container" style="height: 100%;">
                 <div class="content-wrapper" style="height: 100%; overflow-y: visible;">
-                  <div class="list_contact_found_wraper emails_lists_from_body">
+                  <div class="plc_marginbottom30 emails_lists_from_body">
 
-                    <div class="clr"></div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
         <!-- Search Section -->
         <div class="s_contact_found_wraper">
           <div class="top-header contact_found hide">
@@ -99,9 +102,14 @@
                   </a>
                 </div>
               </div>
+              <div>
               <input type="text" placeholder="Enter name or email" class="mksSearchEmail" value="">
-              <span class="show mksph_icon_search" aria-hidden="true" data-icon="" style="cursor: pointer;"></span>
-              <span class="hide mksicon-Close" aria-hidden="true" style="cursor: pointer;"></span>
+
+              <span class="show mksph_icon_search" aria-hidden="true" data-icon="&#xe903;" style="cursor: pointer;position:relative;float:right;top:-35px;right:15px;"></span>
+
+              <span class="hide mksicon-Close" aria-hidden="true" data-icon="&#xe915;" style="cursor: pointer;position:relative;float:right;top:-35px;right:15px;"></span>
+            </div>
+
             </div>
             <div class="searched_results_wrap" style="display:none;">
               <h2 class="total-count-head">

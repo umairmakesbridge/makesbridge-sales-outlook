@@ -29,6 +29,7 @@
                        <div class="cf_email">
                          <p>`+item.sender.emailAddress+`</p>
                        </div>
+                     </div>
                      </div>`;
        emailCount = emailCount + 1;
 
@@ -36,14 +37,14 @@
        for (var i=0;i <toEmail.length;i++){
           emailsHTML +=`<div class="contact_found ripple">
                           <div class="cf_silhouette">
-                            <div class="cf_silhouette_text c_txt_s"><p>`+toEmail[i].emailAddress.charAt(0)+`</p>
-                            </div>
+                            <div class="cf_silhouette_text c_txt_s"><p>`+toEmail[i].emailAddress.charAt(0)+`</p></div>
                         </div>
                         <div class="cf_email_wrap">
                           <div class="cf_email">
                             <p>`+toEmail[i].emailAddress+`</p>
                           </div>
-                        </div>`;
+                        </div>
+                      </div>`;
           emailCount = emailCount + 1;
        }
 
@@ -81,60 +82,78 @@
        /*-----------Common Event Attach-------------*/
        var attachedEvents = (function(){
          var attachedSearchMks = function(params){
+           $('.mksph_icon_search').click(function(event){
+              // $('.YesF').html($('.mksSearchEmail').val())
+              if($('.mksSearchEmail').val())
+                  searchContact($('.mksSearchEmail').val());
+                  $('.mksicon-Close').removeClass('hide');
+                  $(this).addClass('hide');
+           });
+           $('.mksicon-Close').click(function(event){
+             $('.mksph_icon_search').removeClass('hide');
+             $(this).addClass('hide');
+             $('.mksSearchEmail').val('');
+             $('.searched_results_wrap').hide();
+             $('.searched_results_wrap .search_results_single_value').html('');
+           });
            $('.mksSearchEmail').keypress(function(event){
               if(event.which == 13){
-
-                if($('.toggletags').text().toLowerCase()=="tags"){
-                  var searchUrl = baseObject.baseUrl+'/io/subscriber/getData/?BMS_REQ_TK='
-                                  + baseObject.users_details[0].bmsToken +'&type=getSAMSubscriberList&offset=0&searchTag='
-                                  +event.currentTarget.value+'&orderBy=lastActivityDate&ukey='+baseObject.users_details[0].userKey
-                                  +'&isMobileLogin=Y&userId='+baseObject.users_details[0].userId;
-                }else{
-                  var searchUrl = baseObject.baseUrl+'/io/subscriber/getData/?BMS_REQ_TK='
-                                  + baseObject.users_details[0].bmsToken +'&type=getSAMSubscriberList&offset=0&searchValue='
-                                  +event.currentTarget.value+'&orderBy=lastActivityDate&ukey='+baseObject.users_details[0].userKey
-                                  +'&isMobileLogin=Y&userId='+baseObject.users_details[0].userId;
-                }
-                commonModule.showLoadingMask({message:"Search contact...",container : '.searchBar'});
-                $.ajax({
-                      url:searchUrl,
-                      type:"GET",
-                      success: function(data){
-                        try{
-                          var result = JSON.parse(data)
-                          $('.searched_results_wrap .total-count-head .total-count').html(result.totalCount);
-                          $('.searched_results_wrap .total-count-head .total-text').html(`Contacts found containing text '`+event.currentTarget.value+`'`);
-                          $.each(result.subscriberList[0],function(key,value){
-
-                            $('.search_results_single_value').append(`<div class="contact_found ripple">
-                              <div class="cf_silhouette">
-                                <div class="cf_silhouette_text c_txt_s">
-                                  <p>`+value[0].email.charAt(0)+`</p>
-                                </div>
-                                </div>
-                                <div class="cf_email_wrap">
-                                  <div class="cf_email">
-                                    <p>`+value[0].email+`</p>
-                                    <span class="ckvwicon"></span>
-                                  </div>
-                                </div>
-                                <div class="clr"></div>
-                              </div>`);
-                            // console.log(value['subscriber'+(key+1)][0])
-                          });
-                          commonModule.hideLoadingMask();
-                          $('.searched_results_wrap').show();
-                        }catch(e){
-                          $("#error").html('Search Ajax Wrong');
-                        }
-
-
-                      }
-                    });
+                $('.mksicon-Close').removeClass('hide');
+                 $('.mksph_icon_search').addClass('hide');
+                searchContact(event.currentTarget.value);
               }
            });
          }
+         var searchContact = function(value){
+           if($('.toggletags').text().toLowerCase()=="tags"){
+             var searchUrl = baseObject.baseUrl+'/io/subscriber/getData/?BMS_REQ_TK='
+                             + baseObject.users_details[0].bmsToken +'&type=getSAMSubscriberList&offset=0&searchTag='
+                             +value+'&orderBy=lastActivityDate&ukey='+baseObject.users_details[0].userKey
+                             +'&isMobileLogin=Y&userId='+baseObject.users_details[0].userId;
+           }else{
+             var searchUrl = baseObject.baseUrl+'/io/subscriber/getData/?BMS_REQ_TK='
+                             + baseObject.users_details[0].bmsToken +'&type=getSAMSubscriberList&offset=0&searchValue='
+                             +value+'&orderBy=lastActivityDate&ukey='+baseObject.users_details[0].userKey
+                             +'&isMobileLogin=Y&userId='+baseObject.users_details[0].userId;
+           }
+           commonModule.showLoadingMask({message:"Search contact...",container : '.searchBar'});
+           $.ajax({
+                 url:searchUrl,
+                 type:"GET",
+                 success: function(data){
+                   try{
+                     var result = JSON.parse(data)
+                     $('.searched_results_wrap .total-count-head .total-count').html(result.totalCount);
+                     $('.searched_results_wrap .total-count-head .total-text').html(`Contacts found containing text '`+value+`'`);
+                     $('.search_results_single_value').html('');
+                     $.each(result.subscriberList[0],function(key,value){
 
+                       $('.search_results_single_value').append(`<div class="contact_found ripple">
+                         <div class="cf_silhouette">
+                           <div class="cf_silhouette_text c_txt_s">
+                             <p>`+value[0].email.charAt(0)+`</p>
+                           </div>
+                           </div>
+                           <div class="cf_email_wrap">
+                             <div class="cf_email">
+                               <p>`+value[0].email+`</p>
+                               <span class="ckvwicon"></span>
+                             </div>
+                           </div>
+                           <div class="clr"></div>
+                         </div>`);
+                       // console.log(value['subscriber'+(key+1)][0])
+                     });
+                     commonModule.hideLoadingMask();
+                     $('.searched_results_wrap').show();
+                   }catch(e){
+                     $("#error").html('Search Ajax Wrong');
+                   }
+
+
+                 }
+               });
+         }
          var switchContactsTags = function(){
            $('.toggletags').on("click",function(){
                 $('.toggletags').removeClass('active');

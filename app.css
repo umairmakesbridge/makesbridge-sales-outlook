@@ -210,11 +210,12 @@ Login form CSS
         line-height: 42px;
     }
     .contact_found {
-        background: rgb(255, 255, 255);
-        padding: 10px 12px;
+        background: #fff;
+        padding: 10px 0px 5px;
         border-radius: 2px;
+        display: block;
         border-bottom: 1px solid rgb(248, 248, 251);
-        border-top: 1px solid rgb(248, 248, 251);
+        /* border-top: 1px solid rgb(248, 248, 251); */
     }
 
     /*==========================
@@ -519,7 +520,7 @@ Login form CSS
        color: rgb(185, 194, 201);
        font-weight: 100;
        font-size: 12px;
-       margin-bottom: 5px;
+       margin-bottom: 0px;
        position: relative;
    }
    .plc_marginbottom30{
