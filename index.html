@@ -28,6 +28,7 @@
       <article class="login-wrap">
         <div class="mksph_wrapper mksph_login_wrap">
             <h2>Log In</h2>
+            <div class="debugLoginDiv"  style="width:280px;overflow-x:auto;"></div>
             <div class="mksph_cardbox">
                 <form>
 
@@ -39,102 +40,681 @@
         </div>
     </article>
     <main class="ms-welcome__main" style="display:none;">
-            <!-- <header class="ms-welcome__header ms-bgColor-neutralLighter ms-u-fadeIn500">
-                    <h1 class="ms-fontSize-su ms-fontWeight-light ms-fontColor-neutralPrimary">Hello Umair</h1>
+           <header class="ms-welcome__header ms-bgColor-neutralLighter ms-u-fadeIn500">
+                    <h1 class="ms-fontSize-su ms-fontWeight-light ms-fontColor-neutralPrimary debugDiv " style="width:280px;overflow-x:auto;">
+                    </h1>
 
-                </header> -->
+                </header>
 
-
-        <div class="s_contact_found_wraper plc_marginbottom10 email_found_in_message" style="">
-          <h2 class="total-count-head">
-            <strong class="badge total-count">0</strong>
-            <span class="total-text">emails found on page</span>
-          </h2>
-          <div class="custom-scroll " >
-            <div class="outer-container" style="height: 100%;">
-              <div class="custom-scrollbar">
-                <div class="custom-scroll-handle" style="top: 0px; display: block;">
-                  <div class="inner-handle"></div>
-                </div>
-              </div>
-              <div class="inner-container" style="height: 100%;">
-                <div class="content-wrapper" style="height: 100%; overflow-y: visible;">
-                  <div class="plc_marginbottom30 emails_lists_from_body">
-
-                    </div>
+        <div class="mks_wrap_step2 hide">
+          <div class="s_contact_found_wraper plc_marginbottom10 email_found_in_message" style="">
+            <h2 class="total-count-head">
+              <strong class="badge total-count">0</strong>
+              <span class="total-text">emails found on page</span>
+            </h2>
+            <div class="custom-scroll " >
+              <div class="outer-container" style="height: 100%;">
+                <div class="custom-scrollbar">
+                  <div class="custom-scroll-handle" style="top: 0px; display: block;">
+                    <div class="inner-handle"></div>
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
-        <!-- Search Section -->
-        <div class="s_contact_found_wraper">
-          <div class="top-header contact_found hide">
-            <span class="click-label">Last 24 hrs: </span>
-            <ul class="last24">
-              <li class="click_default ">
-                <span class="pclr23 badge">0</span>
-                Clickers
-              </li>
-              <li class="click_default ">
-                <span class="pclr19 badge">0</span>
-                Visitors
-              </li>
-            </ul>
-          </div>
-          <div class="container">
-            <div class="plc_marginbottom30"></div>
-          </div>
-          <div class="container">
-            <div class="searchBar">
-              <div class="YesF" style="width:150px;"></div>
-              <p class="plc_marginbottom10">Open an email or search for a contact on Makesbridge</p>
-              <h2>Search</h2>
-              <div class="contacts-switch">
-                <div class="status_tgl">
-                  <a class="published toggletags active showtooltip">
-                    <i class="togglecontact-icon"></i>
-                    Contacts
-                  </a>
-                  <a class="draft toggletags showtooltip">
-                    <i class="toggletag-icon"></i>
-                    Tags
-                  </a>
-                </div>
-              </div>
-              <div>
-              <input type="text" placeholder="Enter name or email" class="mksSearchEmail" value="">
+                <div class="inner-container" style="height: 100%;">
+                  <div class="content-wrapper" style="height: 100%; overflow-y: visible;">
+                    <div class="plc_marginbottom30 emails_lists_from_body">
 
-              <span class="show mksph_icon_search" aria-hidden="true" data-icon="&#xe903;" style="cursor: pointer;position:relative;float:right;top:-35px;right:15px;"></span>
-
-              <span class="hide mksicon-Close" aria-hidden="true" data-icon="&#xe915;" style="cursor: pointer;position:relative;float:right;top:-35px;right:15px;"></span>
-            </div>
-
-            </div>
-            <div class="searched_results_wrap" style="display:none;">
-              <h2 class="total-count-head">
-                <strong class="badge total-count"></strong>
-                <span class="total-text"></span>
-              </h2>
-              <div class="custom-scroll " >
-                <div class="outer-container" style="height: 100%;">
-                  <div class="custom-scrollbar">
-                    <div class="custom-scroll-handle" style="top: 0px; display: block;">
-                      <div class="inner-handle"></div>
-                    </div>
-                  </div>
-                  <div class="inner-container" style="height: 100%;">
-                    <div class="content-wrapper" style="height: 100%; overflow-y: visible;">
-                      <div class="plc_marginbottom30 search_results_single_value">
-
-                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
+            </div>
+          <!-- Search Section -->
+
+          <div class="s_contact_found_wraper">
+            <div class="top-header contact_found hide">
+              <span class="click-label">Last 24 hrs: </span>
+              <ul class="last24">
+                <li class="click_default ">
+                  <span class="pclr23 badge">0</span>
+                  Clickers
+                </li>
+                <li class="click_default ">
+                  <span class="pclr19 badge">0</span>
+                  Visitors
+                </li>
+              </ul>
+            </div>
+            <div class="container">
+              <div class="plc_marginbottom30"></div>
+            </div>
+            <div class="container">
+              <div class="searchBar">
+                <div class="YesF" style="width:150px;"></div>
+                <p class="plc_marginbottom10">Open an email or search for a contact on Makesbridge</p>
+                <h2>Search</h2>
+                <div class="contacts-switch">
+                  <div class="status_tgl">
+                    <a class="published toggletags active showtooltip">
+                      <i class="togglecontact-icon"></i>
+                      Contacts
+                    </a>
+                    <a class="draft toggletags showtooltip">
+                      <i class="toggletag-icon"></i>
+                      Tags
+                    </a>
+                  </div>
+                </div>
+                <div>
+                <input type="text" placeholder="Enter name or email" class="mksSearchEmail" value="">
+
+                <span class="show mksph_icon_search" aria-hidden="true" data-icon="&#xe903;" style="cursor: pointer;position:relative;float:right;top:-35px;right:15px;"></span>
+
+                <span class="hide mksicon-Close" aria-hidden="true" data-icon="&#xe915;" style="cursor: pointer;position:relative;float:right;top:-35px;right:15px;"></span>
+              </div>
+
+              </div>
+              <div class="searched_results_wrap" style="display:none;">
+                <h2 class="total-count-head">
+                  <strong class="badge total-count"></strong>
+                  <span class="total-text"></span>
+                </h2>
+                <div class="custom-scroll " >
+                  <div class="outer-container" style="height: 100%;">
+                    <div class="custom-scrollbar">
+                      <div class="custom-scroll-handle" style="top: 0px; display: block;">
+                        <div class="inner-handle"></div>
+                      </div>
+                    </div>
+                    <div class="inner-container" style="height: 100%;">
+                      <div class="content-wrapper" style="height: 100%; overflow-y: visible;">
+                        <div class="plc_marginbottom30 search_results_single_value">
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
           </div>
-        </div>
+
+        </div><!-- Ends : Mks Plugin Step 2 -->
+
+        <!-- Mks Plugin Step 3 -->
+        <div class="mks_wrap_step3 hide">
+
+              <!--
+              =================================
+              Create Subscriber Wraps
+              =================================
+              -->
+              <div class="s_contact_found_wraper new_contact_true suppress_ hide">
+                    <div>
+                      <span class="create_slider">
+                        <div class="scf_option">
+                          <div class="scf_option_control one">
+                            <div class="scf_option_panel">
+                              <div class="scf_o_left">
+                                <div class="scf_o_gear_w ripple">
+                                  <a href="#">
+                                    <div class="scf_o_gear" aria-hidden="true" data-icon=""></div>
+                                  </a>
+                                </div>
+                              </div>
+                              <div class="scf_o_right">
+                                <ul>
+                                  <li class="wrap_scf_o_create_contact">
+                                    <div class="scf_option_icon createNewBtn ripple">
+                                      <a href="#">
+                                        <div class="wrap_scf_o_i">
+                                          <div class="wrap_scf_o_i_md">
+                                            <div class="scf_o_icon scf_o_edit" aria-hidden="true" data-icon=""></div>
+                                            <p class="scf_o_txt">Create</p>
+                                          </div>
+                                        </div>
+                                      </a>
+                                    </div>
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="s_contact_found">
+                            <div class="scf_silhouette">
+                              <div class="scf_silhouette_text">
+                                <p>b</p>
+                              </div>
+                            </div>
+                            <div class="scf_email_wrap">
+                              <div class="scf_email">
+
+                                <div class="clr"></div>
+                                <span>billing@careem.com</span>
+                              </div>
+                            </div>
+                            <div class="clr"></div>
+                          </div>
+                        </div>
+                      </span>
+                      <span class="mks_createContact_" style="display: none;">
+                        <div class="scf_option">
+                          <div class="s_contact_found">
+                            <div class="scf_silhouette">
+                              <div class="scf_silhouette_text">
+                                <p>b</p>
+                              </div>
+                            </div>
+                            <div class="scf_email_wrap">
+                              <div class="scf_email">
+                                <p>billing@careem.com</p>
+                              </div>
+                            </div>
+                            <div class="clr"></div>
+                          </div>
+                        </div>
+                        <div class="s_contact_found_edit_wraper">
+                          <div class="s_contact_found_edit">
+                            <div class="scfe_field height90 height100 ">
+                              <input name="firstName" placeholder="First Name" id="firstName">
+                              <input name="lastName" placeholder="Last Name">
+                              <input name="company" placeholder="Company">
+                              <input name="telephone" placeholder="Telephone">
+                              <input name="city" placeholder="City">
+                              <input name="state" placeholder="State">
+                              <input name="address1" placeholder="Address1">
+                              <input name="jobStatus" placeholder="Job Status">
+                              <input name="salesRep" placeholder="Sales Rep">
+                              <input name="salesStatus" placeholder="Sales Status">
+                              <input name="birthDate" placeholder="Birth Date">
+                              <input name="areaCode" placeholder="Area Code">
+                              <input name="country" placeholder="Country">
+                              <input name="zip" placeholder="Zip">
+                              <input name="address2" placeholder="Address 2">
+                              <input name="industry" placeholder="Industry">
+                              <input name="source" placeholder="Source">
+                              <input name="occupation" placeholder="Occupation">
+                            </div>
+                            <div class="expand">
+                              <span>Click to expand</span>
+                              <span class="mksicon-ArrowNext"></span>
+                            </div>
+                            <div class="new_custom_field_wraps">
+                              <h4 class="hide">Custom Fields</h4>
+                            </div>
+                            <div class="scfe_control_option">
+                              <div class="scfe_close_wrap">
+                                <a class="scfe_c_ach" href="#">
+                                  <div class="scfe_close_t scfe_close_basic_top_wrap">
+                                    <span>Close</span>
+                                  </div>
+                                  <div class="scfe_close_i_md">
+                                    <div class="scfe_close_i" aria-hidden="true" data-icon=""></div>
+                                  </div>
+                                </a>
+                              </div>
+                              <div class="scfe_save_wrap disable_false">
+                                <a class="scfe_ach" href="#">
+                                  <div class="scfe_save_t saveNewContact"><span>Save</span></div>
+                                  <div class="scfe_save_i_md">
+                                    <div class="scfe_save_i" aria-hidden="true" data-icon=""></div>
+                                  </div>
+                                </a>
+                              </div>
+                              <div class="disable_false cfe_add_customField">
+                                <a class="scfe_ach" href="#">
+                                  <div class="scfe_save_t">
+                                    <span>Add Custom Field</span>
+                                  </div>
+                                </a>
+                              </div>
+                              <div class="clr"></div>
+                            </div>
+                          </div>
+                        </div>
+                        <span class="addBox_wrapper_container_dialog" style="display: none;">
+                          <div class="addBox_wrapper_container scfe_field">
+                            <h2>Add New Custom Field</h2>
+                            <div class="addBox_input_wrappers">
+                              <input type="text" name="ckey" value="" id="input1" class="focusThis requiredInput" data-required="required" placeholder="Enter field name*">
+                              <input type="text" name="cvlaue" value="" id="input2" class="" placeholder="Enter Value">
+                              <div class="scfe_control_option">
+                                <div class="scfe_close_wrap scfe_close_newcf_dom">
+                                  <a class="scfe_c_ach" href="#">
+                                    <div class="scfe_close_t"><span>Close</span></div>
+                                    <div class="scfe_close_i_md">
+                                      <div class="scfe_close_i" aria-hidden="true" data-icon=""></div>
+                                    </div>
+                                  </a>
+                                </div>
+                                <div class="scfe_save_wrap scfe_add_newcf_dom disable_false">
+                                  <a class="scfe_ach" href="#">
+                                    <div class="scfe_save_t"><span>Save</span>
+                                    </div>
+                                    <div class="scfe_save_i_md">
+                                      <div class="scfe_save_i" aria-hidden="true" data-icon=""></div>
+                                    </div>
+                              </a>
+                            </div>
+                            <div class="clr"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="OverLay"></div>
+                    </span>
+                  </span>
+                </div>
+              </div> <!-- Ends : Create New Contact Wraps -->
+
+              <div class="scf_tab_wrap create_new_contact_card hide">
+                <div class="scf_tab">
+                    <div class="tab_content_wrap">
+                      <span>
+                        <div class="contacts-wrap">
+                          <div id="NoContact" class="tabcontent mksph_cardbox show">
+                            <h3>Contact</h3>
+                            <p class="not-found">Contact not found on Makesbridge</p>
+                            <button type="button" class="mksph_create_contact ripple">Create</button>
+                          </div>
+                        </div>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <!--
+                =================================
+                Edit Subscriber Wraps
+                =================================
+                -->
+                <div class="s_contact_found_wraper new_contact_false hide suppress_U">
+                  <div>
+                    <span>
+                      <div class="scf_option">
+                        <div class="scf_option_control one">
+                          <div class="scf_option_panel">
+                            <div class="scf_o_left">
+                              <div class="scf_o_gear_w ripple">
+                                <a href="#">
+                                  <div class="scf_o_gear" aria-hidden="true" data-icon=""></div>
+                                </a>
+                              </div>
+                            </div>
+
+                            <div class="scf_o_right">
+                              <ul>
+                                <li>
+                                  <div class="scf_option_icon ripple">
+                                    <a href="#">
+                                      <div class="wrap_scf_o_i">
+                                        <div class="wrap_scf_o_i_md">
+                                          <div class="scf_o_icon scf_o_edit" aria-hidden="true" data-icon=""></div>
+                                          <p class="scf_o_txt">Edit</p>
+                                        </div>
+                                      </div>
+                                    </a>
+                                  </div>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="s_contact_found">
+                          <div class="scf_silhouette">
+                            <div class="scf_silhouette_text"><p>a</p></div>
+                          </div>
+                          <div class="scf_email_wrap edit_top_slider_title">
+                            <div class="scf_email">
+                              <span></span>&nbsp;
+                              <span></span>
+                              <div class="clr"></div>
+                              <span></span>
+                            </div>
+                          </div>
+                          <div class="clr"></div>
+                        </div>
+                      </div>
+                    </span>
+                  </div>
+                    <div class="hide SuppressNotify messagebox info animated">
+                      <p>This account has been<strong>Suppressed</strong></p>
+                    </div>
+
+
+                <div class="top-header contact_found top_managerLists_wrappers">
+                  <div class="scf_o_right">
+                    <ul class="top_manager_ul_wraps six">
+                      <li data-tip="Add to Sequence" currentitem="false">
+                        <div class="scf_option_icon ripple top_manage_lists">
+                          <a href="#" style="text-decoration: unset;">
+                            <div class="wrap_scf_o_i">
+                              <div class="wrap_scf_o_i_md" style="padding: 3px 0px 0px;">
+                                <div class="scf_o_icon scf_o_edit mksicon-act_workflow mks_manageList_wrap">
+                                </div>
+                              </div>
+                            </div>
+                          </a>
+                        </div></li>
+                        <li data-tip="Manage list subscription" currentitem="false">
+                          <div class="scf_option_icon ripple top_manage_lists">
+                            <a href="#" style="text-decoration: unset;">
+                              <div class="wrap_scf_o_i">
+                                <div class="wrap_scf_o_i_md">
+                                  <div class="scf_o_icon scf_o_edit mksicon-ManageLists mks_manageList_wrap"></div>
+                                </div>
+                              </div>
+                            </a>
+                          </div>
+                        </li>
+                        <li data-tip="Add to list" currentitem="false">
+                          <div class="scf_option_icon ripple top_manage_lists">
+                            <a href="#" style="text-decoration: unset;">
+                              <div class="wrap_scf_o_i">
+                                <div class="wrap_scf_o_i_md">
+                                  <div class="scf_o_icon scf_o_edit  mksicon-Addlist mks_manageList_wrap"></div></div></div>
+                                </a>
+                              </div>
+                            </li>
+                            <li data-tip="Suppress contact" currentitem="false">
+                              <div class="scf_option_icon ripple top_manage_lists">
+                                <a href="#" style="text-decoration: unset;">
+                                  <div class="wrap_scf_o_i">
+                                    <div class="wrap_scf_o_i_md" style="padding: 3px 0px 0px;">
+                                      <div class="scf_o_icon scf_o_edit mksicon-User1 mks_manageList_wrap"></div>
+                                    </div>
+                                  </div>
+                                </a>
+                              </div>
+                            </li>
+                            <li data-tip="Course Correct" class="mks_cc_li_wrap " currentitem="false">
+                              <div class="scf_option_icon ripple top_manage_lists">
+                                <a href="#" style="text-decoration: unset;">
+                                  <div class="wrap_scf_o_i">
+                                    <div class="wrap_scf_o_i_md">
+                                      <div class="scf_o_icon scf_o_edit mksicon-course_correct mks_manageList_wrap"></div>
+                                    </div>
+                                  </div></a>
+                                </div>
+                              </li>
+                              <li data-tip="Add to Salesforce" class="show show sf_icons mks_hideRightBorder" currentitem="false">
+                                <div class="scf_option_icon ripple top_manage_lists">
+                                  <a href="#" style="text-decoration: unset;">
+                                    <div class="wrap_scf_o_i">
+                                      <div class="wrap_scf_o_i_md" style="padding: 3px 0px 0px;">
+                                        <div class="scf_o_icon scf_o_edit mksicon-add_to_salesforce mks_manageList_wrap" style="padding-top: 0px;"></div>
+                                      </div>
+                                    </div>
+                                  </a>
+                                </div>
+                              </li>
+                              <li data-tip="Jump Salesforce" class="hide show sf_icons mks_hideRightBorder" currentitem="false">
+                                <div class="scf_option_icon ripple top_manage_lists">
+                                  <a href="#" style="text-decoration: unset;">
+                                    <div class="wrap_scf_o_i">
+                                      <div class="wrap_scf_o_i_md">
+                                        <div class="scf_o_icon scf_o_edit mksicon-jump_to_salesforce_record mks_manageList_wrap" style="padding-top: 0px;"></div>
+                                      </div>
+                                    </div></a></div>
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+                            <div class="scf_tab_wrap">
+                              <div class="scf_tab">
+                                <div class="tab">
+                                  <button class="tablinks ripple active">Contact</button>
+                                  <button class="tablinks ripple " id="defaultOpen">Activity</button>
+                                  <div class="score "><i class="icon score"></i>+
+                                    <span class="score-value">0</span>
+                                  </div>
+                                </div>
+                                <div class="tab_content_wrap">
+                                  <span>
+                                    <div class="contacts-wrap">
+
+                                      <div id="Tags" class="tabcontent mksph_cardbox">
+                                        <h3>Tags</h3>
+                                        <a class="addTag mkb_btn mkb_greenbtn ">Add Tag</a>
+                                        <span style="display: none;">
+                                          <div class="autocomplete">
+                                            <div class="autocomplete__selected">
+                                              <ul class="autocomplete__items  hide"></ul>
+                                            </div>
+                                            <div class="autocomplete__menu--wrap">
+                                              <div class="autocomplete__menu">
+                                                <input type="text" class="autocomplete__input" value="" id="addTagName" placeholder="add or apply a tag to this contact...">
+                                                <ul class="autocomplete__items  hide">
+                                                  <li class="autocomplete__item autocomplete__item--disabled">
+                                                    <span data-id="0"></span>
+                                                  </li>
+                                                </ul>
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <div class="">
+                                            <input type="text" value="" class="hide">
+                                            <div class="scfe_control_option">
+                                              <div class="scfe_close_wrap">
+                                                <a class="scfe_c_ach" href="#">
+                                                  <div class="scfe_close_t">
+                                                    <span>Close</span>
+                                                  </div>
+                                                  <div class="scfe_close_i_md">
+                                                    <div class="scfe_close_i" aria-hidden="true" data-icon=""></div>
+                                                  </div>
+                                                </a>
+                                              </div>
+                                              <div class="scfe_save_wrap disable_false">
+                                                <a class="scfe_ach" href="#">
+                                                  <div class="scfe_save_t">
+                                                    <span>Save</span>
+                                                  </div>
+                                                  <div class="scfe_save_i_md">
+                                                    <div class="scfe_save_i" aria-hidden="true" data-icon=""></div>
+                                                  </div>
+                                                </a>
+                                              </div>
+                                              <div class="clr"></div>
+                                            </div>
+                                          </div>
+                                        </span>
+                                        <div class="tags-contents">
+                                          <div>
+                                            <p class="not-found">No tags available.</p>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div id="SalesForce" class="hide tabcontent mkb_basicField_wrap mksph_cardbox">
+                                        <span class="mkb_btn pull-left mkb_basic_edit mkb_sf_btn" style="display: none;">Update fields to Salesforce</span>
+                                        <div class="scfe_save_wrap disable_false" style="float: none; width: 200px; margin: 0px auto;">
+                                          <a class="scfe_ach" href="#">
+                                            <div class="scfe_save_t">
+                                              <span>Update fields to Salesforce</span>
+                                            </div>
+                                            <div class="scfe_save_i_md">
+                                              <div class="scfe_save_i mksicon-jump_to_salesforce_record" aria-hidden="true"></div>
+                                            </div>
+                                          </a>
+                                        </div>
+                                      </div>
+                                      <div id="Contact" class="tabcontent mkb_basicField_wrap mksph_cardbox">
+                                        <h3 style="margin-bottom: 15px;">Basic Fields</h3>
+                                        <span class="mkb_btn mkb_basic_edit pull-right show">Edit</span>
+                                        <span class="mkb_btn mkb_basic_cancel pull-right hide">Cancel</span>
+                                        <span class="mkb_btn mkb_basic_done mkb_done mkb_greenbtn pull-right hide">Done</span>
+                                        <div class="height90  scfe_field">
+                                          <div class="mksph_contact_data">
+                                            <span class="mksph_contact_title">First Name : </span>
+                                            <span class="mksph_contact_value show"></span>
+                                            <input class="hide focusThis" name="firstName" value="abdulleh">
+                                          </div>
+                                          <div class="mksph_contact_data">
+                                            <span class="mksph_contact_title">Last Name : </span>
+                                            <span class="mksph_contact_value show"></span>
+                                            <input class="hide" name="lastName" value="four">
+                                          </div>
+                                          <div class="mksph_contact_data">
+                                            <span class="mksph_contact_title">Company : </span>
+                                            <span class="mksph_contact_value show"></span>
+                                            <input class="hide" name="company" value="">
+                                          </div>
+                                          <div class="mksph_contact_data">
+                                            <span class="mksph_contact_title">Phone : </span>
+                                            <span class="mksph_contact_value show"></span>
+                                            <input class="hide" name="telephone" value="">
+                                          </div>
+                                          <div class="mksph_contact_data">
+                                            <span class="mksph_contact_title">City : </span>
+                                            <span class="mksph_contact_value show"></span>
+                                            <input class="hide" name="city" value="">
+                                          </div>
+                                          <div class="mksph_contact_data">
+                                            <span class="mksph_contact_title">State : </span>
+                                            <span class="mksph_contact_value show"></span>
+                                            <input class="hide" name="state" value="">
+                                          </div>
+                                          <div class="mksph_contact_data">
+                                            <span class="mksph_contact_title">Address 1 : </span>
+                                            <span class="mksph_contact_value show"></span>
+                                            <input class="hide" name="address1" value="">
+                                          </div>
+                                          <div class="mksph_contact_data">
+                                            <span class="mksph_contact_title">Job Title : </span>
+                                            <span class="mksph_contact_value show"></span>
+                                            <input class="hide" name="jobStatus" value="">
+                                          </div>
+                                          <div class="mksph_contact_data">
+                                            <span class="mksph_contact_title">Sales Status : </span>
+                                            <span class="mksph_contact_value show"></span>
+                                            <input class="hide" name="salesStatus" value="">
+                                          </div>
+                                          <div class="mksph_contact_data">
+                                            <span class="mksph_contact_title">Birthday (YYYY-MM-DD): </span>
+                                            <span class="mksph_contact_value show"></span>
+                                            <input class="hide" name="birthDate" value="">
+                                          </div>
+                                          <div class="mksph_contact_data">
+                                            <span class="mksph_contact_title">Area Code : </span>
+                                            <span class="mksph_contact_value show"></span>
+                                            <input class="hide" name="areaCode" value="">
+                                          </div>
+                                          <div class="mksph_contact_data">
+                                            <span class="mksph_contact_title">Country : </span>
+                                            <span class="mksph_contact_value show"></span>
+                                            <input class="hide" name="country" value="">
+                                          </div>
+                                          <div class="mksph_contact_data">
+                                            <span class="mksph_contact_title">Address 2 : </span>
+                                            <span class="mksph_contact_value show"></span>
+                                            <input class="hide" name="address2" value="">
+                                          </div>
+                                          <div class="mksph_contact_data">
+                                            <span class="mksph_contact_title">Zip : </span>
+                                            <span class="mksph_contact_value show"></span>
+                                            <input class="hide" name="zip" value="">
+                                          </div>
+                                          <div class="mksph_contact_data">
+                                            <span class="mksph_contact_title">Industry : </span>
+                                            <span class="mksph_contact_value show"></span>
+                                            <input class="hide" name="industry" value="">
+                                          </div>
+                                          <div class="mksph_contact_data">
+                                            <span class="mksph_contact_title">Occupation : </span>
+                                            <span class="mksph_contact_value show"></span>
+                                            <input class="hide" name="occupation" value="">
+                                          </div>
+                                          <div class="mksph_contact_data">
+                                            <span class="mksph_contact_title">Source : </span>
+                                            <span class="mksph_contact_value show"></span>
+                                            <input class="hide" name="source" value="">
+                                          </div>
+                                          <div class="mksph_contact_data">
+                                            <span class="mksph_contact_title">Sales Rep : </span>
+                                            <span class="mksph_contact_value show"></span>
+                                            <input class="hide" name="salesRep" value="">
+                                          </div>
+                                        </div>
+                                        <div class="expand">
+                                          <span>Click to expand</span>
+                                          <span class="mksicon-ArrowNext"></span>
+                                        </div>
+                                      </div>
+                                      <div id="custom-fields" class="tabcontent mksph_cardbox">
+                                        <h3>Custom Fields</h3>
+                                        <div class="customField_ul_wraps">
+                                          <span style="display: none;">
+                                            <div class="addBox_wrapper_container scfe_field">
+                                              <h2>Add New Custom Field</h2>
+                                              <div class="addBox_input_wrappers">
+                                                <input type="text" name="ckey" value="" id="input1" class="focusThis" data-required="required" placeholder="Enter field name *">
+                                                <input type="text" name="cvlaue" value="" id="input2" class="" placeholder="Enter Value">
+                                                <div class="scfe_control_option">
+                                                  <div class="scfe_close_wrap">
+                                                    <a class="scfe_c_ach" href="#">
+                                                      <div class="scfe_close_t"><span>Close</span>
+                                                      </div>
+                                                      <div class="scfe_close_i_md">
+                                                        <div class="scfe_close_i" aria-hidden="true" data-icon=""></div>
+                                                      </div>
+                                                    </a>
+                                                  </div>
+                                                  <div class="scfe_save_wrap disable_false">
+                                                    <a class="scfe_ach" href="#">
+                                                      <div class="scfe_save_t">
+                                                        <span>Save</span>
+                                                      </div>
+                                                      <div class="scfe_save_i_md">
+                                                        <div class="scfe_save_i" aria-hidden="true" data-icon=""></div>
+                                                    </div>
+                                                  </a>
+                                                </div>
+                                                <div class="clr"></div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <div class="OverLay" style="height: 0px;"></div>
+                                        </span>
+                                        <div>
+                                          <span class="mkb_btn mkb_cf_edit_btn mkb_cf_btn pull-right show">Edit</span>
+                                          <span class="mkb_btn mkb_cf_btn pull-right mkb_greenbtn addCF show">Add New</span>
+                                          <span class="mkb_btn mkb_cf_btn mkb_cf_cancel_btn pull-right hide">Cancel</span>
+                                          <span class="addTag mkb_btn mkb_cf_btn mkb_greenbtn mkb_done pull-right hide">Done</span>
+                                          <div class="csfields-contents scfe_field height90 ">
+                                            <ul class="customFields_ul">
+
+                                            </ul>
+                                          </div>
+                                        </div>
+                                          <div class="expand">
+                                            <span>Click to expand</span>
+                                            <span class="mksicon-ArrowNext"></span>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </span>
+
+                                  <span style="display: none;">
+                                    <div class="contacts-wrap">
+                                      <div id="NoContact" class="tabcontent mksph_cardbox">
+                                        <h3>Total Activities</h3>
+                                        <p class="not-found">No Activity Found</p>
+                                      </div>
+                                    </div>
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <!--
+                          =================================
+                          ENDS : Edit Subscriber Wraps
+                          =================================
+                          -->
+
+        </div><!-- Mks Plugin Step 3 -->
+
+
         <!-- End Search Section -->
         <div id="error">Error</div>
     </main>
