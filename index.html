@@ -475,11 +475,9 @@
                                       <div id="Tags" class="tabcontent mksph_cardbox">
                                         <h3>Tags</h3>
                                         <a class="addTag mkb_btn mkb_greenbtn ">Add Tag</a>
-                                        <span style="display: none;">
+                                        <span class="addTagWrapper" style="display: none;">
                                           <div class="autocomplete">
-                                            <div class="autocomplete__selected">
-                                              <ul class="autocomplete__items  hide"></ul>
-                                            </div>
+                                            
                                             <div class="autocomplete__menu--wrap">
                                               <div class="autocomplete__menu">
                                                 <input type="text" class="autocomplete__input" value="" id="addTagName" placeholder="add or apply a tag to this contact...">
@@ -519,8 +517,11 @@
                                           </div>
                                         </span>
                                         <div class="tags-contents">
-                                          <div>
+                                          <div class="tags-not-found">
                                             <p class="not-found">No tags available.</p>
+                                          </div>
+                                          <div class="tags_content hide">
+                                              <ul class="autocomplete__items mks_tag_ul"></ul>
                                           </div>
                                         </div>
                                       </div>

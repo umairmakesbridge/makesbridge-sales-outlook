@@ -760,7 +760,7 @@ span.mksph_contact_value {
      list-style: none;
  }
 .tags-contents ul li > a {
-     background: none repeat scroll 0 0 #006ffd;
+     background: #006ffd;
      border: 0 none;
      color: #FFFFFF;
      display: block;
@@ -785,7 +785,10 @@ span.mksph_contact_value {
      cursor: pointer;
  }
  .icon.cross {
-   background: url("chrome-extension://__MSG_@@extension_id__/img/cross.png") no-repeat center center;
+   background: url("assets/img/cross.png") no-repeat center center;
+   font-size: 11px;
+   font-style: normal;
+
 }
 div#custom-fields ul li {
    list-style-type: none;

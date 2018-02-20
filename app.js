@@ -121,7 +121,7 @@
 
        /*----- Global Object ----*/
        var baseObject = {
-            baseUrl   : 'https://test.bridgemailsystem.com/pms',
+            baseUrl   : 'https://mks.bridgemailsystem.com/pms',
             users_details    : [],
             gmail_email_list : [],
             subNum : ""
@@ -282,13 +282,12 @@
                                           searlizeBasicObj['frmFld_'+commonModule.encodeHTML($(val).find('.mksph_contact_title').text().trim())] = commonModule.encodeHTML($(val).find('.mksph_contact_value').text())
                                     });
                                   }
-
+                                  $('.debugDiv').html(JSON.stringify(searlizeBasicObj))
                                   var url = baseObject.baseUrl+'/io/subscriber/setData/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken+'&type=addSubscriber';
                                  commonModule.showLoadingMask({message:"Saving contact...",container : '.new_contact_true'});
-                                 commonModule.saveData(url,searlizeBasicObj,createNewSubscriber)
-
-                                 $('.debugDiv').html(JSON.stringify(searlizeBasicObj))
-                                 event.stopPropagation();
+                                 commonModule.saveData(url,searlizeBasicObj,NewSubscriberCreated);
+                                 //$('.debugDiv').html(JSON.stringify(searlizeBasicObj))
+                                 //event.stopPropagation();
 
                                 });
 
@@ -329,6 +328,10 @@
                                 })
                           };
 
+                          var NewSubscriberCreated = function(){
+                            $('.debugDiv').html('This function will hit after successs')
+                          }
+
                           var getSubscriberDetails = function(){
 
 
@@ -353,20 +356,64 @@
                               $(val).find('input').val(data[$(val).find('input').attr('name')]);
                             });
                             $('.customFields_ul').html('');
-                            $.each(data.cusFldList[0],function(key,value){
-                              $('ul.customFields_ul').append(`<li>
-                                <div>
-                                  <span class="mksph_contact_title">`+Object.keys(value[0])[0]+` </span>:
-                                  <span class="mksph_contact_value show">`+value[0][Object.keys(value[0])[0]]+`</span>
-                                  <input class="hide" value="`+value[0][Object.keys(value[0])[0]]+`">
-                                </div>
-                              </li>`);
-                            });
+                            if(data.cusFldList){
+                              $.each(data.cusFldList[0],function(key,value){
+                                $('ul.customFields_ul').append(`<li>
+                                  <div>
+                                    <span class="mksph_contact_title">`+Object.keys(value[0])[0]+` </span>:
+                                    <span class="mksph_contact_value show">`+value[0][Object.keys(value[0])[0]]+`</span>
+                                    <input class="hide" value="`+value[0][Object.keys(value[0])[0]]+`">
+                                  </div>
+                                </li>`);
+                              });
+                            }
 
+                            if(data.tags){
+                              $('.mks_tag_ul').html('')
+                              $('.tags-not-found').hide();
+                              $('.tags_content').removeClass('hide');
+                              var tags = "";
+                              $.each(data.tags.split(','),function(key,val){
+                                  tags +=`<li>
+                                    <a class="tag">
+                                      <span>`+val+`</span>
+                                      <i class="icon cross"></i>
+                                    </a>
+                                  </li>`;
+                              });
+                              $('.mks_tag_ul').append(tags);
+                            }
                             attachSubscriberEvents()
                           }
                           var saveBasicAdvanceFields = function(){
-                            $('.debugDiv').html('Time to update all the fields of basic and adv')
+                            var searlizeBasicObj = {};
+                            $.each($('.mkb_basicField_wrap input'),function(key,value){
+                               searlizeBasicObj[$(value).attr('name')] = $(value).val();
+                            });
+                            searlizeBasicObj['email']  = $('.mks_createContact_ .scf_email p').text();
+                            searlizeBasicObj['listNum']  = baseObject.users_details[0].listObj['listNum'];
+                            searlizeBasicObj['isMobileLogin']='Y';
+                            searlizeBasicObj['userId']=baseObject.users_details[0].userId;
+                            searlizeBasicObj['subNum']=baseObject.subNum;
+                            // Add custom fields values
+                            if($('ul.customFields_ul li').length > 0){
+                              $.each($('ul.customFields_ul li'),function(key,val){
+                                    searlizeBasicObj['frmFld_'+commonModule.encodeHTML($(val).find('.mksph_contact_title').text().trim())] = commonModule.encodeHTML($(val).find('input').val())
+                              });
+                            }
+
+                            var url = baseObject.baseUrl+'/io/subscriber/setData/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken+'&type=editProfile';
+                            commonModule.saveData(url,searlizeBasicObj,updatedBasicAdvField)
+                            $('.debugDiv').html(JSON.stringify(searlizeBasicObj));
+                            commonModule.showLoadingMask({message:"Updating contact...",container : '.mkb_basicField_wrap'});
+                          }
+                          var updatedBasicAdvField = function(data){
+                            $('.debugDiv').html('Hit After Updating');
+                            $('.mkb_basic_cancel').trigger('click');
+                            $('.mkb_cf_cancel_btn').trigger('click');
+                            $('.dialogBox').remove();
+                            $('.OverLay').remove();
+                            getSubscriberDetails();
                           }
                           var attachSubscriberEvents = function(){
                               $('.mkb_basicField_wrap .mkb_basic_edit').on('click',function(event){
@@ -408,9 +455,111 @@
                                 parentDiv.find('.mkb_done').addClass('hide');
                                 parentDiv.find('ul.customFields_ul li .mksph_contact_value').removeClass('hide');
                                 parentDiv.find('ul.customFields_ul li input').addClass('hide');
+                              });
+                              $('.addCF').unbind('click');
+                              $('.addCF').on('click',function(event){
+                                var bodyHtml = `<input type="text" name="ckey" value="" id="input1" class="focusThis requiredInput" data-required="required" placeholder="Enter field name *">
+                                                <input type="text" name="cvlaue" value="" id="input2" class="" placeholder="Enter Value">`;
+                                dialogModule.dialogView({showTitle:'Add Custom Field',childrenView : bodyHtml, additionalClass : '',container : '.customField_ul_wraps',saveCallBack : addNewCF });
+                                event.stopPropagation();
                               })
 
+                              $('.addTag').on('click',function(event){
+                                  $(this).hide();
+                                  $('.addTagWrapper').show();
+                              });
+                              $('.addTagWrapper .scfe_close_wrap').on('click',function(){
+                                  $(this).parents('.addTagWrapper').hide();
+                                  $('.addTag').show();
+                              });
+
+                              $('ul.mks_tag_ul .icon.cross').on('click',function(){
+
+                                var tagName = $(this).parent().find('span').text();
+
+                                deleteTags(tagName);
+                              });
+
+                              $('.addTagWrapper .scfe_save_wrap .scfe_ach').on('click',function(){
+                                  var url = baseObject.baseUrl+'/io/subscriber/setData/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken;
+                                  var addTag = {
+                                            type: 'addTag'
+                                           ,tags:''
+                                           ,subNum: baseObject.subNum
+                                           ,tag: commonModule.encodeHTML($('#addTagName').val())
+                                           ,ukey:baseObject.users_details[0].userKey
+                                           ,isMobileLogin:'Y'
+                                           ,userId:baseObject.users_details[0].userId
+                                         };
+                                      $('.debugDiv').html(JSON.stringify(addTag));
+                                    commonModule.showLoadingMask({message:"Adding Tag...",container : '.addTagWrapper'});
+                                    commonModule.saveData(url,addTag,generateAddedTag);
+                              });
+
+
+                          };
+
+                          var addNewCF  = function(){
+                              //$('.debugDiv').html($('.dialogBox .addBox_input_wrappers').serialize());
+
+                              if(!$('.dialogBox input.requiredInput').val()){
+                                $('.dialogBox input.requiredInput').addClass('hasError');
+                                return;
+                              }
+
+                              $('ul.customFields_ul').append(`<li>
+                                <div>
+                                  <span class="mksph_contact_title">`+$('.dialogBox input#input1').val()+` </span>:
+                                  <span class="mksph_contact_value show">`+$('.dialogBox input#input2').val()+`</span>
+                                  <input class="hide" value="`+$('.dialogBox input#input2').val()+`">
+                                </div>
+                              </li>`);
+                              saveBasicAdvanceFields();
+
                           }
+                          var deleteTags = function(tagName){
+                            var url = baseObject.baseUrl+'/io/subscriber/setData/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken
+
+                            var tag = {
+                                      type: 'deleteTag'
+                                     ,subNum: baseObject.subNum
+                                     ,tag: tagName
+                                     ,ukey:baseObject.users_details[0].userKey
+                                     ,isMobileLogin:'Y'
+                                     ,userId:baseObject.users_details[0].userId
+                                   }
+                                   $('.debugDiv').html(tagName);
+                                   commonModule.showLoadingMask({message:"Deleting tag "+tagName+"...",container : '#Tags'});
+                                   commonModule.saveData(url,tag,deletedTag)
+                          }
+                          var deletedTag = function(data){
+                              $('.debugDiv').html('Tag Deleted');
+                              getSubscriberDetails()
+                          };
+
+                          var generateAddedTag = function(data){
+                              $('.debugDiv').html('At Generated Tag');
+                            var dataA = `<li>
+                              <a class="tag">
+                                <span>`+commonModule.decodeHTML($('#addTagName').val())+`</span>
+                                <i class="icon cross"></i>
+                              </a>
+                            </li>`;
+                            $('.addTagWrapper').hide();
+                            $('.mks_tag_ul').parent().removeClass('hide');
+                            $('.mks_tag_ul').append(dataA);
+
+                            $('.addTagWrapper input').val('');
+                            // Reattach delete event for new tag
+                            $('ul.mks_tag_ul .icon.cross').unbind('click');
+                            $('ul.mks_tag_ul .icon.cross').on('click',function(){
+
+                              var tagName = $(this).parent().find('span').text();
+
+                              deleteTags(tagName);
+                            });
+                          }
+
                           return {
                             init: init,
                             extractSubscriberDetails : extractSubscriberDetails,
@@ -419,7 +568,76 @@
                           };
 
                         })();
+
+       /*----- Dialog Module ----*/
+       var dialogModule = (function(){
+
+                            var init = function(reqObj){
+                              var callBackEvent = reqObj.saveCallBack;
+                              $('.dialogBox_close_btn').on('click',function(){
+                                  handleCancel();
+                              })
+                              $('.dialogBox_save_btn').on('click',function(){
+                                  handleSave(callBackEvent);
+                              })
+                            }
+
+                            var dialogView = function(reqObj){
+                              var dialogHtml = `<div class="dialogBox addBox_wrapper_container scfe_field `+reqObj.additionalClass+`">
+
+                                <h2>`+reqObj.showTitle+`</h2>
+                                <div class="addBox_input_wrappers">
+                                  `+reqObj.childrenView+`
+                                  <div class="scfe_control_option">
+                                      <div class="scfe_close_wrap dialogBox_close_btn">
+                                          <a class="scfe_c_ach" href="#">
+                                              <div class="scfe_close_t">
+                                                  <span>Close</span>
+                                              </div>
+                                              <div class="scfe_close_i_md">
+                                                  <div class="scfe_close_i" aria-hidden="true" data-icon="&#xe915;"></div>
+                                              </div>
+                                          </a>
+                                      </div>
+                                      <div class="scfe_save_wrap dialogBox_save_btn disable_">
+                                          <a class="scfe_ach" href="#">
+                                              <div class="scfe_save_t">
+                                                  <span>Save</span>
+                                              </div>
+                                              <div class="scfe_save_i_md">
+                                                  <div class="scfe_save_i" aria-hidden="true" data-icon="&#xe905;"></div>
+                                              </div>
+                                          </a>
+                                      </div>
+                                      <div class="clr"></div>
+                                    </div>
+                                </div>
+
+
+                              </div>
+                              <div class="OverLay" style="height: `+$('.ms-welcome').height()+`px;"></div>
+                              `;
+
+                              $(reqObj.container).append(dialogHtml);
+                              init(reqObj);
+                            }
+                            var handleCancel = function(reqObj){
+
+                              $('.dialogBox').remove();
+                              $('.OverLay').remove();
+                              $('.debugDiv').html('Dialog Cancel has been click' + event.currentTarget);
+                            }
+
+                            var handleSave = function(callback){
+                              callback();
+                            }
+                             return {
+                               init : init,
+                               dialogView : dialogView
+                             };
+                          })();
        /*----- Common Module ----*/
+
        var commonModule = (function(){
                                 var showLoadingMask = function(paramObj){
                                   var loadingHtml = `<div class="loader-mask `+paramObj.extraClass+`">
@@ -518,7 +736,7 @@
                                 }
 
                               var saveData = function(url,data,callBack){
-
+                                  $('.debugDiv').html('Creating The ACCount')
                                   $.ajax({
                                         url:url,
                                         type:"POST",
@@ -527,18 +745,18 @@
                                         dataType:"json",
                                         success: function(data){
                                           try{
-                                            $('.debugDiv').html(data)
+                                            //$('.debugDiv').html(data)
                                             if(data.errorDetail){
                                               //call alert
                                               commonModule.hideLoadingMask();
                                               return;
                                             }
                                             commonModule.hideLoadingMask();
-                                            $('debugDiv').html('Created The ACCount')
+                                            $('.debugDiv').html('Created The ACCount')
                                             //var jsonResponse = JSON.parse(data);
                                             callBack(data);
                                           }catch(e){
-                                            $('debugDiv').html(e.message);
+                                            $('.debugDiv').html(e.message);
                                           }
 
                                         }
