@@ -120,10 +120,83 @@ h6 {
 
 
 /* ---------------------------------------------- Plugin Custom CSS by Abdullah ------------------------------------*/
+.mkspanelhead {
+    position: sticky;
+    top: 0px;
+    z-index: 999;
+    background: rgb(29, 60, 73);
+    color: #fff;
+}
+.back-container {
+    width: 15%;
+    float: left;
+    height: 50px;
+}
+.mksph_logo {
+    float: left;
+    width: 55%;
+}
+.logo {
+    height: 30px;
+    margin: 10px 0px 3px;
+}
+.mksph_row a {
+    text-decoration: none;
+}
+.mks_logo_img {
+    height: 30px;
+    width: 120px;
+    display: block;
+    background: url(assets/img/mks_logo.svg) no-repeat;
+    background-repeat: no-repeat;
+}
+.mksph_logout {
+    float: right;
+    width: 5%;
+    height: 50px;
+    cursor: pointer;
+}
+.mksph_close {
+    float: right;
+    width: 7%;
+    height: 50px;
+}
+.mksph_back{
+   width: 100%;
+   height: 50px;
+   color: #fff;
+}
+.mksph_icon_back{
+  color:#fff;
+  position: relative;
+  left: 22px;
+  top:15px
+}
+.mksicon-logout{
+  position: relative;
+  /* right: -30px; */
+  top : 15px;
+}
 /*===========================================
 Login form CSS
 ============================================*/
-
+.makesbridge_plugin {
+ right: 0;
+   z-index: 999;
+   position: fixed;
+   overflow-y: auto;
+   overflow-x: hidden;
+   height: 100%;
+   width: 400px;
+   background: #f8f8fb;
+   /* box-shadow: 0 8px 30px 0 rgba(0, 0, 0, 0.2); */
+   -webkit-transition: all 1.2s ease-in-out;
+   -moz-transition: all 1.2s ease-in-out;
+   -o-transition: all 1.2s ease-in-out;
+}
+.mkspanel{
+  position: relative;
+}
 .mksph_wrapper{
     padding: 18px;
    }
@@ -195,11 +268,11 @@ Login form CSS
     }
     .contact_found {
         background: #fff;
-        padding: 10px 0px 5px;
+        padding: 10px 0px 10px;
         border-radius: 2px;
         display: block;
         border-bottom: 1px solid rgb(248, 248, 251);
-        /* border-top: 1px solid rgb(248, 248, 251); */
+        border-top: 1px solid rgb(248, 248, 251);
     }
     .tabcontent {
        /*display: none;*/
@@ -479,7 +552,106 @@ Login form CSS
       background: #bac2ca;
     }
     /*End Edit Contact*/
+    /*-----------------------------Alerts---------------------------*/
+    .messagebox {
+    	color: #784900;
+    	font-size: 14px;
+    	font-weight: bold;
+    	margin:20px auto;
+    	padding: 10px 35px 10px 60px;#04aced;
+    	width: 285px;
+    	-webkit-border-radius: 2px;
+    	-moz-border-radius: 2px;
+    	border-radius: 2px;
+    	-webkit-transition: opacity .3s ease-out;
+      -moz-transition: opacity .3s ease-out;
+      -o-transition: opacity .3s ease-out;
+      transition: opacity .3s ease-out;
+      position: fixed;
+      top: -20px;
+      z-index: 999;
 
+    }
+    .messagebox:after {content:""; width:45px; height:100%; display:block; position:absolute; left:0; top:0;}
+    .messagebox a.closebtn {
+    	display:block;
+    	position:absolute;
+    	right:10px;
+    	top:10px;
+    	opacity:0;
+    	-webkit-transition: opacity .3s ease-out;
+        -moz-transition: opacity .3s ease-out;
+        -o-transition: opacity .3s ease-out;
+        transition: opacity .3s ease-out;
+    }
+    .messagebox:hover a.closebtn {
+    	opacity:1;
+    }
+    .messagebox a.closebtn:hover {
+    	opacity:0.7;
+    }
+    .messagebox h3 {
+        font-size: 16px;
+        font-weight: bold;
+        line-height: 18px;
+        margin: 0;
+        padding: 0 0 5px;
+    }
+    .messagebox p {
+    	font-size:13px;
+    	padding:0;
+    	margin:0;
+    	display:table-cell;
+    	vertical-align:middle;
+    	font-weight:normal;
+    	text-align:left;
+    }
+    span.alert_icon{
+      position: absolute;
+      left: 13px;
+      z-index: 999;
+      color: #fff;
+      font-size: 18px;
+      line-height: 38px;
+    }
+    .messagebox a.alert_close_icon{
+      z-index: 9999;
+      color: #fff;
+      right: 10px;
+      position: absolute;
+      top: 5px;
+    }
+    .messagebox.success {
+    	background-color:#c9e78e;
+    	background-color:#d9eeb0;
+    /*	border: 2px solid #94cf1e;
+    */}
+    .messagebox.success:after {background-color: #c1e37d;  }
+    .messagebox.success  h3, .messagebox.success  p { color:#5c873d; }
+
+    .messagebox.error {
+    	background-color:#fb8c8c;
+    	background-color:#fcaeae;
+    /*	border: 2px solid #f71a1a;
+    */}
+    .messagebox.error:after {background-color:#fb8080;  }
+    .messagebox.error  h3, .messagebox.error  p { color:#b11a0b; }
+
+    .messagebox.caution {
+    	background-color:#ffcd7f;
+    	background-color:#ffdca5;
+    /*	border: 2px solid #ff9c00;
+    */}
+    /*.messagebox.caution:after {background: url("../img/caution.png") no-repeat scroll center center #ffc872;  }*/
+    .messagebox.caution h3, .messagebox.caution p { color:#e05f00; }
+
+    .messagebox.info {
+    	background-color:#80d6f6;
+    	background-color:#a6e2f9;
+    /*	border: 2px solid #01aeee;
+    */}
+    /*.messagebox.info:after {background: url("../img/info.png") no-repeat scroll center center #73d2f5;  }*/
+    .messagebox.info h3, .messagebox.info p { color:#00739e; }
     /*==========================
       Common CSS
     ==============================*/
@@ -722,8 +894,15 @@ span.mksph_contact_title {
    font-size: 14px;
    display: inline-block;
 }
+.mkb_elipsis{
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+}
 span.mksph_contact_value {
    color: #016EFD;
+   max-width: 150px;
+   display: inline-block;
 }
 .tags-contents {
  min-height: 70px;

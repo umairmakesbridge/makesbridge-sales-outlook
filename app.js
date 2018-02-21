@@ -150,7 +150,13 @@
                 searchContact(event.currentTarget.value);
               }
            });
+           $('.mksicon-logout').on('click',function(){
+             $('.debugDiv').html('Logout Button Press');
+             $('.login-wrap').show();
+             $('.ms-welcome__main').hide();
+           });
          }
+
          var searchContact = function(value){
            if($('.toggletags').text().toLowerCase()=="tags"){
              var searchUrl = baseObject.baseUrl+'/io/subscriber/getData/?BMS_REQ_TK='
@@ -163,6 +169,10 @@
                              +value+'&orderBy=lastActivityDate&ukey='+baseObject.users_details[0].userKey
                              +'&isMobileLogin=Y&userId='+baseObject.users_details[0].userId;
            }
+
+           // var searchedEmail = function(email){
+           //   searchEmailInMks
+           // }
            commonModule.showLoadingMask({message:"Search contact...",container : '.searchBar'});
            $.ajax({
                  url:searchUrl,
@@ -175,7 +185,7 @@
                      $('.search_results_single_value').html('');
                      $.each(result.subscriberList[0],function(key,value){
 
-                       $('.search_results_single_value').append(`<div class="contact_found ripple">
+                       $('.search_results_single_value').append(`<div class="contact_found searched_email_mks ripple">
                          <div class="cf_silhouette">
                            <div class="cf_silhouette_text c_txt_s">
                              <p>`+value[0].email.charAt(0)+`</p>
@@ -193,6 +203,10 @@
                      });
                      commonModule.hideLoadingMask();
                      $('.searched_results_wrap').show();
+                     $('.searched_email_mks').on('click',function(event){
+                       var email = $(this).find('.cf_email p').text();
+                       searchEmailInMks(email);
+                     })
                    }catch(e){
                      $("#error").html('Search Ajax Wrong');
                    }
@@ -244,6 +258,7 @@
                               }else{
                                 $('.debugDiv').html(resObj.subscriberList[0].subscriber1[0].subNum);
                                 $('.mks_wrap_step2').addClass('hide');
+                                $('.mksph_back').removeClass('hide');
                                 $('.mks_wrap_step3').removeClass('hide');
                                 baseObject['subNum'] = resObj.subscriberList[0].subscriber1[0].subNum;
                                 getSubscriberDetails();
@@ -253,7 +268,7 @@
                           var init = function (text) {
                                 // Unbind Events
 
-                                $('.mks_wrap_step3 .createNewBtn,.mks_wrap_step3 .scfe_save_t,.mks_wrap_step3 .mksph_create_contact,.mks_wrap_step3 .cfe_add_customField,.scfe_add_newcf_dom').unbind('click');
+                                $('.mks_wrap_step3 .createNewBtn,.mks_wrap_step3 .scfe_save_t,.mks_wrap_step3 .mksph_create_contact,.mks_wrap_step3 .cfe_add_customField,.scfe_add_newcf_dom,.mks_expandable_new').unbind('click');
 
                                 $('.mks_wrap_step3 .createNewBtn,.mks_wrap_step3 .mksph_create_contact').on('click', function(event){
                                   $('.mks_createContact_').show();
@@ -325,16 +340,43 @@
                                 $('.scfe_close_newcf_dom').on('click',function(event){
                                     $('.addBox_wrapper_container_dialog').hide();
                                     $('.addBox_wrapper_container_dialog input').val('');
-                                })
+                                });
+
+                                $('.mks_expandable_new').on('click',function(event){
+                                  $('.debugDiv').html('Create New  : '+$(this).hasClass('expand'));
+                                  if($(this).hasClass('expand')){
+                                    $('.new_basic_expand_height').addClass('heighAuto');
+                                  }else{
+                                    $('.new_basic_expand_height').removeClass('heighAuto');
+                                  }
+                                  if($(this).hasClass('expand')){
+                                    $(this).removeClass('expand');
+                                    $(this).addClass('collapse');
+                                  }else{
+                                    $(this).addClass('expand');
+                                    $(this).removeClass('collapse');
+                                  }
+                                  /*if($(event.currentTarget).hasClass('expand')){
+                                    $(event.currentTarget).removeClass('expand');
+                                    $(event.currentTarget).addClass('collapse');
+                                  }else{
+                                    $(event.currentTarget).removeClass('collapse');
+                                    $(event.currentTarget).addClass('expand');
+                                  }*/
+                                });
+
                           };
 
-                          var NewSubscriberCreated = function(){
-                            $('.debugDiv').html('This function will hit after successs')
+                          var NewSubscriberCreated = function(data){
+                            commonModule.SuccessAlert({message :'Subscriber created successfully.'});
+                            $('.debugDiv').html('This function will hit after successs'+ data.toString());
+                            baseObject.subNum = data[1];
+                            $('.new_contact_true,.create_new_contact_card').addClass('hide');
+                            $('.new_contact_false').removeClass('hide');
+                            getSubscriberDetails();
                           }
 
                           var getSubscriberDetails = function(){
-
-
                             var searchUrl = baseObject.baseUrl
                                             +'/io/subscriber/getData/?BMS_REQ_TK='
                                             + baseObject.users_details[0].bmsToken +'&type=getSubscriber&subNum='
@@ -351,6 +393,7 @@
                             if(data.lastName){$('.edit_top_slider_title .scf_email span').eq(1).html(data.lastName)}
                             $('.edit_top_slider_title .scf_email span').eq(2).html(data.email)
 
+                            $('.score-value').html(data.score);
                             $.each($('.mkb_basicField_wrap .mksph_contact_data'),function(key,val){
                               $(val).find('.mksph_contact_value').html(data[$(val).find('input').attr('name')]);
                               $(val).find('input').val(data[$(val).find('input').attr('name')]);
@@ -361,7 +404,7 @@
                                 $('ul.customFields_ul').append(`<li>
                                   <div>
                                     <span class="mksph_contact_title">`+Object.keys(value[0])[0]+` </span>:
-                                    <span class="mksph_contact_value show">`+value[0][Object.keys(value[0])[0]]+`</span>
+                                    <span class="mksph_contact_value show mkb_elipsis">`+value[0][Object.keys(value[0])[0]]+`</span>
                                     <input class="hide" value="`+value[0][Object.keys(value[0])[0]]+`">
                                   </div>
                                 </li>`);
@@ -411,6 +454,7 @@
                             $('.debugDiv').html('Hit After Updating');
                             $('.mkb_basic_cancel').trigger('click');
                             $('.mkb_cf_cancel_btn').trigger('click');
+                            commonModule.SuccessAlert({message :'Subscriber fields updated successfully.'})
                             $('.dialogBox').remove();
                             $('.OverLay').remove();
                             getSubscriberDetails();
@@ -423,6 +467,7 @@
                                 parentDiv.find('.mkb_basic_done').removeClass('hide');
                                 parentDiv.find('.mksph_contact_data .mksph_contact_value').addClass('hide');
                                 parentDiv.find('.mksph_contact_data input').removeClass('hide');
+                                $('.basic_expand').trigger('click');
                               });
 
                               $('.mkb_basicField_wrap .mkb_basic_cancel').on('click',function(event){
@@ -432,9 +477,13 @@
                                   parentDiv.find('.mkb_basic_done').addClass('hide');
                                   parentDiv.find('.mksph_contact_data .mksph_contact_value').removeClass('hide');
                                   parentDiv.find('.mksph_contact_data input').addClass('hide');
+                                  $('.basic_expand').trigger('click');
                               });
 
                               $('.mkb_basicField_wrap .mkb_basic_done,.mkb_done').on('click',function(event){
+                                if($(event.currentTarget).hasClass('mkb_basic_done')){
+                                    $('.basic_expand').trigger('click');
+                                }
                                 saveBasicAdvanceFields();
                               });
 
@@ -456,6 +505,10 @@
                                 parentDiv.find('ul.customFields_ul li .mksph_contact_value').removeClass('hide');
                                 parentDiv.find('ul.customFields_ul li input').addClass('hide');
                               });
+                              $('.edit_top_slider').on('click',function(event){
+                                $('.debugDiv').html('Edit Basic Fields ');
+                                $('.mkb_basicField_wrap .mkb_basic_edit,.basic_expand').trigger('click');
+                              })
                               $('.addCF').unbind('click');
                               $('.addCF').on('click',function(event){
                                 var bodyHtml = `<input type="text" name="ckey" value="" id="input1" class="focusThis requiredInput" data-required="required" placeholder="Enter field name *">
@@ -496,7 +549,46 @@
                                     commonModule.saveData(url,addTag,generateAddedTag);
                               });
 
+                              $('.mks_expandable').on('click',function(event){
 
+
+                                  /*-- Adding height --*/
+                                  if($(this).hasClass('basic_expand')){
+
+                                    if($(this).hasClass('expand')){
+                                      $(this).find('span').eq(0).text('Click to collapse')
+                                      $('.basic_expand_height').addClass('heighAuto');
+                                    }else{
+                                        $(this).find('span').eq(0).text('Click to expand')
+                                      $('.basic_expand_height').removeClass('heighAuto');
+                                    }
+
+                                  }else if($(this).hasClass('cf_expand')){
+
+                                    if($(this).hasClass('expand')){
+                                      $(this).find('span').eq(0).text('Click to collapse')
+                                      $('.cf_expand_height').addClass('heighAuto');
+                                    }else{
+                                      $(this).find('span').eq(0).text('Click to expand');
+                                        $('.cf_expand_height').removeClass('heighAuto');
+                                    }
+
+                                  }
+
+                                  if($(this).hasClass('expand')){
+                                    $(this).removeClass('expand');
+                                    $(this).addClass('collapse');
+                                  }else{
+                                    $(this).removeClass('collapse');
+                                    $(this).addClass('expand');
+                                  }
+                              });
+
+                                $('.mksph_back').on('click',function(event){
+                                    $(this).addClass('hide');
+                                    $('.mks_wrap_step2').removeClass('hide');
+                                    $('.mks_wrap_step3').removeClass('hide');
+                                });
                           };
 
                           var addNewCF  = function(){
@@ -510,7 +602,7 @@
                               $('ul.customFields_ul').append(`<li>
                                 <div>
                                   <span class="mksph_contact_title">`+$('.dialogBox input#input1').val()+` </span>:
-                                  <span class="mksph_contact_value show">`+$('.dialogBox input#input2').val()+`</span>
+                                  <span class="mksph_contact_value show mkb_elipsis">`+$('.dialogBox input#input2').val()+`</span>
                                   <input class="hide" value="`+$('.dialogBox input#input2').val()+`">
                                 </div>
                               </li>`);
@@ -534,11 +626,13 @@
                           }
                           var deletedTag = function(data){
                               $('.debugDiv').html('Tag Deleted');
+                              commonModule.SuccessAlert({message :'Tag deleted successfully.'})
                               getSubscriberDetails()
                           };
 
                           var generateAddedTag = function(data){
                               $('.debugDiv').html('At Generated Tag');
+                              commonModule.SuccessAlert({message :'Tag created successfully.'})
                             var dataA = `<li>
                               <a class="tag">
                                 <span>`+commonModule.decodeHTML($('#addTagName').val())+`</span>
@@ -724,8 +818,10 @@
                                             }else{
                                               if(data[1]=='SESSION_EXPIRED'){
                                                 // Show Alert and logout
+                                                commonModule.ErrorAlert({message:data[1]});
                                               }else{
                                                 //Just show Alert message
+                                                commonModule.ErrorAlert({message:data.errorDetail});
                                               }
                                             }
                                           }catch(e){
@@ -746,8 +842,12 @@
                                         success: function(data){
                                           try{
                                             //$('.debugDiv').html(data)
-                                            if(data.errorDetail){
+                                            if(data[1]=='SESSION_EXPIRED'){
+                                              // Show Alert and logout
+                                              commonModule.ErrorAlert({message:data[1]})
+                                            }else if(data.errorDetail){
                                               //call alert
+                                              commonModule.ErrorAlert({message:data.errorDetail})
                                               commonModule.hideLoadingMask();
                                               return;
                                             }
@@ -762,13 +862,58 @@
                                         }
                                       });
                                 }
+
+                                var ErrorAlert = function(props) {
+                                  if (props.message) {
+                                              var inlineStyle = '0px';
+                                              var fixed_position = "fixed";
+                                              var cl = 'error';
+                                              var title = 'Error';
+                                              var icon  = 'mksicon-Close';
+                                              if (props && props.type == 'caution')
+                                              {
+                                                  cl = 'caution';
+                                                  title = 'Caution';
+                                              }
+                                              else if (props && props.type == 'Disabled')
+                                              {
+                                                  cl = 'caution';
+                                                  title = props.type;
+                                              }
+
+                                              var message_box = $('<div class="messagebox messsage_alert messagebox_ ' + cl + '" style=' + inlineStyle + '><span class="alert_icon '+icon+'"></span><h3>' + title + '</h3><p>' + props.message + '</p><a class="alert_close_icon mksicon-Close"></a></div> ');
+                                              $('.ms-welcome').append(message_box);
+                                              message_box.find(".alert_close_icon").click(function (e) {
+                                                  message_box.fadeOut("fast", function () {
+                                                      $(this).remove();
+                                                  })
+                                                  e.stopPropagation()
+                                              });
+                                          }
+                                }
+
+                                var SuccessAlert = function(props) {
+                                  var message_box = $('<div class="global_messages messagebox success"><span class="alert_icon mksicon-Check"></span><h3>Success</h3><p>'+props.message+'</p><a class="alert_close_icon mksicon-Close"></a></div>')
+                                    $('.ms-welcome').append(message_box);
+                                    $(".global_messages").hide();
+                                    $(".global_messages").slideDown("medium", function () {
+                                        setTimeout('$(".global_messages").remove()', 4000);
+                                    });
+                                    $(".global_messages .alert_close_icon").click(function () {
+                                        $(".global_messages").fadeOut("fast", function () {
+                                            $(this).remove();
+                                        })
+                                  });
+                                }
                                 return {
                                   showLoadingMask: showLoadingMask,
                                   hideLoadingMask: hideLoadingMask,
                                   getDataRequest : getDataRequest,
                                   saveData : saveData,
                                   encodeHTML : encodeHTML,
-                                  decodeHTML : decodeHTML
+                                  decodeHTML : decodeHTML,
+                                  ErrorAlert : ErrorAlert,
+                                  SuccessAlert : SuccessAlert
                                 };
                            })();
        /*----- Login Module ----*/
@@ -789,6 +934,7 @@
                                     if(data.errorDetail){
                                       //call alert
                                       commonModule.hideLoadingMask();
+                                      commonModule.ErrorAlert({message:data.errorDetail})
                                       return;
                                     }
                                     commonModule.hideLoadingMask();
@@ -828,6 +974,7 @@
                                   success: function(data){
                                     if(data.errorDetail){
                                       //call alert
+                                      commonModule.ErrorAlert({message:data.errorDetail})
                                       commonModule.hideLoadingMask();
                                       return;
                                     }
@@ -876,8 +1023,10 @@
                                       }else{
                                         if(data[1]=='SESSION_EXPIRED'){
                                           // Show Alert and logout
+                                          commonModule.ErrorAlert({message:data[1]})
                                         }else{
                                           //Just show Alert message
+                                          commonModule.ErrorAlert({message:data[1]})
                                         }
                                       }
 
@@ -913,7 +1062,9 @@
                                 if(username && password)
                                   loginAjaxCall({url:baseObject.baseUrl,username:username,password:password});
                               }
-                            })
+                            });
+
+
                           };
 
                           return {

@@ -27,6 +27,7 @@
       <!-- <h2>Username : <span class="userName"></span></h2> -->
       <article class="login-wrap">
         <div class="mksph_wrapper mksph_login_wrap">
+            <div class="debugDivL"></div>
             <h2>Log In</h2>
             <div class="debugLoginDiv"  style="width:280px;overflow-x:auto;"></div>
             <div class="mksph_cardbox">
@@ -45,6 +46,41 @@
                     </h1>
 
                 </header>
+    <div class="makesbridge_plugin full_s">
+
+
+      <div class="mkspanel">
+        <div class="mkspanelhead">
+          <div class="mksph_row">
+
+            <div class="back-container">
+              <span style="">
+                <div class="mksph_back ripple hide">
+                  <a href="#"><span class="mksph_icon_back" aria-hidden="true" data-icon="&#xe91b;"></span></a>
+                </div>
+              </span>
+            </div>
+            <div class="mksph_logo">
+              <div class="logo">
+                <center>
+                  <a href="http://www.makesbridge.com/">
+                    <div class="mks_logo_img"></div>
+                  </a>
+                </center>
+              </div>
+            </div>
+            <div class=" mksph_logout ripple">
+              <span class="mksicon-logout" title="Logout">
+              </span>
+            </div>
+              <div class="mksph_close ripple hide">
+                <a href="#" title="Close">
+                  <span class="mksph_icon_close" aria-hidden="true" data-icon=""></span>
+                </a>
+              </div>
+              <div class="clr"></div>
+            </div>
+          </div>
 
         <div class="mks_wrap_step2 hide">
           <div class="s_contact_found_wraper plc_marginbottom10 email_found_in_message" style="">
@@ -108,9 +144,9 @@
                 <div>
                 <input type="text" placeholder="Enter name or email" class="mksSearchEmail" value="">
 
-                <span class="show mksph_icon_search" aria-hidden="true" data-icon="&#xe903;" style="cursor: pointer;position:relative;float:right;top:-35px;right:15px;"></span>
+                <span class="show mksph_icon_search" aria-hidden="true" data-icon="&#xe903;" style="cursor: pointer;position:relative;float:right;top:5px;right:25px;"></span>
 
-                <span class="hide mksicon-Close" aria-hidden="true" data-icon="&#xe915;" style="cursor: pointer;position:relative;float:right;top:-35px;right:15px;"></span>
+                <span class="hide mksicon-Close" aria-hidden="true" data-icon="&#xe915;" style="cursor: pointer;position:relative;float:right;top:10px;right:25px;"></span>
               </div>
 
               </div>
@@ -215,7 +251,7 @@
                         </div>
                         <div class="s_contact_found_edit_wraper">
                           <div class="s_contact_found_edit">
-                            <div class="scfe_field height90 height100 ">
+                            <div class="scfe_field height90 height100 new_basic_expand_height">
                               <input name="firstName" placeholder="First Name" id="firstName">
                               <input name="lastName" placeholder="Last Name">
                               <input name="company" placeholder="Company">
@@ -235,7 +271,7 @@
                               <input name="source" placeholder="Source">
                               <input name="occupation" placeholder="Occupation">
                             </div>
-                            <div class="expand">
+                            <div class="expand mks_expandable_new new_basic_expand">
                               <span>Click to expand</span>
                               <span class="mksicon-ArrowNext"></span>
                             </div>
@@ -343,7 +379,7 @@
                             <div class="scf_o_right">
                               <ul>
                                 <li>
-                                  <div class="scf_option_icon ripple">
+                                  <div class="scf_option_icon edit_top_slider ripple">
                                     <a href="#">
                                       <div class="wrap_scf_o_i">
                                         <div class="wrap_scf_o_i_md">
@@ -381,9 +417,9 @@
                     </div>
 
 
-                <div class="top-header contact_found top_managerLists_wrappers">
+                <div class="top-header contact_found top_managerLists_wrappers hide">
                   <div class="scf_o_right">
-                    <ul class="top_manager_ul_wraps six">
+                    <ul class="top_manager_ul_wraps six" style="visibility:hidden;position:absolute;display:none;">
                       <li data-tip="Add to Sequence" currentitem="false">
                         <div class="scf_option_icon ripple top_manage_lists">
                           <a href="#" style="text-decoration: unset;">
@@ -463,8 +499,8 @@
                               <div class="scf_tab">
                                 <div class="tab">
                                   <button class="tablinks ripple active">Contact</button>
-                                  <button class="tablinks ripple " id="defaultOpen">Activity</button>
-                                  <div class="score "><i class="icon score"></i>+
+                                  <button class="tablinks ripple hide" id="defaultOpen">Activity</button>
+                                  <div class="score "><i class="icon score"></i>
                                     <span class="score-value">0</span>
                                   </div>
                                 </div>
@@ -477,7 +513,7 @@
                                         <a class="addTag mkb_btn mkb_greenbtn ">Add Tag</a>
                                         <span class="addTagWrapper" style="display: none;">
                                           <div class="autocomplete">
-                                            
+
                                             <div class="autocomplete__menu--wrap">
                                               <div class="autocomplete__menu">
                                                 <input type="text" class="autocomplete__input" value="" id="addTagName" placeholder="add or apply a tag to this contact...">
@@ -543,7 +579,7 @@
                                         <span class="mkb_btn mkb_basic_edit pull-right show">Edit</span>
                                         <span class="mkb_btn mkb_basic_cancel pull-right hide">Cancel</span>
                                         <span class="mkb_btn mkb_basic_done mkb_done mkb_greenbtn pull-right hide">Done</span>
-                                        <div class="height90  scfe_field">
+                                        <div class="height90  scfe_field basic_expand_height">
                                           <div class="mksph_contact_data">
                                             <span class="mksph_contact_title">First Name : </span>
                                             <span class="mksph_contact_value show"></span>
@@ -635,7 +671,7 @@
                                             <input class="hide" name="salesRep" value="">
                                           </div>
                                         </div>
-                                        <div class="expand">
+                                        <div class="expand mks_expandable basic_expand">
                                           <span>Click to expand</span>
                                           <span class="mksicon-ArrowNext"></span>
                                         </div>
@@ -680,13 +716,13 @@
                                           <span class="mkb_btn mkb_cf_btn pull-right mkb_greenbtn addCF show">Add New</span>
                                           <span class="mkb_btn mkb_cf_btn mkb_cf_cancel_btn pull-right hide">Cancel</span>
                                           <span class="addTag mkb_btn mkb_cf_btn mkb_greenbtn mkb_done pull-right hide">Done</span>
-                                          <div class="csfields-contents scfe_field height90 ">
+                                          <div class="csfields-contents cf_expand_height scfe_field height90 ">
                                             <ul class="customFields_ul">
 
                                             </ul>
                                           </div>
                                         </div>
-                                          <div class="expand">
+                                          <div class="expand mks_expandable cf_expand">
                                             <span>Click to expand</span>
                                             <span class="mksicon-ArrowNext"></span>
                                           </div>
@@ -715,7 +751,8 @@
 
         </div><!-- Mks Plugin Step 3 -->
 
-
+      </div>
+    </div><!-- end : makesbridge_plugin -->
         <!-- End Search Section -->
         <div id="error">Error</div>
     </main>
