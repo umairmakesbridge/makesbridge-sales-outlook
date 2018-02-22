@@ -187,7 +187,7 @@ Login form CSS
    overflow-y: auto;
    overflow-x: hidden;
    height: 100%;
-   width: 400px;
+   width: 100%;
    background: #f8f8fb;
    /* box-shadow: 0 8px 30px 0 rgba(0, 0, 0, 0.2); */
    -webkit-transition: all 1.2s ease-in-out;
@@ -211,14 +211,14 @@ Login form CSS
     min-height: 135px;
    }
    .mksph_cardbox form input{
-    width: 287px;
+    width: 80%;
     padding: 8px 10px;
     margin: 0 0 10px;
     border-radius: 2px;
     border: 1px solid #ddd;
    }
    input[type="text"],textarea{
-    width: 287px;
+    width: 80%;
     padding: 8px 10px;
     margin: 0 0 10px;
     border-radius: 2px;

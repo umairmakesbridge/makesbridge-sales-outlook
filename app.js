@@ -155,15 +155,7 @@
             gmail_email_list : [],
             subNum : ""
        }
-       var value = Office.context.roamingSettings.get('BMS_REQ_TK');
-       if(value){
-         var userObj = {
-           "bmsToken" : Office.context.roamingSettings.get('BMS_REQ_TK'),
-           "userKey"  : Office.context.roamingSettings.get('userKey'),
-           "userId"  : Office.context.roamingSettings.get('userId')
-         }
-         baseObject.users_details.push(userObj);
-       }
+
        /*-----------Common Event Attach-------------*/
        var attachedEvents = (function(){
          var attachedSearchMks = function(params){
@@ -474,11 +466,14 @@
                           }
                           var saveBasicAdvanceFields = function(){
                             var searlizeBasicObj = {};
+                            $('.debugDiv').html('Save Basic Adv Function Called');
                             $.each($('.mkb_basicField_wrap input'),function(key,value){
                                searlizeBasicObj[$(value).attr('name')] = $(value).val();
                             });
                             searlizeBasicObj['email']  = $('.mks_createContact_ .scf_email p').text();
+
                             searlizeBasicObj['listNum']  = baseObject.users_details[0].listObj['listNum'];
+                            $('.debugDiv').html(JSON.stringify(searlizeBasicObj));
                             searlizeBasicObj['isMobileLogin']='Y';
                             searlizeBasicObj['userId']=baseObject.users_details[0].userId;
                             searlizeBasicObj['subNum']=baseObject.subNum;
@@ -490,8 +485,9 @@
                             }
 
                             var url = baseObject.baseUrl+'/io/subscriber/setData/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken+'&type=editProfile';
+
                             commonModule.saveData(url,searlizeBasicObj,updatedBasicAdvField)
-                            $('.debugDiv').html(JSON.stringify(searlizeBasicObj));
+
                             commonModule.showLoadingMask({message:"Updating contact...",container : '.mkb_basicField_wrap'});
                           }
                           var updatedBasicAdvField = function(data){
@@ -643,7 +639,7 @@
                           };
 
                           var addNewCF  = function(){
-                              //$('.debugDiv').html($('.dialogBox .addBox_input_wrappers').serialize());
+
 
                               if(!$('.dialogBox input.requiredInput').val()){
                                 $('.dialogBox input.requiredInput').addClass('hasError');
@@ -657,6 +653,7 @@
                                   <input class="hide" value="`+$('.dialogBox input#input2').val()+`">
                                 </div>
                               </li>`);
+                              $('.debugDiv').html('CF new add called');
                               saveBasicAdvanceFields();
 
                           }
@@ -697,6 +694,7 @@
                             $('.addTagWrapper input').val('');
                             // Reattach delete event for new tag
                             $('ul.mks_tag_ul .icon.cross').unbind('click');
+                            $('.tags-not-found').hide();
                             $('ul.mks_tag_ul .icon.cross').on('click',function(){
 
                               var tagName = $(this).parent().find('span').text();
@@ -723,12 +721,13 @@
                                   handleCancel();
                               })
                               $('.dialogBox_save_btn').on('click',function(){
-                                  $('.dialogBox').hide();
+                                  $('.dialogBox,.OverLay').hide();
                                   handleSave(callBackEvent);
                               });
                               $('.dialogBox input').keypress(function(event){
                                 if(event.which==13){
                                   if($('.dialogBox input.requiredInput').val()){
+                                    $('.dialogBox,.OverLay').hide();
                                     handleSave(callBackEvent)
                                   }else{
                                     $('.requiredInput').addClass('hasError')
@@ -1058,8 +1057,10 @@
                                   }
                                 });
                           }
-                          var checkSubscriberList = function(){
 
+
+                          var checkSubscriberList = function(){
+                            $('.debugDivC').html('subscriber list')
                             var userDetails = baseObject.users_details[0];
 
                             var userName    = userDetails.userId.split('@')[0];
@@ -1142,13 +1143,24 @@
                           };
 
                           return {
-                            init: init
+                            init: init,
+                            checkSubscriberList : checkSubscriberList
                           };
 
                         })();
       //console.log(LoginModule);
       LoginModule.init('Hello!');
-
+      var value = Office.context.roamingSettings.get('BMS_REQ_TK');
+      if(value){
+        var userObj = {
+          "bmsToken" : Office.context.roamingSettings.get('BMS_REQ_TK'),
+          "userKey"  : Office.context.roamingSettings.get('userKey'),
+          "userId"  : Office.context.roamingSettings.get('userId')
+        }
+        baseObject.users_details.push(userObj);
+          $('.debugDivC').html(JSON.stringify(baseObject.users_details[0]));
+          LoginModule.checkSubscriberList()
+          }
 
        }
        catch(e){
