@@ -116,6 +116,10 @@ h6 {
     .ms-welcome__features {
         width: 100%;
     }
+    .mksph_icon_search,.mks-icon-close-search{
+      top :-34px !important;
+      right: 20px !important;
+    }
 }
 
 

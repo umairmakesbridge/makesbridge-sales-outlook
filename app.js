@@ -1159,7 +1159,9 @@
         }
         baseObject.users_details.push(userObj);
           $('.debugDivC').html(JSON.stringify(baseObject.users_details[0]));
-          LoginModule.checkSubscriberList()
+          LoginModule.checkSubscriberList();
+          attachedEvents.attachedSearchMks();
+          attachedEvents.switchContactsTags();
           }
 
        }
