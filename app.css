@@ -273,6 +273,7 @@ Login form CSS
         display: block;
         border-bottom: 1px solid rgb(248, 248, 251);
         border-top: 1px solid rgb(248, 248, 251);
+
     }
     .tabcontent {
        /*display: none;*/
@@ -1129,6 +1130,9 @@ div#custom-fields ul li {
        height: 100%;
        display: block;
        z-index: 1;
+       top:0;
+       left:0;
+       padding-top: 40px;
    }
 
    .loader-mask p{

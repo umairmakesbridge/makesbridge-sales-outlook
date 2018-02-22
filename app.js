@@ -11,13 +11,25 @@
   Office.initialize = function (reason) {
     $(document).ready(function () {
       $("#run").html("init");
+
+      var value = Office.context.roamingSettings.get('BMS_REQ_TK');
+      $('.debugDivL').html(value);
+      if(value){
+        $('.ms-welcome__main').show();
+        $('.mks_wrap_step2').removeClass('hide');
+      }else{
+        $('.login-wrap').show();
+      }
+      // $('.debugDivL').html(document.cookie);
+      // Get the current value of the 'myKey' setting
+
       /*=======Append Emails to Body after grabbing======*/
       function appendArray(uniqueAr){
         var emailsHTML = "";
         $('.debugDiv').html(uniqueAr.toString());
 
         $.each(uniqueAr,function(key,value){
-          emailsHTML += `<div class="contact_found ripple">
+          emailsHTML += `<div class="contact_found click_pointer ripple">
                           <div class="cf_silhouette">
                             <div class="cf_silhouette_text c_txt_s"><p>`+value.charAt(0)+`</p>
                             </div>
@@ -37,13 +49,30 @@
          attachedEvents.searchEmailInMks(email);
        });
 
+       $('.mksicon-logout').on('click',function(){
+         $('.debugDiv').html('Logout Button Press');
+         $('.login-wrap').show();
+         $('.new_contact_true,.create_new_contact_card').addClass('hide');
+         $('.ms-welcome__main').hide();
+
+         // Update the value of the 'myKey' setting
+         Office.context.roamingSettings.set('BMS_REQ_TK', '');
+         Office.context.roamingSettings.set('userId', '');
+         Office.context.roamingSettings.set('userKey', '');
+         // Persist the change
+         Office.context.roamingSettings.saveAsync();
+       });
+
       }
       /*=======End : Append Emails to Body after grabbing======*/
+
       var _mailbox = Office.context.mailbox;
       var _settings = Office.context.roamingSettings;
+
        // Obtains the current item.
        $("#error").html("mail box");
        try {
+         // parent.window.style.width = "400px";
        var item = _mailbox.item;
        var emailsHTML = "";
        var emailCount = 0;
@@ -126,6 +155,15 @@
             gmail_email_list : [],
             subNum : ""
        }
+       var value = Office.context.roamingSettings.get('BMS_REQ_TK');
+       if(value){
+         var userObj = {
+           "bmsToken" : Office.context.roamingSettings.get('BMS_REQ_TK'),
+           "userKey"  : Office.context.roamingSettings.get('userKey'),
+           "userId"  : Office.context.roamingSettings.get('userId')
+         }
+         baseObject.users_details.push(userObj);
+       }
        /*-----------Common Event Attach-------------*/
        var attachedEvents = (function(){
          var attachedSearchMks = function(params){
@@ -150,10 +188,19 @@
                 searchContact(event.currentTarget.value);
               }
            });
+           $('.mksicon-logout').unbind('click');
            $('.mksicon-logout').on('click',function(){
              $('.debugDiv').html('Logout Button Press');
              $('.login-wrap').show();
+             $('.new_contact_true,.create_new_contact_card').addClass('hide');
              $('.ms-welcome__main').hide();
+
+             // Update the value of the 'myKey' setting
+             Office.context.roamingSettings.set('BMS_REQ_TK', '');
+             Office.context.roamingSettings.set('userId', '');
+             Office.context.roamingSettings.set('userKey', '');
+             // Persist the change
+             Office.context.roamingSettings.saveAsync();
            });
          }
 
@@ -185,7 +232,7 @@
                      $('.search_results_single_value').html('');
                      $.each(result.subscriberList[0],function(key,value){
 
-                       $('.search_results_single_value').append(`<div class="contact_found searched_email_mks ripple">
+                       $('.search_results_single_value').append(`<div class="contact_found searched_email_mks click_pointer ripple">
                          <div class="cf_silhouette">
                            <div class="cf_silhouette_text c_txt_s">
                              <p>`+value[0].email.charAt(0)+`</p>
@@ -226,7 +273,7 @@
          }
 
          var searchEmailInMks = function(email){
-
+           commonModule.showLoadingMask({message:"Loading subscriber details..",container : '.mks_wrap_step2'});
            $('.mks_createContact_ .scf_email p').html(email);
            $('.create_slider .scf_email span').html(email);
            $('.mks_createContact_ .scf_silhouette_text p,.create_slider .scf_silhouette_text p').html(email.charAt(0));
@@ -254,6 +301,7 @@
                               if(parseInt(resObj.totalCount)==0){
                                 $('.mks_wrap_step3,.new_contact_true,.create_new_contact_card').removeClass('hide');
                                 $('.mks_wrap_step2').addClass('hide');
+                                  $('.new_contact_false').addClass('hide');
                                 init()
                               }else{
                                 $('.debugDiv').html(resObj.subscriberList[0].subscriber1[0].subNum);
@@ -261,6 +309,7 @@
                                 $('.mksph_back').removeClass('hide');
                                 $('.mks_wrap_step3').removeClass('hide');
                                 baseObject['subNum'] = resObj.subscriberList[0].subscriber1[0].subNum;
+                                commonModule.showLoadingMask({message:"Loading subscriber details..",container : '.mks_wrap_step2'});
                                 getSubscriberDetails();
                               }
                           };
@@ -356,13 +405,6 @@
                                     $(this).addClass('expand');
                                     $(this).removeClass('collapse');
                                   }
-                                  /*if($(event.currentTarget).hasClass('expand')){
-                                    $(event.currentTarget).removeClass('expand');
-                                    $(event.currentTarget).addClass('collapse');
-                                  }else{
-                                    $(event.currentTarget).removeClass('collapse');
-                                    $(event.currentTarget).addClass('expand');
-                                  }*/
                                 });
 
                           };
@@ -377,6 +419,7 @@
                           }
 
                           var getSubscriberDetails = function(){
+                            commonModule.showLoadingMask({message:"Loading contact details...",container : '.mkb_basicField_wrap'});
                             var searchUrl = baseObject.baseUrl
                                             +'/io/subscriber/getData/?BMS_REQ_TK='
                                             + baseObject.users_details[0].bmsToken +'&type=getSubscriber&subNum='
@@ -396,7 +439,7 @@
                             $('.score-value').html(data.score);
                             $.each($('.mkb_basicField_wrap .mksph_contact_data'),function(key,val){
                               $(val).find('.mksph_contact_value').html(data[$(val).find('input').attr('name')]);
-                              $(val).find('input').val(data[$(val).find('input').attr('name')]);
+                              $(val).find('input').val(commonModule.decodeHTML(data[$(val).find('input').attr('name')]));
                             });
                             $('.customFields_ul').html('');
                             if(data.cusFldList){
@@ -405,7 +448,7 @@
                                   <div>
                                     <span class="mksph_contact_title">`+Object.keys(value[0])[0]+` </span>:
                                     <span class="mksph_contact_value show mkb_elipsis">`+value[0][Object.keys(value[0])[0]]+`</span>
-                                    <input class="hide" value="`+value[0][Object.keys(value[0])[0]]+`">
+                                    <input class="hide" value="`+commonModule.decodeHTML(value[0][Object.keys(value[0])[0]])+`">
                                   </div>
                                 </li>`);
                               });
@@ -426,6 +469,7 @@
                               });
                               $('.mks_tag_ul').append(tags);
                             }
+                            commonModule.hideLoadingMask();
                             attachSubscriberEvents()
                           }
                           var saveBasicAdvanceFields = function(){
@@ -467,6 +511,7 @@
                                 parentDiv.find('.mkb_basic_done').removeClass('hide');
                                 parentDiv.find('.mksph_contact_data .mksph_contact_value').addClass('hide');
                                 parentDiv.find('.mksph_contact_data input').removeClass('hide');
+                                setTimeout("$('.mkb_basicField_wrap .focusThis').focus()",500);
                                 $('.basic_expand').trigger('click');
                               });
 
@@ -515,42 +560,10 @@
                                                 <input type="text" name="cvlaue" value="" id="input2" class="" placeholder="Enter Value">`;
                                 dialogModule.dialogView({showTitle:'Add Custom Field',childrenView : bodyHtml, additionalClass : '',container : '.customField_ul_wraps',saveCallBack : addNewCF });
                                 event.stopPropagation();
-                              })
-
-                              $('.addTag').on('click',function(event){
-                                  $(this).hide();
-                                  $('.addTagWrapper').show();
                               });
-                              $('.addTagWrapper .scfe_close_wrap').on('click',function(){
-                                  $(this).parents('.addTagWrapper').hide();
-                                  $('.addTag').show();
-                              });
-
-                              $('ul.mks_tag_ul .icon.cross').on('click',function(){
-
-                                var tagName = $(this).parent().find('span').text();
-
-                                deleteTags(tagName);
-                              });
-
-                              $('.addTagWrapper .scfe_save_wrap .scfe_ach').on('click',function(){
-                                  var url = baseObject.baseUrl+'/io/subscriber/setData/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken;
-                                  var addTag = {
-                                            type: 'addTag'
-                                           ,tags:''
-                                           ,subNum: baseObject.subNum
-                                           ,tag: commonModule.encodeHTML($('#addTagName').val())
-                                           ,ukey:baseObject.users_details[0].userKey
-                                           ,isMobileLogin:'Y'
-                                           ,userId:baseObject.users_details[0].userId
-                                         };
-                                      $('.debugDiv').html(JSON.stringify(addTag));
-                                    commonModule.showLoadingMask({message:"Adding Tag...",container : '.addTagWrapper'});
-                                    commonModule.saveData(url,addTag,generateAddedTag);
-                              });
-
+                              $('.mks_expandable').unbind('click');
                               $('.mks_expandable').on('click',function(event){
-
+                                  $('.debugDiv').html('collapse clicked')
 
                                   /*-- Adding height --*/
                                   if($(this).hasClass('basic_expand')){
@@ -584,10 +597,48 @@
                                   }
                               });
 
+                              $('.addTag').on('click',function(event){
+                                  $(this).hide();
+                                  $('.addTagWrapper').show();
+                                  setTimeout("$('.addTagWrapper .focusThis').focus()",500);
+                              });
+                              $('.tag__input_mks').keypress(function(event){
+                                 if(event.which == 13){
+                                   $('.addTagWrapper .scfe_save_wrap .scfe_ach').trigger('click');
+                                 }
+                              });
+                              $('.addTagWrapper .scfe_close_wrap').on('click',function(){
+                                  $(this).parents('.addTagWrapper').hide();
+                                  $('.addTag').show();
+                              });
+
+                              $('ul.mks_tag_ul .icon.cross').on('click',function(){
+
+                                var tagName = $(this).parent().find('span').text();
+
+                                deleteTags(tagName);
+                              });
+
+                              $('.addTagWrapper .scfe_save_wrap .scfe_ach').on('click',function(){
+                                  var url = baseObject.baseUrl+'/io/subscriber/setData/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken;
+                                  var addTag = {
+                                            type: 'addTag'
+                                           ,tags:''
+                                           ,subNum: baseObject.subNum
+                                           ,tag: commonModule.encodeHTML($('#addTagName').val())
+                                           ,ukey:baseObject.users_details[0].userKey
+                                           ,isMobileLogin:'Y'
+                                           ,userId:baseObject.users_details[0].userId
+                                         };
+                                      $('.debugDiv').html(JSON.stringify(addTag));
+                                    commonModule.showLoadingMask({message:"Adding Tag...",container : '.addTagWrapper'});
+                                    commonModule.saveData(url,addTag,generateAddedTag);
+                              });
+
                                 $('.mksph_back').on('click',function(event){
                                     $(this).addClass('hide');
                                     $('.mks_wrap_step2').removeClass('hide');
-                                    $('.mks_wrap_step3').removeClass('hide');
+                                    $('.mks_wrap_step3').addClass('hide');
                                 });
                           };
 
@@ -599,7 +650,7 @@
                                 return;
                               }
 
-                              $('ul.customFields_ul').append(`<li>
+                              $('ul.customFields_ul').append(`<li class="click_pointer">
                                 <div>
                                   <span class="mksph_contact_title">`+$('.dialogBox input#input1').val()+` </span>:
                                   <span class="mksph_contact_value show mkb_elipsis">`+$('.dialogBox input#input2').val()+`</span>
@@ -672,8 +723,19 @@
                                   handleCancel();
                               })
                               $('.dialogBox_save_btn').on('click',function(){
+                                  $('.dialogBox').hide();
                                   handleSave(callBackEvent);
-                              })
+                              });
+                              $('.dialogBox input').keypress(function(event){
+                                if(event.which==13){
+                                  if($('.dialogBox input.requiredInput').val()){
+                                    handleSave(callBackEvent)
+                                  }else{
+                                    $('.requiredInput').addClass('hasError')
+                                  }
+                                }
+                              });
+                            setTimeout("$('.dialogBox .focusThis').focus()",500);
                             }
 
                             var dialogView = function(reqObj){
@@ -818,6 +880,7 @@
                                             }else{
                                               if(data[1]=='SESSION_EXPIRED'){
                                                 // Show Alert and logout
+                                                  $('.mksicon-logout').trigger('click');
                                                 commonModule.ErrorAlert({message:data[1]});
                                               }else{
                                                 //Just show Alert message
@@ -844,6 +907,7 @@
                                             //$('.debugDiv').html(data)
                                             if(data[1]=='SESSION_EXPIRED'){
                                               // Show Alert and logout
+                                                $('.mksicon-logout').trigger('click');
                                               commonModule.ErrorAlert({message:data[1]})
                                             }else if(data.errorDetail){
                                               //call alert
@@ -937,12 +1001,21 @@
                                       commonModule.ErrorAlert({message:data.errorDetail})
                                       return;
                                     }
-                                    commonModule.hideLoadingMask();
-                                    _settings.set("cookie", Date());
+
+                                    // Update the value of the 'myKey' setting
+                                    Office.context.roamingSettings.set('BMS_REQ_TK', data.bmsToken);
+                                    Office.context.roamingSettings.set('userId', data.userId);
+                                    Office.context.roamingSettings.set('userKey', data.userKey);
+                                    // Persist the change
+                                    Office.context.roamingSettings.saveAsync();
+
                                     $('.login-wrap').hide();
                                     $('.ms-welcome__main').show();
                                     $('.mks_wrap_step2').removeClass('hide');
+                                    //document.cookie = "username=John Doe";
 
+
+                                    commonModule.hideLoadingMask();
                                     baseObject.users_details.push(data);
                                     //localStorage.setItem('pmks_userpass', this.state.username+'__'+this.state.password);
                                     attachedEvents.attachedSearchMks();
@@ -1023,6 +1096,7 @@
                                       }else{
                                         if(data[1]=='SESSION_EXPIRED'){
                                           // Show Alert and logout
+                                          $('.mksicon-logout').trigger('click');
                                           commonModule.ErrorAlert({message:data[1]})
                                         }else{
                                           //Just show Alert message

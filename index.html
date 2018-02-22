@@ -25,11 +25,10 @@
 
 <body class="ms-font-m ms-welcome">
       <!-- <h2>Username : <span class="userName"></span></h2> -->
-      <article class="login-wrap">
+      <article class="login-wrap" style="display:none;">
         <div class="mksph_wrapper mksph_login_wrap">
             <div class="debugDivL"></div>
             <h2>Log In</h2>
-            <div class="debugLoginDiv"  style="width:280px;overflow-x:auto;"></div>
             <div class="mksph_cardbox">
                 <form>
 
@@ -41,7 +40,7 @@
         </div>
     </article>
     <main class="ms-welcome__main" style="display:none;">
-           <header class="ms-welcome__header ms-bgColor-neutralLighter ms-u-fadeIn500">
+           <header class="ms-welcome__header ms-bgColor-neutralLighter ms-u-fadeIn500 hide">
                     <h1 class="ms-fontSize-su ms-fontWeight-light ms-fontColor-neutralPrimary debugDiv " style="width:280px;overflow-x:auto;">
                     </h1>
 
@@ -516,7 +515,7 @@
 
                                             <div class="autocomplete__menu--wrap">
                                               <div class="autocomplete__menu">
-                                                <input type="text" class="autocomplete__input" value="" id="addTagName" placeholder="add or apply a tag to this contact...">
+                                                <input type="text" class="autocomplete__input tag__input_mks focusThis" value="" id="addTagName" placeholder="add or apply a tag to this contact...">
                                                 <ul class="autocomplete__items  hide">
                                                   <li class="autocomplete__item autocomplete__item--disabled">
                                                     <span data-id="0"></span>
@@ -583,12 +582,12 @@
                                           <div class="mksph_contact_data">
                                             <span class="mksph_contact_title">First Name : </span>
                                             <span class="mksph_contact_value show"></span>
-                                            <input class="hide focusThis" name="firstName" value="abdulleh">
+                                            <input class="hide focusThis" name="firstName" value="">
                                           </div>
                                           <div class="mksph_contact_data">
                                             <span class="mksph_contact_title">Last Name : </span>
                                             <span class="mksph_contact_value show"></span>
-                                            <input class="hide" name="lastName" value="four">
+                                            <input class="hide" name="lastName" value="">
                                           </div>
                                           <div class="mksph_contact_data">
                                             <span class="mksph_contact_title">Company : </span>
