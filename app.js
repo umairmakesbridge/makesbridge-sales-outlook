@@ -592,7 +592,6 @@
                                     $(this).addClass('expand');
                                   }
                               });
-
                               $('.addTag').on('click',function(event){
                                   $(this).hide();
                                   $('.addTagWrapper').show();
@@ -614,7 +613,7 @@
 
                                 deleteTags(tagName);
                               });
-
+                              $('.addTagWrapper .scfe_save_wrap .scfe_ach').unbind('click');
                               $('.addTagWrapper .scfe_save_wrap .scfe_ach').on('click',function(){
                                   var url = baseObject.baseUrl+'/io/subscriber/setData/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken;
                                   var addTag = {
@@ -688,6 +687,7 @@
                               </a>
                             </li>`;
                             $('.addTagWrapper').hide();
+                            $('.addTag').show();
                             $('.mks_tag_ul').parent().removeClass('hide');
                             $('.mks_tag_ul').append(dataA);
 

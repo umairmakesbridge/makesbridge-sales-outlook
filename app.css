@@ -156,7 +156,7 @@ h6 {
 }
 .mksph_logout {
     float: right;
-    width: 5%;
+    width: 10%;
     height: 50px;
     cursor: pointer;
 }
@@ -830,7 +830,7 @@ input.hasError {
     position: fixed;
     top: 185px;
     z-index: 299;
-    width: 340px;
+    width: 90%;
     right: 19px;
     background: rgb(255, 255, 255);
 }
