@@ -293,6 +293,7 @@
                               if(parseInt(resObj.totalCount)==0){
                                 $('.mks_wrap_step3,.new_contact_true,.create_new_contact_card').removeClass('hide');
                                 $('.mks_wrap_step2').addClass('hide');
+                                $('.mksph_back').removeClass('hide');
                                   $('.new_contact_false').addClass('hide');
                                 init()
                               }else{
@@ -300,6 +301,7 @@
                                 $('.mks_wrap_step2').addClass('hide');
                                 $('.mksph_back').removeClass('hide');
                                 $('.mks_wrap_step3').removeClass('hide');
+                                $('.new_contact_true').addClass('hide');
                                 baseObject['subNum'] = resObj.subscriberList[0].subscriber1[0].subNum;
                                 commonModule.showLoadingMask({message:"Loading subscriber details..",container : '.mks_wrap_step2'});
                                 getSubscriberDetails();
@@ -398,6 +400,12 @@
                                     $(this).removeClass('collapse');
                                   }
                                 });
+                                $('.mksph_back').on('click',function(event){
+                                    $(this).addClass('hide');
+                                    $('.mks_wrap_step2').removeClass('hide');
+                                    $('.mks_wrap_step3').addClass('hide');
+                                     commonModule.hideLoadingMask();
+                                });
 
                           };
 
@@ -427,6 +435,7 @@
                             if(data.firstName){$('.edit_top_slider_title .scf_email span').eq(0).html(data.firstName)}
                             if(data.lastName){$('.edit_top_slider_title .scf_email span').eq(1).html(data.lastName)}
                             $('.edit_top_slider_title .scf_email span').eq(2).html(data.email)
+                            $('.new_contact_false .scf_silhouette_text p').html(data.email.charAt(0));
 
                             $('.score-value').html(data.score);
                             $.each($('.mkb_basicField_wrap .mksph_contact_data'),function(key,val){
@@ -527,13 +536,22 @@
                                 }
                                 saveBasicAdvanceFields();
                               });
+                              $('.mkb_cf_done').on('click',function(event){
+                                var parentDiv = $(this).parent();
+                                $('.cf_expand').trigger('click');
+                                parentDiv.find('.mkb_cf_cancel_btn').addClass('hide');
+                                parentDiv.find('.mkb_cf_done').addClass('hide');
+                                parentDiv.find('.mkb_cf_edit_btn').removeClass('hide');
+                                parentDiv.find('.addCF').removeClass('hide');
+                                saveBasicAdvanceFields();
+                              });
 
                               $('.mkb_cf_edit_btn').on('click',function(event){
                                 var parentDiv = $(this).parent();
                                 $(this).addClass('hide');
                                 parentDiv.find('.addCF').addClass('hide');
                                 parentDiv.find('.mkb_cf_cancel_btn').removeClass('hide');
-                                parentDiv.find('.mkb_done').removeClass('hide');
+                                parentDiv.find('.mkb_cf_done').removeClass('hide');
                                 parentDiv.find('ul.customFields_ul li .mksph_contact_value').addClass('hide');
                                 parentDiv.find('ul.customFields_ul li input').removeClass('hide');
                                 $('.cf_expand').trigger('click');
@@ -543,14 +561,14 @@
                                 $(this).addClass('hide');
                                 parentDiv.find('.addCF').removeClass('hide');
                                 parentDiv.find('.mkb_cf_edit_btn').removeClass('hide');
-                                parentDiv.find('.mkb_done').addClass('hide');
+                                parentDiv.find('.mkb_cf_done').addClass('hide');
                                 parentDiv.find('ul.customFields_ul li .mksph_contact_value').removeClass('hide');
                                 parentDiv.find('ul.customFields_ul li input').addClass('hide');
                                   $('.cf_expand').trigger('click');
                               });
                               $('.edit_top_slider').on('click',function(event){
                                 $('.debugDiv').html('Edit Basic Fields ');
-                                $('.mkb_basicField_wrap .mkb_basic_edit,.basic_expand').trigger('click');
+                                $('.mkb_basicField_wrap .mkb_basic_edit').trigger('click');
                               })
                               $('.addCF').unbind('click');
                               $('.addCF').on('click',function(event){

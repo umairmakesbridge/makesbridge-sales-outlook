@@ -272,7 +272,7 @@ Login form CSS
     }
     .contact_found {
         background: #fff;
-        padding: 10px 12px;
+        padding: 10px 6px;
         border-radius: 2px;
         display: block;
         border-bottom: 1px solid rgb(248, 248, 251);
@@ -686,7 +686,7 @@ Login form CSS
     }
     .cf_email_wrap {
         width: 100%;
-        padding-left: 40px;
+        padding-left: 32px;
     }
     .cf_email {
         height: 25px;
@@ -985,7 +985,7 @@ div#custom-fields ul li {
     position: absolute;
     top: -25px;
 }
-.mkb_cf_btn.mkb_done {
+.mkb_cf_btn.mkb_cf_done {
     right: 60px;
 }
 .mkb_btn.mkb_basic_done {
