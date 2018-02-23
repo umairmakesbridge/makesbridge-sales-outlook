@@ -272,7 +272,7 @@ Login form CSS
     }
     .contact_found {
         background: #fff;
-        padding: 10px 0px 10px;
+        padding: 10px 12px;
         border-radius: 2px;
         display: block;
         border-bottom: 1px solid rgb(248, 248, 251);
@@ -661,7 +661,7 @@ Login form CSS
       Common CSS
     ==============================*/
     .cf_silhouette {
-        width: 40px;
+        width: 20px;
         float: left;
     }
     .cf_silhouette_text{

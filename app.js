@@ -29,7 +29,7 @@
         $('.debugDiv').html(uniqueAr.toString());
 
         $.each(uniqueAr,function(key,value){
-          emailsHTML += `<div class="contact_found click_pointer ripple">
+          emailsHTML += `<div class="contact_found click_pointer ripple" title="`+value+`">
                           <div class="cf_silhouette">
                             <div class="cf_silhouette_text c_txt_s"><p>`+value.charAt(0)+`</p>
                             </div>
@@ -488,12 +488,12 @@
 
                             commonModule.saveData(url,searlizeBasicObj,updatedBasicAdvField)
 
-                            commonModule.showLoadingMask({message:"Updating contact...",container : '.mkb_basicField_wrap'});
+                            commonModule.showLoadingMask({message:"Updating contact...",container : '.new_contact_false'});
                           }
                           var updatedBasicAdvField = function(data){
                             $('.debugDiv').html('Hit After Updating');
-                            $('.mkb_basic_cancel').trigger('click');
-                            $('.mkb_cf_cancel_btn').trigger('click');
+                          //  $('.mkb_basic_cancel').trigger('click');
+                          //  $('.mkb_cf_cancel_btn').trigger('click');
                             commonModule.SuccessAlert({message :'Subscriber fields updated successfully.'})
                             $('.dialogBox').remove();
                             $('.OverLay').remove();
@@ -508,7 +508,7 @@
                                 parentDiv.find('.mksph_contact_data .mksph_contact_value').addClass('hide');
                                 parentDiv.find('.mksph_contact_data input').removeClass('hide');
                                 setTimeout("$('.mkb_basicField_wrap .focusThis').focus()",500);
-                                $('.basic_expand').trigger('click');
+                                $('.mkb_basicField_wrap .mks_expandable').trigger('click');
                               });
 
                               $('.mkb_basicField_wrap .mkb_basic_cancel').on('click',function(event){
@@ -518,12 +518,12 @@
                                   parentDiv.find('.mkb_basic_done').addClass('hide');
                                   parentDiv.find('.mksph_contact_data .mksph_contact_value').removeClass('hide');
                                   parentDiv.find('.mksph_contact_data input').addClass('hide');
-                                  $('.basic_expand').trigger('click');
+                                  $('.mkb_basicField_wrap .mks_expandable').trigger('click');
                               });
 
                               $('.mkb_basicField_wrap .mkb_basic_done,.mkb_done').on('click',function(event){
                                 if($(event.currentTarget).hasClass('mkb_basic_done')){
-                                    $('.basic_expand').trigger('click');
+                                    $('.mkb_basicField_wrap .mks_expandable').trigger('click');
                                 }
                                 saveBasicAdvanceFields();
                               });
@@ -536,6 +536,7 @@
                                 parentDiv.find('.mkb_done').removeClass('hide');
                                 parentDiv.find('ul.customFields_ul li .mksph_contact_value').addClass('hide');
                                 parentDiv.find('ul.customFields_ul li input').removeClass('hide');
+                                $('.cf_expand').trigger('click');
                               })
                               $('.mkb_cf_cancel_btn').on('click',function(event){
                                 var parentDiv = $(this).parent();
@@ -545,6 +546,7 @@
                                 parentDiv.find('.mkb_done').addClass('hide');
                                 parentDiv.find('ul.customFields_ul li .mksph_contact_value').removeClass('hide');
                                 parentDiv.find('ul.customFields_ul li input').addClass('hide');
+                                  $('.cf_expand').trigger('click');
                               });
                               $('.edit_top_slider').on('click',function(event){
                                 $('.debugDiv').html('Edit Basic Fields ');
