@@ -40,7 +40,7 @@
         </div>
     </article>
     <main class="ms-welcome__main" style="display:none;">
-           <header class="ms-welcome__header ms-bgColor-neutralLighter ms-u-fadeIn500 hide">
+           <header class="ms-welcome__header ms-bgColor-neutralLighter ms-u-fadeIn500">
                     <h1 class="ms-fontSize-su ms-fontWeight-light ms-fontColor-neutralPrimary debugDiv " style="width:280px;overflow-x:auto;">
                     </h1>
 
@@ -82,7 +82,40 @@
           </div>
 
         <div class="mks_wrap_step2 hide">
+
           <div class="s_contact_found_wraper plc_marginbottom10 email_found_in_message" style="">
+            <div class="top-header contact_found">
+              <span class="click-label">Last 24 hrs: </span>
+              <ul class="last24">
+                <li class="click_default clickers">
+                  <span class="pclr23 badge">0</span>
+                  Clickers
+                </li>
+                <li class="click_default visitors">
+                  <span class="pclr19 badge">0</span>
+                  Visitors
+                </li>
+              </ul>
+            </div>
+            <div class="custom-scroll " >
+              <div class="outer-container" style="height: 100%;">
+                <div class="custom-scrollbar">
+                  <div class="custom-scroll-handle" style="top: 0px; display: block;">
+                    <div class="inner-handle"></div>
+                  </div>
+                </div>
+                <div class="inner-container" style="height: 100%;">
+                  <div class="content-wrapper" style="height: 100%; overflow-y: visible;">
+                    <div class="plc_marginbottom30 clicker_wraps">
+                            <p>Loading...</p>
+                      </div>
+                      <div class="plc_marginbottom30 visitors_wraps hide">
+
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             <h2 class="total-count-head">
               <strong class="badge total-count">0</strong>
               <span class="total-text">emails found on page</span>
@@ -107,19 +140,7 @@
           <!-- Search Section -->
 
           <div class="s_contact_found_wraper">
-            <div class="top-header contact_found hide">
-              <span class="click-label">Last 24 hrs: </span>
-              <ul class="last24">
-                <li class="click_default ">
-                  <span class="pclr23 badge">0</span>
-                  Clickers
-                </li>
-                <li class="click_default ">
-                  <span class="pclr19 badge">0</span>
-                  Visitors
-                </li>
-              </ul>
-            </div>
+
             <div class="container">
               <div class="plc_marginbottom30"></div>
             </div>
@@ -762,6 +783,7 @@
     <script type="text/javascript" src="node_modules/office-ui-fabric-js/dist/js/fabric.js"></script>
 
     <script type="text/javascript" src="app.js"></script>
+    <script type="text/javascript" src="common.js"></script>
 </body>
 
 </html>

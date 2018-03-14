@@ -61,6 +61,7 @@
          Office.context.roamingSettings.set('userKey', '');
          // Persist the change
          Office.context.roamingSettings.saveAsync();
+         $('.debugDiv').html(Office.context.roamingSettings.get('userId'));
        });
 
       }
@@ -281,9 +282,9 @@
           //$('.debugDiv').html(responseData.totalCount)
          }
          return {
-           attachedSearchMks : attachedSearchMks,
+           attachedSearchMks  : attachedSearchMks,
            switchContactsTags : switchContactsTags,
-           searchEmailInMks : searchEmailInMks
+           searchEmailInMks   : searchEmailInMks
          };
        })();
        /*----- Subscriber Module ----*/
@@ -811,194 +812,7 @@
                                dialogView : dialogView
                              };
                           })();
-       /*----- Common Module ----*/
 
-       var commonModule = (function(){
-                                var showLoadingMask = function(paramObj){
-                                  var loadingHtml = `<div class="loader-mask `+paramObj.extraClass+`">
-                                            <div class="spinner">
-                                              <div class="bounce1"></div>
-                                              <div class="bounce2"></div>
-                                              <div class="bounce3"></div>
-                                            </div>
-                                            <p>`+paramObj.message+`</p>
-                                          </div>`;
-                                  $(paramObj.container).append(loadingHtml);
-                                }
-
-                                var hideLoadingMask = function(paramObj){
-                                  $('.loader-mask').remove();
-                                }
-
-                                var extractEmailsFromBody = function(text){
-                                    //return text.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi);
-                                    return 'fahad';
-                                }
-
-                                var encodeHTML= function(str){
-                                 if (typeof (str) !== "undefined") {
-                                             str = str.replace(/:/g, "&#58;");
-                                             str = str.replace(/\'/g, "&#39;");
-                                             str = str.replace(/=/g, "&#61;");
-                                             str = str.replace(/\(/g, "&#40;");
-                                             str = str.replace(/\)/g, "&#41;");
-                                             str = str.replace(/</g, "&lt;");
-                                             str = str.replace(/>/g, "&gt;");
-                                             str = str.replace(/\"/g, "&quot;");
-                                             str = str.replace(/\‘/g, "&#8216;");
-                                             str = str.replace(//g, "");
-                                             // str = str.replace(/ /g,'+')
-                                         }
-                                         else {
-                                             str = "";
-                                         }
-                                         return str;
-                                }
-
-                                var decodeHTML= function (str,lineFeed){
-                                 //decoding HTML entites to show in textfield and text area
-                                        if (typeof (str) !== "undefined") {
-                                            str = str.replace(/&amp;/g, "&");
-                                            str = str.replace(/&#58;/g, ":");
-                                            str = str.replace(/&#39;/g, "\'");
-                                            str = str.replace(/&#40;/g, "(");
-                                            str = str.replace(/&#41;/g, ")");
-                                            str = str.replace(/&lt;/g, "<");
-                                            str = str.replace(/&gt;/g, ">");
-                                            str = str.replace(/&gt;/g, ">");
-                                            str = str.replace(/&#9;/g, "\t");
-                                            str = str.replace(/&nbsp;/g, " ");
-                                            str = str.replace(/&quot;/g, "\"");
-                                            str = str.replace(/&#8216;/g, "‘");
-                                            str = str.replace(/&#61;/g, "=");
-                                            str = str.replace(/%252B/g,' ');
-                                            str = str.replace(/\+/g, " ");
-                                            if (lineFeed) {
-                                                str = str.replace(/&line;/g, "\n");   // NEED TO DISCUSS THIS WITH UMAIR
-                                            }
-                                        }
-                                        else {
-                                            str = "";
-                                        }
-                                        return str;
-                               }
-
-                                var getDataRequest = function(url,callBack){
-                                  $('.debugDiv').html(url)
-                                  $.ajax({
-                                        url:url,
-                                        type:"GET",
-                                        success: function(data){
-                                          try{
-
-                                            if(data[0]!='err'){
-                                              //$('.debugDiv').html(JSON.stringify(data))
-                                              var result = JSON.parse(data);
-
-                                              callBack(result);
-                                            }else{
-                                              if(data[1]=='SESSION_EXPIRED'){
-                                                // Show Alert and logout
-                                                  $('.mksicon-logout').trigger('click');
-                                                commonModule.ErrorAlert({message:data[1]});
-                                              }else{
-                                                //Just show Alert message
-                                                commonModule.ErrorAlert({message:data.errorDetail});
-                                              }
-                                            }
-                                          }catch(e){
-                                            $("#error").html(e.message);
-                                          }
-                                        }
-                                      });
-                                }
-
-                              var saveData = function(url,data,callBack){
-                                  $('.debugDiv').html('Creating The ACCount')
-                                  $.ajax({
-                                        url:url,
-                                        type:"POST",
-                                        data:data,
-                                        contentType:"application/x-www-form-urlencoded",
-                                        dataType:"json",
-                                        success: function(data){
-                                          try{
-                                            //$('.debugDiv').html(data)
-                                            if(data[1]=='SESSION_EXPIRED'){
-                                              // Show Alert and logout
-                                                $('.mksicon-logout').trigger('click');
-                                              commonModule.ErrorAlert({message:data[1]})
-                                            }else if(data.errorDetail){
-                                              //call alert
-                                              commonModule.ErrorAlert({message:data.errorDetail})
-                                              commonModule.hideLoadingMask();
-                                              return;
-                                            }
-                                            commonModule.hideLoadingMask();
-                                            $('.debugDiv').html('Created The ACCount')
-                                            //var jsonResponse = JSON.parse(data);
-                                            callBack(data);
-                                          }catch(e){
-                                            $('.debugDiv').html(e.message);
-                                          }
-
-                                        }
-                                      });
-                                }
-
-                                var ErrorAlert = function(props) {
-                                  if (props.message) {
-                                              var inlineStyle = '0px';
-                                              var fixed_position = "fixed";
-                                              var cl = 'error';
-                                              var title = 'Error';
-                                              var icon  = 'mksicon-Close';
-                                              if (props && props.type == 'caution')
-                                              {
-                                                  cl = 'caution';
-                                                  title = 'Caution';
-                                              }
-                                              else if (props && props.type == 'Disabled')
-                                              {
-                                                  cl = 'caution';
-                                                  title = props.type;
-                                              }
-
-                                              var message_box = $('<div class="messagebox messsage_alert messagebox_ ' + cl + '" style=' + inlineStyle + '><span class="alert_icon '+icon+'"></span><h3>' + title + '</h3><p>' + props.message + '</p><a class="alert_close_icon mksicon-Close"></a></div> ');
-                                              $('.ms-welcome').append(message_box);
-                                              message_box.find(".alert_close_icon").click(function (e) {
-                                                  message_box.fadeOut("fast", function () {
-                                                      $(this).remove();
-                                                  })
-                                                  e.stopPropagation()
-                                              });
-                                          }
-                                }
-
-                                var SuccessAlert = function(props) {
-                                  var message_box = $('<div class="global_messages messagebox success"><span class="alert_icon mksicon-Check"></span><h3>Success</h3><p>'+props.message+'</p><a class="alert_close_icon mksicon-Close"></a></div>')
-                                    $('.ms-welcome').append(message_box);
-                                    $(".global_messages").hide();
-                                    $(".global_messages").slideDown("medium", function () {
-                                        setTimeout('$(".global_messages").remove()', 4000);
-                                    });
-                                    $(".global_messages .alert_close_icon").click(function () {
-                                        $(".global_messages").fadeOut("fast", function () {
-                                            $(this).remove();
-                                        })
-                                  });
-                                }
-                                return {
-                                  showLoadingMask: showLoadingMask,
-                                  hideLoadingMask: hideLoadingMask,
-                                  getDataRequest : getDataRequest,
-                                  saveData : saveData,
-                                  encodeHTML : encodeHTML,
-                                  decodeHTML : decodeHTML,
-                                  ErrorAlert : ErrorAlert,
-                                  SuccessAlert : SuccessAlert
-                                };
-                           })();
        /*----- Login Module ----*/
        var LoginModule = (function () {
                           var loginAjaxCall = function (reqObj) {
@@ -1103,6 +917,7 @@
                                         if(parseInt(jsonResponse.totalCount)==0){
 
                                           createNewList();
+                                          getClickerVisitors();
                                           //this.getUserSFStats();
                                       }else{
 
@@ -1112,7 +927,7 @@
                                                                               ,listChecksum:jsonResponse.lists[0].list1[0]['listNumber.checksum']
                                                                             }
                                           //this.getUserSFStats();
-
+                                          getClickerVisitors();
                                       }
                                       }else{
                                         if(data[1]=='SESSION_EXPIRED'){
@@ -1121,7 +936,8 @@
                                           commonModule.ErrorAlert({message:data[1]})
                                         }else{
                                           //Just show Alert message
-                                          commonModule.ErrorAlert({message:data[1]})
+                                          commonModule.ErrorAlert({message:data[1]});
+
                                         }
                                       }
 
@@ -1134,7 +950,73 @@
                                 });
 
                           }
+                          var getClickerVisitors =  function(){
+                            //https://test.bridgemailsystem.com/pms/io/subscriber/getData/?
+                            //BMS_REQ_TK=e1plTH3CifVtWdJkWeu6NnQ0xT3LYe&type=getSAMSubscriberStats&ukey=25YIXbbb&isMobileLogin=Y&userId=umair
+                            //
+                            var url = baseObject.baseUrl+"/io/subscriber/getData/?BMS_REQ_TK="
+                            +baseObject.users_details[0].bmsToken
+                            +'&type=getSAMSubscriberStats&ukey='
+                            +baseObject.users_details[0].userKey
+                            +'&isMobileLogin=Y&userId='+baseObject.users_details[0].userId;
+                            $('.debugDiv').html('get visitors & clickers');
+                            commonModule.getDataRequest(url,generateVisitorsClickers);
 
+                          }
+                          var generateVisitorsClickers = function(data){
+                              //$('.debugDiv').html('clicks : ' + data.clickCount);
+                              //$('.debugDiv').html('visits : ' + data.visitCount);
+                              $('.clickers span').text(data.clickCount);
+                              $('.visitors span').text(data.visitCount);
+
+                              $('.last24 li').on('click',function(event){
+                                $('.last24 li').removeClass('active');
+                                $(this).addClass('active');
+                                if($(this).hasClass('clickers')){
+                                  $('.debugDiv').html('Clickers need to be called');
+                                  //https://mks.bridgemailsystem.com/pms
+                                  // /io/subscriber/getData/?BMS_REQ_TK=VumjeXzS5vATnYv4AoJWFzXabDUejf&
+                                  //type=getSAMSubscriberList&offset=0&filterBy=WV&lastXDays=1&ukey=ccaY49Wc&isMobileLogin=Y&userId=jayadams
+                                  var url = baseObject.baseUrl+"/io/subscriber/getData/?BMS_REQ_TK="
+                                  +baseObject.users_details[0].bmsToken
+                                  +'&type=getSAMSubscriberList&offset=0&filterBy=CK&lastXDays=1&ukey='
+                                  +baseObject.users_details[0].userKey
+                                  +'&isMobileLogin=Y&userId='+baseObject.users_details[0].userId;
+
+                                  commonModule.getDataRequest(url,generateEmailsOfCK);
+                                }else{
+                                  $('.debugDiv').html('Visitors need to be called');
+                                }
+                              })
+
+                          }
+                          var generateEmailsOfCK = function(data){
+                            //$('.clicker_wraps').html('');
+                            jQuery.each(data.subscriberList[0],function(key,val){
+                                //console.log(val[0]);
+                                $('.debugDiv').html(val[0].email);
+                                  $('.clicker_wraps').append(`<div class="contact_found searched_email_mks click_pointer ripple">
+                                    <div class="cf_silhouette">
+                                      <div class="cf_silhouette_text c_txt_s">
+                                        <p>`+value[0].email.charAt(0)+`</p>
+                                      </div>
+                                      </div>
+                                      <div class="cf_email_wrap">
+                                        <div class="cf_email">
+                                          <p>`+value[0].email+`</p>
+                                          <span class="ckvwicon">
+                                            <span class="mksicon-act_click" ck=""></span>
+                                            Email Click - 6 hrs ago
+                                          </span>
+                                        </div>
+                                      </div>
+                                      <div class="clr"></div>
+                                    </div>`);
+                            });
+                            $('.clicker_wraps').removeClass('hide');
+                            //$('.visitors_wraps').addClass('hide');
+
+                          }
                           var init = function (text) {
                             //loginAjaxCall(text);
 
