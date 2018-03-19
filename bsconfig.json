@@ -1,6 +1,6 @@
 {
     "ui": {
-        "port": 3000
+        "port": 8080
     },
     "server": {
         "routes": {
@@ -11,7 +11,7 @@
         "key": "./certs/server.key",
         "cert": "./certs/server.crt"
     },
-    "watch": false,
+    "watch": true,
     "files": "*.*",
     "open": false
 }
