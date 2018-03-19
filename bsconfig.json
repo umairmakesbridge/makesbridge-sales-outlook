@@ -11,6 +11,6 @@
         "key": "./certs/server.key",
         "cert": "./certs/server.crt"
     },
-    "watch": true,
+    "watch": false,
     "files": "*.*"
 }
