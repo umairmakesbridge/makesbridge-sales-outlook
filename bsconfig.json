@@ -12,5 +12,6 @@
         "cert": "./certs/server.crt"
     },
     "watch": false,
-    "files": "*.*"
+    "files": "*.*",
+    "open": false
 }
