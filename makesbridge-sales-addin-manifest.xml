@@ -20,8 +20,8 @@
   <Description DefaultValue="[Outlook Add-in description]"/>
 
   <!-- Icon for your add-in. Used on installation screens and the add-ins dialog. -->
-  <IconUrl DefaultValue="https://agile-castle-61177.herokuapp.com/assets/icon-32.png" />
-  <HighResolutionIconUrl DefaultValue="https://agile-castle-61177.herokuapp.com/assets/hi-res-icon.png"/>
+  <IconUrl DefaultValue="https://localhost:3000/assets/icon-32.png" />
+  <HighResolutionIconUrl DefaultValue="https://localhost:3000/assets/hi-res-icon.png"/>
   <SupportUrl DefaultValue="https://www.makesbridge.com/contact-us/" />
 
   <!--If you plan to submit this add-in to the Office Store, uncomment the SupportUrl element below-->
@@ -46,7 +46,7 @@
   <FormSettings>
     <Form xsi:type="ItemRead">
       <DesktopSettings>
-        <SourceLocation DefaultValue="https://agile-castle-61177.herokuapp.com/index.html"/>
+        <SourceLocation DefaultValue="https://localhost:3000/index.html"/>
         <RequestedHeight>250</RequestedHeight>
       </DesktopSettings>
     </Form>
@@ -105,13 +105,13 @@
 
     <Resources>
       <bt:Images>
-        <bt:Image id="icon16" DefaultValue="https://agile-castle-61177.herokuapp.com/assets/icon-16.png"/>
-        <bt:Image id="icon32" DefaultValue="https://agile-castle-61177.herokuapp.com/assets/icon-32.png"/>
-        <bt:Image id="icon80" DefaultValue="https://agile-castle-61177.herokuapp.com/assets/icon-80.png"/>
+        <bt:Image id="icon16" DefaultValue="https://localhost:3000/assets/icon-16.png"/>
+        <bt:Image id="icon32" DefaultValue="https://localhost:3000/assets/icon-32.png"/>
+        <bt:Image id="icon80" DefaultValue="https://localhost:3000/assets/icon-80.png"/>
       </bt:Images>
       <bt:Urls>
-        <bt:Url id="functionFile" DefaultValue="https://agile-castle-61177.herokuapp.com/function-file/function-file.html"/>
-        <bt:Url id="messageReadTaskPaneUrl" DefaultValue="https://agile-castle-61177.herokuapp.com/index.html"/>
+        <bt:Url id="functionFile" DefaultValue="https://localhost:3000/function-file/function-file.html"/>
+        <bt:Url id="messageReadTaskPaneUrl" DefaultValue="https://localhost:3000/index.html"/>
       </bt:Urls>
       <bt:ShortStrings>
         <bt:String id="groupLabel" DefaultValue="My Add-in Group"/>
