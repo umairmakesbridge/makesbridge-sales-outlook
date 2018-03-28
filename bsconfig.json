@@ -13,5 +13,6 @@
     },
     "watch": true,
     "files": "*.*",
-    "open": false
+    "open": false,
+    "debug": true
 }
