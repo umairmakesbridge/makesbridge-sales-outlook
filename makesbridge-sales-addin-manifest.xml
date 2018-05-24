@@ -17,11 +17,11 @@
   <DefaultLocale>en-US</DefaultLocale>
   <!-- The display name of your add-in. Used on the store and various places of the Office UI such as the add-ins dialog. -->
   <DisplayName DefaultValue="Makesbridge Sales Assistant" />
-  <Description DefaultValue="Add-in will helps sales professionals quickly interact and manage contacts."/>
+  <Description DefaultValue="It helps sales professionals interact and manage contacts. Makesbridge account needed to login."/>
 
   <!-- Icon for your add-in. Used on installation screens and the add-ins dialog. -->
   <IconUrl DefaultValue="https://makesbridge.com/mkssalesassistant/assets/hi-res-icon.png" />
-  <HighResolutionIconUrl DefaultValue="https://makesbridge.com/mkssalesassistant/assets/hi-res-icon.png"/>
+  <HighResolutionIconUrl DefaultValue="https://makesbridge.com/mkssalesassistant/assets/icon-128.png"/>
   <SupportUrl DefaultValue="https://www.makesbridge.com/contact-us/" />
 
   <!--If you plan to submit this add-in to the Office Store, uncomment the SupportUrl element below-->
@@ -114,13 +114,13 @@
         <bt:Url id="messageReadTaskPaneUrl" DefaultValue="https://makesbridge.com/mkssalesassistant/index.html"/>
       </bt:Urls>
       <bt:ShortStrings>
-        <bt:String id="groupLabel" DefaultValue="My Add-in Group"/>
-        <bt:String id="customTabLabel"  DefaultValue="My Add-in Tab"/>
-        <bt:String id="paneReadButtonLabel" DefaultValue="Display all properties"/>
-        <bt:String id="paneReadSuperTipTitle" DefaultValue="Get all properties"/>
+        <bt:String id="groupLabel" DefaultValue="Makesbridge"/>
+        <bt:String id="customTabLabel"  DefaultValue="Sales Assistant"/>
+        <bt:String id="paneReadButtonLabel" DefaultValue="Makesbridge Sales Assistant"/>
+        <bt:String id="paneReadSuperTipTitle" DefaultValue="Manage Contacts"/>
       </bt:ShortStrings>
       <bt:LongStrings>
-        <bt:String id="paneReadSuperTipDescription" DefaultValue="Opens a pane displaying all available properties. This is an example of a button that opens a task pane."/>
+        <bt:String id="paneReadSuperTipDescription" DefaultValue="It helps sales professionals interact and manage contacts. Makesbridge account needed to login."/>
       </bt:LongStrings>
     </Resources>
   </VersionOverrides>

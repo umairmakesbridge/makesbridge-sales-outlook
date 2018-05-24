@@ -14,17 +14,21 @@
     <script src="https://appsforoffice.microsoft.com/lib/1/hosted/Office.js" type="text/javascript"></script>
 
     <!-- LOCAL -->
-    <link rel="stylesheet" href="https://makesbridge.com/mkssalesassistant/node_modules/office-ui-fabric-js/dist/css/fabric.min.css" />
-    <link rel="stylesheet" href="https://makesbridge.com/mkssalesassistant/node_modules/office-ui-fabric-js/dist/css/fabric.components.css" />
+    <link rel="stylesheet" href="node_modules/office-ui-fabric-js/dist/css/fabric.min.css" />
+    <link rel="stylesheet" href="node_modules/office-ui-fabric-js/dist/css/fabric.components.css" />
 
-    <link href="https://makesbridge.com/mkssalesassistant/app.css" rel="stylesheet" type="text/css" />
-    <link href="https://makesbridge.com/mkssalesassistant/assets/css/plugin_font_icon.css" rel="stylesheet" type="text/css" />
-    <link href="https://makesbridge.com/mkssalesassistant/app.css" rel="stylesheet" type="text/css" />
+
+    <link href="assets/css/skins/all.css" rel="stylesheet">
     
+    <!-- <link href="app.css" rel="stylesheet" type="text/css" /> -->
+    <link href="assets/css/plugin_font_icon.css" rel="stylesheet" type="text/css" />
+    <link href="app.css?v=0.2" rel="stylesheet" type="text/css" />
+
 </head>
 
 <body class="ms-font-m ms-welcome">
       <!-- <h2>Username : <span class="userName"></span></h2> -->
+      <div class="autoLoading" style="display:none;"></div>
       <article class="login-wrap" style="display:none;">
         <div class="mksph_wrapper mksph_login_wrap">
             <div class="debugDivL hide"></div>
@@ -37,6 +41,11 @@
                     <button name="submit" type="button" class="mksph_login_btn mksph-pull-right ripple" id="submitForm">Login</button>
                 </form>
             </div>
+              <ul style="list-style:none;">
+			  <li style="margin-top:5px;"><b>Makesbridge sales assistant</b> helps sales professionals quickly interact and manage prospects.</li>	  
+              <li style="margin-top:10px;">Use <b>Makesbridge Username and Password</b> to login.</li>
+              <li style="margin-top:10px;">If you are not user of Makesbridge.<br/><a href="https://www.makesbridge.com/signup" target="_blank">Signup</a> here.</li>
+            </ul>
         </div>
     </article>
     <main class="ms-welcome__main" style="display:none;">
@@ -106,9 +115,9 @@
                 </div>
                 <div class="inner-container" style="height: 100%;">
                   <div class="content-wrapper" style="height: 100%; overflow-y: visible;">
-                    <!--<div class="plc_marginbottom30 clicker_wraps">
+                    <div class="plc_marginbottom30 clicker_wraps hide">
                             <p>Loading...</p>
-                      </div>-->
+                      </div>
                       <div class="plc_marginbottom30 visitors_wraps hide">
 
                         </div>
@@ -434,27 +443,30 @@
                     </span>
                   </div>
                     <div class="hide SuppressNotify messagebox info animated">
-                      <p>This account has been<strong>Suppressed</strong></p>
+                      <p>This account has been <strong>Suppressed</strong></p>
                     </div>
 
 
-                <div class="top-header contact_found top_managerLists_wrappers hide">
+                <div class="top-header contact_found top_managerLists_wrappers">
                   <div class="scf_o_right">
-                    <ul class="top_manager_ul_wraps six" style="visibility:hidden;position:absolute;display:none;">
-                      <li data-tip="Add to Sequence" currentitem="false">
+                    <ul class="top_manager_ul_wraps five">
+                      <li data-tip="Add to Sequence" class="addSequence tooltips" currentitem="false">
                         <div class="scf_option_icon ripple top_manage_lists">
-                          <a href="#" style="text-decoration: unset;">
+                          <a href="#" style="text-decoration: none;" class="">
                             <div class="wrap_scf_o_i">
                               <div class="wrap_scf_o_i_md" style="padding: 3px 0px 0px;">
                                 <div class="scf_o_icon scf_o_edit mksicon-act_workflow mks_manageList_wrap">
                                 </div>
                               </div>
                             </div>
+                            
                           </a>
-                        </div></li>
-                        <li data-tip="Manage list subscription" currentitem="false">
+                        </div>
+                        <span>Add to Sequence</span>
+                      </li>
+                        <li data-tip="Manage list subscription" class="tooltips" currentitem="false">
                           <div class="scf_option_icon ripple top_manage_lists">
-                            <a href="#" style="text-decoration: unset;">
+                            <a href="#" style="text-decoration: none;">
                               <div class="wrap_scf_o_i">
                                 <div class="wrap_scf_o_i_md">
                                   <div class="scf_o_icon scf_o_edit mksicon-ManageLists mks_manageList_wrap"></div>
@@ -462,19 +474,21 @@
                               </div>
                             </a>
                           </div>
+                          <span>Manage list subscription</span>
                         </li>
-                        <li data-tip="Add to list" currentitem="false">
+                        <li data-tip="Add to list" class="tooltips" currentitem="false">
                           <div class="scf_option_icon ripple top_manage_lists">
-                            <a href="#" style="text-decoration: unset;">
+                            <a href="#" style="text-decoration: none;">
                               <div class="wrap_scf_o_i">
                                 <div class="wrap_scf_o_i_md">
                                   <div class="scf_o_icon scf_o_edit  mksicon-Addlist mks_manageList_wrap"></div></div></div>
                                 </a>
                               </div>
+                              <span>Add to list</span>
                             </li>
-                            <li data-tip="Suppress contact" currentitem="false">
+                            <li data-tip="Suppress contact" class="tooltips" currentitem="false">
                               <div class="scf_option_icon ripple top_manage_lists">
-                                <a href="#" style="text-decoration: unset;">
+                                <a href="#" style="text-decoration: none;">
                                   <div class="wrap_scf_o_i">
                                     <div class="wrap_scf_o_i_md" style="padding: 3px 0px 0px;">
                                       <div class="scf_o_icon scf_o_edit mksicon-User1 mks_manageList_wrap"></div>
@@ -482,10 +496,11 @@
                                   </div>
                                 </a>
                               </div>
+                              <span>Suppress contact</span>
                             </li>
-                            <li data-tip="Course Correct" class="mks_cc_li_wrap " currentitem="false">
+                            <li data-tip="Course Correct" class="hide mks_cc_li_wrap " currentitem="false">
                               <div class="scf_option_icon ripple top_manage_lists">
-                                <a href="#" style="text-decoration: unset;">
+                                <a href="#" style="text-decoration: none;">
                                   <div class="wrap_scf_o_i">
                                     <div class="wrap_scf_o_i_md">
                                       <div class="scf_o_icon scf_o_edit mksicon-course_correct mks_manageList_wrap"></div>
@@ -493,7 +508,7 @@
                                   </div></a>
                                 </div>
                               </li>
-                              <li data-tip="Add to Salesforce" class="show show sf_icons mks_hideRightBorder" currentitem="false">
+                              <li data-tip="Add to Salesforce" class="hide show sf_icons mks_hideRightBorder" currentitem="false">
                                 <div class="scf_option_icon ripple top_manage_lists">
                                   <a href="#" style="text-decoration: unset;">
                                     <div class="wrap_scf_o_i">
@@ -520,13 +535,13 @@
                               <div class="scf_tab">
                                 <div class="tab">
                                   <button class="tablinks ripple active">Contact</button>
-                                  <button class="tablinks ripple hide" id="defaultOpen">Activity</button>
+                                  <button class="tablinks ripple" id="defaultOpen">Activity</button>
                                   <div class="score "><i class="icon score"></i>
                                     <span class="score-value">0</span>
                                   </div>
                                 </div>
                                 <div class="tab_content_wrap">
-                                  <span>
+                                  <span class="tabs_content" id="mks_tab_contact">
                                     <div class="contacts-wrap">
 
                                       <div id="Tags" class="tabcontent mksph_cardbox">
@@ -751,15 +766,258 @@
                                       </div>
                                     </div>
                                   </span>
-
-                                  <span style="display: none;">
-                                    <div class="contacts-wrap">
+                                  <!--
+                                    =================================
+                                    Starts : User Activity Time 
+                                    =================================
+                                    -->
+                                  <span class="tabs_content" id="mks_tab_activity" style="display: none;">
+                                    <div class="contacts-wrap activityLoading">
                                       <div id="NoContact" class="tabcontent mksph_cardbox">
                                         <h3>Total Activities</h3>
                                         <p class="not-found">No Activity Found</p>
                                       </div>
                                     </div>
+
+
+
+                                    <div class="tabcontent active hide" id="Activity">
+                                      <div class="act_head">
+                                        <div class="total_act">
+                                          <div class="act_total_count">
+                                            <p>42</p>
+                                          </div>
+                                          <div class="atc_headline">
+                                            <p>Total Activities</p>
+                                          </div>
+                                          <div class="clr"></div>
+                                        </div>
+                                        <div class="act_filter hide">
+                                          <p>
+                                            <a href="#">show all</a> | 
+                                            <a href="#">advance filter</a>
+                                          </p>
+                                        </div>
+                                        <div class="clr"></div>
+                                      </div>
+                                      <div class="activity_content">
+                                        <div class="new_activities current">
+                                          <div class="act_row_wrapper">
+                                            <div class="timestop now">
+                                              <span>09 Apr 2018 ,03:04 AM</span>
+                                              </div>
+                                              <div class="act_row_body_wrap">
+                                              <div class="act_row green ">
+                                                <span class="icon mksicon-act_score"></span>
+                                                <h5>
+                                                  <a>+30</a>
+                                                </h5>
+                                                <div class="info-p">
+                                                  <div class="infotxt">
+                                                    <strong class="">Bot Name</strong><a>New Score Bot2</a>
+                                                  </div>
+                                                </div>
+                                                <div class="btm-bar ">
+                                                  <div class="datetime">
+                                                    <span class="this-event-type showtooltip" data-original-title="Click to view this event type only" style="cursor: pointer;">
+                                                      Score Changed
+                                                    </span>at 12:00 AM, 09 Apr 2018
+                                                  </div>
+                                                </div>
+                                              </div>
+                                              <div class="act_row blue">
+                                                <span class="icon mksicon-act_pageview"></span>
+                                                <h5><a>Invite Friends</a></h5>
+                                                <div class="info-p">
+                                                  <div class="infotxt hide">
+                                                    <strong>Subject</strong><a></a>
+                                                  </div>
+                                                  <div class="infotxt mkb_elipsis mkb_text_break">
+                                                    <a href="https://mks.bridgemailsystem.com/pms/form/Friends.jsp" target="_blank" style="color: rgb(92, 155, 181);">https://mks.bridgemailsystem.com/pms/form/Friends.jsp</a>
+                                                  </div>
+                                                </div>
+                                                <div class="btm-bar ">
+                                                  <div class="datetime">
+                                                    <span class="this-event-type showtooltip" data-original-title="Click to view this event type only" style="cursor: pointer;">Page Viewed</span>at 03:53 AM, 02 Feb 2018</div>
+                                                    <div class="camp_type">
+                                                      <span class="showtooltip all-timelineFilter hide" data-original-title="Click to view all Campaigns activities" style="cursor: pointer;">
+                                                        <i class="icon camp"></i>Campaign</span>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                  <div class="act_row green hide">
+                                                    <span class="icon mksicon-act_score"></span>
+                                                    <h5>
+                                                      <a>0</a>
+                                                    </h5>
+                                                    <div class="info-p">
+                                                      <div>
+                                                        <div class="infotxt">
+                                                          <strong class="hide">Page Type</strong><a></a>
+                                                        </div>
+                                                        <div class="infotxt">
+                                                          <strong class="hide">Page URL</strong><a></a>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                    <div class="btm-bar ">
+                                                      <div class="datetime">
+                                                        <span class="this-event-type showtooltip" data-original-title="Click to view this event type only" style="cursor: pointer;">Score Changed</span> at 07:47 AM, 01 Feb 2018></div>
+                                                      </div></div>
+                                                      <div class="act_row green">
+                                                        <span class="icon mksicon-ActSent"></span>
+                                                        <h5>
+                                                          <a>Test 1:1</a>
+                                                        </h5>
+                                                        <div class="info-p">
+                                                          <div class="infotxt ">
+                                                            <strong>Subject</strong>
+                                                            <a>Test 1:1</a>
+                                                          </div>
+                                                        </div>
+                                                        <div class="btm-bar ">
+                                                          <div class="datetime">
+                                                            <span class="this-event-type showtooltip" data-original-title="Click to view this event type only" style="cursor: pointer;">Sent</span> at 02:19 AM, 01 Feb 2018</div>
+                                                            <div class="camp_type">
+                                                              <span class="showtooltip all-timelineFilter " data-original-title="Click to view all Campaigns activities" style="cursor: pointer;">
+                                                                <i class="icon camp"></i>Single Message</span>
+                                                              </div>
+                                                            </div>
+                                                          </div>
+                                                          <div class="act_row red">
+                                                            <span class="icon mksicon-act_alert"></span>
+                                                            <h5>
+                                                              <a>AU Course ADv2</a>
+                                                              <span class="camp_type" style="float: unset;">
+                                                                <span class="showtooltip all-timelineFilter" style="cursor: pointer; right: 0px; position: relative; float: unset; font-weight: 100;">
+                                                                Step 1</span>
+                                                              </span>
+                                                              <span class="camp_type" style="float: unset;">
+                                                                <span class="showtooltip all-timelineFilter" style="cursor: pointer; right: 0px; position: relative; float: unset; font-weight: 100;">
+                                                                  Option 1
+                                                                </span>
+                                                              </span>
+                                                            </h5>
+                                                            <div class="info-p"></div>
+                                                                <div class="btm-bar ">
+                                                                  <div class="datetime">
+                                                                    <span class="this-event-type showtooltip" data-original-title="Click to view this event type only" style="cursor: pointer;">Alert</span>
+                                                                     at 05:32 AM, 30 Jan 2018
+                                                                     /div>
+                                                                     <div class="camp_type">
+                                                                       <span class="showtooltip all-timelineFilter" data-original-title="Click to view all Campaigns activities" style="cursor: pointer;">
+                                                                         <i class="icon wficon"></i>Workflow
+                                                                        </span>
+                                                                      </div>
+                                                                    </div>
+                                                                </div>
+                                                               </div> 
+                                                          <div class="act_row green">
+                                                            <span class="icon mksicon-ActSent"></span>
+                                                            <h5><a>AU Course ADv2</a>
+                                                            <span class="camp_type" style="float: unset;">
+                                                              <span class="showtooltip all-timelineFilter" style="cursor: pointer; right: 0px; position: relative; float: unset; font-weight: 100;">
+                                                                Step 1
+                                                              </span>
+                                                            </span>
+                                                            <span class="camp_type" style="float: unset;">
+                                                              <span class="showtooltip all-timelineFilter" style="cursor: pointer; right: 0px; position: relative; float: unset; font-weight: 100;">
+                                                                Option 1
+                                                              </span>
+                                                            </span>
+                                                          </h5>
+                                                          <div class="info-p">
+                                                            <div class="infotxt">
+                                                              <strong>Subject</strong>
+                                                              <a>Course Correct Email1</a>
+                                                            </div>
+                                                          </div>
+                                                          <div class="btm-bar ">
+                                                            <div class="datetime">
+                                                              <span class="this-event-type showtooltip" data-original-title="Click to view this event type only" style="cursor: pointer;">Sent</span> at 05:32 AM, 30 Jan 2018/div>
+                                                              <div class="camp_type">
+                                                                <span class="showtooltip all-timelineFilter" data-original-title="Click to view all Campaigns activities" style="cursor: pointer;">
+                                                                  <i class="icon wficon"></i>
+                                                                  Workflow
+                                                                </span>
+                                                              </div>
+                                                            </div>
+                                                          </div>
+                                                          </div>
+                                                          <div class="act_row red">
+                                                            <span class="icon mksicon-act_alert"></span>
+                                                            <h5>
+                                                              <a>AU Course Adv3</a>
+                                                              <span class="camp_type" style="float: unset;"><span class="showtooltip all-timelineFilter" style="cursor: pointer; right: 0px; position: relative; float: unset; font-weight: 100;">Step 1</span>
+                                                            </span>
+                                                            <span class="camp_type" style="float: unset;">
+                                                              <span class="showtooltip all-timelineFilter" style="cursor: pointer; right: 0px; position: relative; float: unset; font-weight: 100;">
+                                                                Option 1
+                                                              </span>
+                                                            </span>
+                                                          </h5>
+                                                          <div class="info-p"></div>
+                                                          <div class="btm-bar ">
+                                                            <div class="datetime">
+                                                              <span class="this-event-type showtooltip" data-original-title="Click to view this event type only" style="cursor: pointer;">Alert</span> at 05:32 AM , 30 Jan 2018</div><div class="camp_type"><span class="showtooltip all-timelineFilter" data-original-title="Click to view all Campaigns activities" style="cursor: pointer;">
+                                                                <i class="icon wficon"></i>
+                                                                Workflow 
+                                                              </span>
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                        
+                                                        <div class="act_row green">
+                                                          <span class="icon mksicon-ActSent"></span>
+                                                          <h5>
+                                                            <a>AU Course Adv3</a>
+                                                            <span class="camp_type" style="float: unset;">
+                                                              <span class="showtooltip all-timelineFilter" style="cursor: pointer; right: 0px; position: relative; float: unset; font-weight: 100;">
+                                                                Step 1</span>
+                                                              </span>
+                                                              <span class="camp_type" style="float: unset;">
+                                                                <span class="showtooltip all-timelineFilter" style="cursor: pointer; right: 0px; position: relative; float: unset; font-weight: 100;">
+                                                                  Option 1
+                                                                </span>
+                                                              </span>
+                                                            </h5>
+                                                            <div class="info-p">
+                                                              <div class="infotxt">
+                                                                <strong>Subject</strong>
+                                                                <a>Course Correct Email1</a>
+                                                              </div>
+                                                            </div>
+                                                            <div class="btm-bar ">
+                                                              <div class="datetime">
+                                                                <span class="this-event-type showtooltip" data-original-title="Click to view this event type only" style="cursor: pointer;">Sent</span> at 05:32 AM>, 30 Jan 2018
+                                                              </div>
+                                                              <div class="camp_type">
+                                                                <span class="showtooltip all-timelineFilter" data-original-title="Click to view all Campaigns activities" style="cursor: pointer;">
+                                                                  <i class="icon wficon"></i>Workflow</span>
+                                                                </div>
+                                                              </div>
+                                                        </div>
+                                                      </div>
+                                                        <div class="LoadMore-wrapper hide loading_false timeline_loading_mask">
+                                                          <div class="LoadMore loading_false">Loading more...</div>
+                                                        </div>
+                                                        <div class="LoadMore-wrapper ">
+                                                          <div class="LoadMore"><span class="mksicon-Add"></span>Show more Activities
+                                                          </div>
+                                                        </div>
+                                                        <div class="act_row magenda show_signup hide">
+                                                          <span class="icon mksicon-startflag"></span>Joined on 16 Feb 2016, 02:02 AM
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
                                   </span>
+                                  <!--
+                                    =================================
+                                    Ends : User Activity Time 
+                                    =================================
+                                    -->
                                 </div>
                               </div>
                             </div>
@@ -778,12 +1036,15 @@
         <div id="error">Error</div>
     </main>
 
-    <script type="text/javascript" src="https://makesbridge.com/mkssalesassistant/node_modules/core-js/client/core.js"></script>
-    <script type="text/javascript" src="https://makesbridge.com/mkssalesassistant/node_modules/jquery/dist/jquery.js"></script>
-    <script type="text/javascript" src="https://makesbridge.com/mkssalesassistant/node_modules/office-ui-fabric-js/dist/js/fabric.js"></script>
+    <script type="text/javascript" src="node_modules/core-js/client/core.js"></script>
+    <script type="text/javascript" src="node_modules/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="node_modules/office-ui-fabric-js/dist/js/fabric.js"></script>
+    <script src="https://momentjs.com/downloads/moment.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="assets/js/jQuery.highlight.js" ></script>
+    <script src="assets/js/icheck.min.js"></script>
 
-    <script type="text/javascript" src="https://makesbridge.com/mkssalesassistant/app.js"></script>
-    
+    <script type="text/javascript" src="app.js?v=0.4"></script>
+
 </body>
 
 </html>

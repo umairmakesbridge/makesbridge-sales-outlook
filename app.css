@@ -184,6 +184,15 @@ h6 {
 /*===========================================
 Login form CSS
 ============================================*/
+.highlight {
+    background-color: #08c !important;
+    color: #fff !important;
+    float: none !important;
+    font-weight: bold !important;
+    padding: 0 !important;
+    width: auto !important;
+    margin: 0 !important;
+}
 .makesbridge_plugin {
  right: 0;
    z-index: 999;
@@ -368,7 +377,7 @@ Login form CSS
         color: #80c000;
         display: inline-block;
         line-height: 27px;
-        padding: 5px 10px 2px 5px;
+        padding: 5px 4px 2px 5px;
         float: right;
     }
     .icon.score{
@@ -485,12 +494,12 @@ Login form CSS
      background: #1fb97e;
     }
     .cfe_add_customField{
-      width: 112px;
+      width: 98px;
       margin-right: 7px;
-
     }
     .cfe_add_customField .scfe_save_t{
       background: rgb(14, 123, 247);
+      font-size: 11px;
     }
     .cfe_add_customField .scfe_ach:hover > .scfe_save_t {
         background: rgb(14, 123, 247);
@@ -556,15 +565,35 @@ Login form CSS
     .disable_true .scfe_save_t,.disable_true .scfe_save_i_md{
       background: #bac2ca;
     }
+    .contact_found:hover{
+       background: #006eff;
+       cursor: pointer;
+       color: #fff;
+       -webkit-transition: all 0.3s ease-in-out;
+       -moz-transition: all 0.3s ease-in-out;
+       -o-transition: all 0.3s ease-in-out;
+    }
+    .cf_email span.ckvwicon{
+          display: table-row;
+          font-size: 11px;
+          color: #4f87ab;
+    }
+    .cf_email span.ckvwicon span{
+      margin-right: 5px;
+    }
+    .contact_found:hover > .cf_email p,.contact_found:hover .ckvwicon{color: #fff;}
     /*End Edit Contact*/
     /*-----------------------------Alerts---------------------------*/
+    .red_color_mks{
+        color : #fb4c2f !important;
+    }
     .messagebox {
     	color: #784900;
     	font-size: 14px;
     	font-weight: bold;
     	margin:20px auto;
-    	padding: 10px 35px 10px 60px;#04aced;
-    	width: 285px;
+    	padding: 10px 35px 10px 60px;
+    	width: 200px;
     	-webkit-border-radius: 2px;
     	-moz-border-radius: 2px;
     	border-radius: 2px;
@@ -603,7 +632,7 @@ Login form CSS
         padding: 0 0 5px;
     }
     .messagebox p {
-    	font-size:13px;
+    	font-size:12px;
     	padding:0;
     	margin:0;
     	display:table-cell;
@@ -884,6 +913,9 @@ span.mksph_contact_value {
 }
 .mkb_basicField_wrap{
   position: relative;
+}
+.pull-left{
+    float: left;
 }
 
 /*==================Contact Info , Tags, Custom Fields===================*/
@@ -1370,7 +1402,7 @@ div#custom-fields ul li {
        width: 47px;
    }
    ul.top_manager_ul_wraps.five .top_manage_lists .wrap_scf_o_i{
-   width: 58px;
+   width: 55px;
    }
    ul.top_manager_ul_wraps.six .scf_o_txt{
        font-size: 7px;
@@ -1379,10 +1411,10 @@ div#custom-fields ul li {
      position: relative;
      top: 9px;
      margin: 0 auto;
-     width: 248px;
+     width: 190px;
    }
    .SuppressNotify::after {
-       background: url("chrome-extension://__MSG_@@extension_id__/img/info.png") no-repeat scroll center center #e09387;
+       background: url("assets/img/info.png") no-repeat scroll center center #e09387;
      }
    .suppress_S .SuppressNotify{
      display: block !important;
@@ -1399,8 +1431,14 @@ div#custom-fields ul li {
      padding: 12px 5px 8px;
      background: rgb(239, 247, 251);
    }
+   .addBox_body{
+       max-height: 270px;
+       overflow-y: auto;
+   }
+   li.mngList_li_wrap {
+    width: 95%;
+   }
    .mks_mnglist_wrap h4 {
-     width: 160px;
    height: 16px;
    float: left;
    overflow: hidden;
@@ -1418,6 +1456,64 @@ div#custom-fields ul li {
    .mngList_li_wrap{
      display: block;
      margin-bottom: 2px;
+   }
+   .addToSuppressWrapper .scfe_save_wrap .scfe_save_i_md {
+    background: #fb3f3f;
+   }
+   .addToSuppressWrapper .scfe_save_wrap .scfe_save_t {
+    background: #f54a4a;
+   }
+   .addToSuppressWrapper .scfe_save_wrap{
+       width: 91px;
+   }
+   /*====================
+    Tool Tip Styling
+   ==================*/
+   li.tooltips {
+    position: relative;
+    display: inline;
+  }
+  li.tooltips span {
+    position: absolute;
+    width:140px;
+    color: #FFFFFF;
+    background: #23CD8C;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    visibility: hidden;
+    border-radius: 6px;
+    box-shadow: 1px 1px 5px #3D8036;
+  }
+  li.tooltips span:after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -8px;
+    width: 0; height: 0;
+    border-top: 8px solid #23CD8C;
+    border-right: 8px solid transparent;
+    border-left: 8px solid transparent;
+  }
+  li:hover.tooltips span {
+    visibility: visible;
+    opacity: 1;
+    bottom: 42px;
+    left: 24%;
+    margin-left: -58px;
+    z-index: 999;
+  }
+   /*=============================
+    Add Subscriber List
+   =================================*/
+   ul.subsriberList-wrap li.mngList_li_wrap input{
+    width: auto;
+    float: left;
+    margin-right: 8px;
+   }
+   ul.subsriberList{
+       width: 98%;
    }
    /*=============================================
    Slider Start
@@ -1838,3 +1934,319 @@ div#custom-fields ul li {
    /*=============================================
    Slider Ends
    =============================================*/
+/*-----------------------*/
+/* Makesbridge Workflows
+----------------------------------- */
+.workflow_wrap_rendering h4{
+    font-size: 15px;
+    margin: 10px 3px;
+    color: rgb(116, 133, 146);
+    font-weight: 200;
+}
+.workflow_wrap_rendering span {
+    margin-left: 5px;
+    font-size: 13px;
+    color: rgb(116, 133, 146);
+}
+.workflow_wrap_rendering label {
+    margin-bottom: 7px;
+    display: inline-block;
+    cursor: pointer;
+}
+.icheck-labels {
+    font-size: 13px;
+    font-weight: 400;
+    color: rgb(116, 133, 146);
+}
+.customFields_ul span.mksph_contact_value {
+    position: relative;
+    top: 5px;
+    left: 3px;
+}
+/*-----------------------------------------
+Suppressed contact
+----------------------------------------------*/
+.addToSuppressWrapper h2{
+    background: #f34a4a;
+}
+.addToSuppressWrapper p{
+    color: #f34a4a;
+    font-size: 15px;
+}
+.mks_suppresContact .scf_option_control.one,.mks_suppresContact .top-header.contact_found.top_managerLists_wrappers,.mks_suppresContact .mkb_btn {
+    display: none;
+}
+.mks_suppresContact .SuppressNotify{
+    display: block !important;
+}
+/*=======================================================*/
+   /*                 Timeline CSS               */
+/*=======================================================*/
+.act_head{
+    background: #c1d4e0;
+    padding: 7px 10px;
+ }
+ .total_act{
+    width: 150px;
+    float: left;
+ }
+ .atc_headline {
+    height: 20px;
+    width: 100px;
+    float: left;
+    display: table;
+    padding: 0px 0px 0px 5px;
+}
+.act_total_count {
+    height: 20px;
+    float: left;
+    display: table;
+    background: rgb(255, 255, 255);
+    border-radius: 20px;
+    padding: 0px 9px;
+}
+.new_activities {
+    padding:0px 0px 0px 0px;
+    position:relative;
+}
+.new_activities:before {
+    background: none repeat scroll 0 0 #B7D6E3;
+    content: "";
+    display: block;
+    height: 100%;
+    left: 10px;
+    position: absolute;
+    top: 0px;
+    width: 3px;
+}
+.new_activities .timestop {   margin: 0 -10px 0 -60px;}
+.new_activities.future .timestop span {  background: none repeat scroll 0 0 #72d8ff; color:#fff;}
+.new_activities.future .timestop:before {  border-bottom: 1px dashed #72d8ff;}
+
+.new_activities  .clearfix { height:1px;}
+.new_activities .act_row {
+      position:relative;
+      margin: 10px 0 0;
+      box-shadow: unset;
+      padding-bottom: 40px;
+      padding-left: 30px;
+}
+.new_activities .act_row:first-child { margin:0; }
+
+
+.new_activities .act_row  .info-p { min-height: 50px; margin:10px 0 0;}
+
+.new_activities .act_row  i.icon { float:left; width:35px; height:35px;  }
+.timeline-container .new_activities .act_row  i.icon { float:left; width:20px; height:20px;  }
+
+.timestop {
+    margin: 30px -12px 0 -114px;
+    position: relative;
+    z-index: 99;
+}
+.timestop:first-child {
+    margin: 0 -10px 0 0;
+    padding-bottom: 20px;
+}
+.timestop:before { content:""; width:97%; border-bottom:1px dashed #e9eff3; position:absolute; left:0; top: 20px;}
+
+.timestop span { background:#e9eff3; display:block; height:20px; margin:0 auto; width:200px; font-size:11px; text-align:center; color:#fff;
+position:relative; z-index:9;
+-webkit-border-radius: 20px ;
+	-moz-border-radius: 20px;
+	border-radius: 20px;}
+  .timestop.now span {
+      background: none repeat scroll 0 0 #495B67;
+      line-height: 21px;
+      position: relative;
+      top: 9px;
+  }
+.timestop.now:before  {border-bottom:1px dashed #495b67 }
+
+.new_activities .act_row > .icon {
+  color: #fff;
+  text-align: center;
+  line-height: 29px;
+	position:absolute;
+  left: 0px;
+  width: 25px;
+  height: 25px;
+	top:14px;
+	margin:0;
+	z-index:9;
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	border-radius: 50%;
+}
+.new_activities .act_row h5 {
+    font-size: 12px;
+    min-height: 25px;
+    letter-spacing: 0.3px;
+    margin: 0 0;
+}
+
+.new_activities .act_row h5::after {
+
+    display: block;
+    content: ".";
+    clear: both;
+    font-size: 0;
+    line-height: 0;
+    height: 0;
+    overflow: hidden;
+
+}
+.new_activities .act_row .info-p {
+    min-height: 30px;
+    margin: 0px;
+}
+.new_activities .act_row .infotxt {
+    color: #5C9BB5;
+    margin-right: 0px;
+    margin-bottom: 10px;
+}
+.new_activities .act_row .infotxt a {
+    font-size: 13px;
+    font-weight: 600;
+}
+.new_activities .act_row .infotxt strong {
+    display: block;
+    font-size: 12px;
+    font-weight: normal;
+    line-height: 14px;
+}
+.new_activities .act_row .infotxt {
+    color: #5C9BB5;
+    margin-right: 30px;
+    margin-bottom: 10px;
+}
+.new_activities .act_row::before {
+    content: "";
+    height: 1px;
+    background: #F2F9FC;
+    display: block;
+    margin-bottom: 15px;
+    position: relative;
+    left: -27px;
+    width: 311px;
+}
+.new_activities .act_row .btm-bar {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border-radius: 0;
+    bottom: 0;
+    clear: both;
+    color: #8A8A8A;
+    font-size: 12px;
+    height: 20px;
+    left: 31px;
+    margin: 0;
+    padding: 10px 0px;
+    position: absolute;
+    width: 86%;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+}
+.new_activities .act_row .btm-bar div.datetime {
+    color: #5C9BB5;
+    float: left;
+    font-size: 10px;
+    line-height: 20px;
+}
+.new_activities .act_row .camp_type {
+    float: right;
+}
+.new_activities .act_row .camp_type span {
+    background: none repeat scroll 0 0 #E9F5FA;
+    border-radius: 20px;
+    color: #8bbacf;
+    float: left;
+    font-size: 10px;
+    margin: 0 0 0 5px;
+    padding: 0 10px;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+    height: auto;
+    line-height: 18px;
+}
+.new_activities .act_row i.icon {
+    float: left;
+    width: 20px;
+    height: 20px;
+}
+.act_row_wrapper {
+  max-height: 475px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+.LoadMore-wrapper{
+  position: relative;
+   border-top: 1px solid #f8f8fb;
+   height: 40px;
+   line-height: 120px;
+   background: #fff;
+}
+.LoadMore {
+    z-index: 9;
+    background: #fff;
+    position: absolute;
+    width: 100%;
+    padding-left: 23px;
+    color: #B8C2CB;
+    line-height: 40px;
+    cursor: pointer;
+}
+
+.LoadMore .mksicon-Add{
+  padding-right: 20px;
+    position: relative;
+    top: 2px;
+}
+/*=================activity icons================*/
+.new_activities .act_row.red > .icon {
+  background-color: rgb(253, 64, 64);
+}
+.new_activities .act_row.show_signup {
+    position: relative;
+    top: 18px;
+    line-height: 26px;
+    color: #5F9BB4;
+    padding-bottom: 15px;
+}
+.new_activities .act_row.magenda > .icon{
+    background: #5F9BB4;
+    font-size: 15px;
+    line-height: 25px;
+    color:#fff;
+}
+.new_activities .act_row.blue > .icon {
+  background-color: #00aff0;
+}
+.new_activities .act_row.blue h5 a, .new_activities .act_row.blue .btm-bar div.datetime span{
+  color: #00aff0;
+}
+.new_activities .act_row.green > .icon {
+  background-color: #3BD505;
+}
+.new_activities .act_row.green h5 a, .new_activities .act_row.green .btm-bar div.datetime span{
+  color: #3BD505;
+}
+.new_activities .act_row > .bounce {
+    background: url("chrome-extension://__MSG_@@extension_id__/img/act-bounce.png") no-repeat scroll center center #fff;
+}
+.new_activities .act_row.red h5 a, .new_activities .act_row.red .btm-bar div.datetime span {
+    color: #fd4040;
+}
+.new_activities .act_row.red h5 a, .new_activities .act_row.red .btm-bar div.datetime span {
+    color: #fd4040;
+}
+.new_activities .act_row .camp {
+    background: url("assets/img/act-campaign.png") no-repeat scroll 0 4px rgba(0, 0, 0, 0);
+}
+.new_activities .act_row .wficon {
+    background: url("assets/img/act-workflow.png") no-repeat scroll 0 4px rgba(0, 0, 0, 0);
+}
+/*=======================================================*/
+   /*                 Timeline CSS  ENDS           */
+/*=======================================================*/
