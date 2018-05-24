@@ -22,6 +22,7 @@
     
     <!-- <link href="app.css" rel="stylesheet" type="text/css" /> -->
     <link href="assets/css/plugin_font_icon.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/jquery.timepicker.min.css" rel="stylesheet" type="text/css" />
     <link href="app.css?v=0.2" rel="stylesheet" type="text/css" />
 
 </head>
@@ -32,7 +33,7 @@
       <article class="login-wrap" style="display:none;">
         <div class="mksph_wrapper mksph_login_wrap">
             <div class="debugDivL hide"></div>
-            <h2>Log In - Sales Assistant</h2>
+            <h2>Log In - Sales Assistant Dev</h2>
             <div class="mksph_cardbox">
                 <form>
 
@@ -41,11 +42,6 @@
                     <button name="submit" type="button" class="mksph_login_btn mksph-pull-right ripple" id="submitForm">Login</button>
                 </form>
             </div>
-              <ul style="list-style:none;">
-			  <li style="margin-top:5px;"><b>Makesbridge sales assistant</b> helps sales professionals quickly interact and manage prospects.</li>	  
-              <li style="margin-top:10px;">Use <b>Makesbridge Username and Password</b> to login.</li>
-              <li style="margin-top:10px;">If you are not user of Makesbridge.<br/><a href="https://www.makesbridge.com/signup" target="_blank">Signup</a> here.</li>
-            </ul>
         </div>
     </article>
     <main class="ms-welcome__main" style="display:none;">
@@ -93,6 +89,67 @@
         <div class="mks_wrap_step2 hide">
 
           <div class="s_contact_found_wraper plc_marginbottom10 email_found_in_message" style="">
+              <div class="topbtn_wraps_contact_tasks">
+                <div>
+                  <span style="display: none;">
+                    <div class="addBox_wrapper_container scfe_field mks_add_new_contact_wrap">
+                      <h2>Create Contact</h2>
+                      <div class="addBox_input_wrappers">
+                        <div class="cc_wraps_mks">
+                        <div class="s_contact_found_edit_wraper create_new_contact">
+                          <div class="s_contact_found_edit" style="padding:0">
+                            <div class="scfe_field height90 height100 undefined">
+                              <input placeholder="Email *" id="cemail"class="focusThis" value="" data-required="required">
+                              <input placeholder="First Name" id="cfirstname" id="cfirstname" value="">
+                              <input placeholder="Last Name" id="clastname" value="">
+                            </div>
+                            <div class="clr"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="scfe_control_option">
+                        <div class="scfe_close_wrap">
+                          <a class="scfe_c_ach" href="#">
+                            <div class="scfe_close_t">
+                              <span>Close</span>
+                            </div>
+                            <div class="scfe_close_i_md">
+                              <div class="scfe_close_i" aria-hidden="true" data-icon=""></div>
+                            </div>
+                          </a>
+                        </div>
+                        <div class="scfe_save_wrap disable_false show" style="width: 85px;">
+                          <a class="scfe_ach" href="#">
+                            <div class="scfe_save_t">
+                              <span>Create</span>
+                            </div>
+                            <div class="scfe_save_i_md">
+                              <div class="scfe_save_i" aria-hidden="true" data-icon=""></div>
+                            </div>
+                          </a>
+                        </div>
+                            <div class="clr"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="OverLay"></div>
+                  </span>
+                  <!-- End of Create Dialog-->
+                  <div class="btn_wrap" style="width: 138px; text-align: center;">
+                    <span class="mksph_login_btn add_new_btn ripple" style="display: inline-block; width: 142px;padding: 3px 0;">
+                      <i class="scf_o_icon scf_o_edit mksicon-Add_Contact mks_manageList_wrap" style="font-size: 12px; margin-right: 4px;"></i>
+                      Create Contact
+                    </span>
+                  </div>
+                  <div class="btn_wrap" style="width: 137px; text-align: center;">
+                    <span class="mksph_login_btn show_tasks_list ripple" style="display: inline-block; width: 140px;padding: 3px 0;">
+                      <i class="scf_o_icon scf_o_edit mksicon-Task_List mks_manageList_wrap" style="font-size: 12px; margin-right: 4px;"></i>
+                      tasks
+                    </span>
+                  </div>
+                </div>
+              </div>
+            
             <div class="top-header contact_found">
               <span class="click-label">Last 24 hrs: </span>
               <ul class="last24">
@@ -125,6 +182,60 @@
                   </div>
                 </div>
               </div>
+              <div class="container tasks_wrapper_dashboard hide">
+                <div class="D plc_marginbottom20 mks_task_lists_dash_wrapper">
+                  <div class="contacts-switch">
+                    <div class="status_tgl">
+                      <a class="published today toggleTask active showtooltip">Todays Tasks</a>
+                      <a class="draft all toggleTask undefined showtooltip">All Tasks</a>
+                    </div>
+                  </div>
+                  <div class="content-wrapper undefined" style="">
+                    <div class="searchBar hide">
+                      <h2 class="total-count-head">
+                        <strong class="badge total-count total-pending">1</strong><span class="total-text">task(s) for today</span>
+                      </h2>
+                      <h3 class="">Show</h3>
+                      <div class="contacts-select-by">
+                        <select>
+                          <option value="-1">All</option>
+                          <optgroup label="Priority">
+                            <option value="high">High</option>
+                            <option value="medium">Medium</option>
+                            <option value="low">Low</option>
+                          </optgroup>
+                          <optgroup label="Tasks Types">
+                            <option value="call">Call</option>
+                            <option value="email">Email</option>
+                            <option value="discovery">Discovery</option>
+                            <option value="lunch">Lunch</option>
+                            <option value="breakfast">Breakfast</option>
+                            <option value="meeting">Meeting</option>
+                            <option value="proposal">proposal</option>
+                            <option value="demo">Demo</option>
+                            <option value="first_touch">First Touch</option>
+                          </optgroup>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="task_status_P_wrapper  height90 height100"></div>
+                    
+                  </div>
+                  <div class="expand msk_collapse_tasks_P hide" style="background: rgb(255, 255, 255); margin: 5px 0px; padding: 5px 0px;">
+                    <span>Click to expand</span>
+                    <span class="mksicon-ArrowNext"></span>
+                  </div>
+                  <span class="show _mks_completed_tasks">
+                    <h2 class="total-count-head hide" style="clear:both">
+                      <strong class="badge total-count total-complete">1</strong>
+                      <span class="total-text">Completed task(s) of today</span>
+                    </h2>
+                  
+                  </span>
+                </div>
+              </div>
+              <!-- Search Contacts or Tags -->
             <h2 class="total-count-head">
               <strong class="badge total-count">0</strong>
               <span class="total-text">emails found on page</span>
@@ -157,7 +268,10 @@
               <div class="searchBar">
                 <div class="YesF" style="width:150px;"></div>
                 <p class="plc_marginbottom10">Open an email or search for a contact on Makesbridge</p>
-                <h2>Search</h2>
+                <h2 style="font-size:14px;">Search</h2>
+                <div style="display: inline;">
+                <select style="width: 95px;" class="selectSharedContact"><option value="N">My Contacts</option><option value="Y">Shared Contacts</option></select>
+                </div>
                 <div class="contacts-switch">
                   <div class="status_tgl">
                     <a class="published toggletags active showtooltip">
@@ -508,7 +622,7 @@
                                   </div></a>
                                 </div>
                               </li>
-                              <li data-tip="Add to Salesforce" class="hide show sf_icons mks_hideRightBorder" currentitem="false">
+                              <li data-tip="Add to Salesforce" class="hide addSf sf_icons mks_hideRightBorder" currentitem="false">
                                 <div class="scf_option_icon ripple top_manage_lists">
                                   <a href="#" style="text-decoration: unset;">
                                     <div class="wrap_scf_o_i">
@@ -519,7 +633,7 @@
                                   </a>
                                 </div>
                               </li>
-                              <li data-tip="Jump Salesforce" class="hide show sf_icons mks_hideRightBorder" currentitem="false">
+                              <li data-tip="Jump Salesforce" class="hide jumpSf sf_icons mks_hideRightBorder" currentitem="false">
                                 <div class="scf_option_icon ripple top_manage_lists">
                                   <a href="#" style="text-decoration: unset;">
                                     <div class="wrap_scf_o_i">
@@ -546,6 +660,7 @@
 
                                       <div id="Tags" class="tabcontent mksph_cardbox">
                                         <h3>Tags</h3>
+                                        
                                         <a class="addTag mkb_btn mkb_greenbtn ">Add Tag</a>
                                         <span class="addTagWrapper" style="display: none;">
                                           <div class="autocomplete">
@@ -553,11 +668,6 @@
                                             <div class="autocomplete__menu--wrap">
                                               <div class="autocomplete__menu">
                                                 <input type="text" class="autocomplete__input tag__input_mks focusThis" value="" id="addTagName" placeholder="add or apply a tag to this contact...">
-                                                <ul class="autocomplete__items  hide">
-                                                  <li class="autocomplete__item autocomplete__item--disabled">
-                                                    <span data-id="0"></span>
-                                                  </li>
-                                                </ul>
                                               </div>
                                             </div>
                                           </div>
@@ -712,6 +822,206 @@
                                           <span class="mksicon-ArrowNext"></span>
                                         </div>
                                       </div>
+                                      <!-- Tasks -->
+                                      <div id="tasks" class="tabcontent mksph_cardbox">
+                                        <h3>Tasks</h3>
+                                        <div class="tasks_sort_by" style="display: inline-block;position: absolute;top: 11px;left: 73px;">
+                                            <select>
+                                              <option value="-1">All</option>
+                                              <optgroup label="Priority">
+                                                <option value="high">High</option>
+                                                <option value="medium">Medium</option>
+                                                <option value="low">Low</option>
+                                              </optgroup>
+                                              <optgroup label="Tasks Types">
+                                                <option value="call">Call</option>
+                                                <option value="email">Email</option>
+                                                <option value="discovery">Discovery</option>
+                                                <option value="lunch">Lunch</option>
+                                                <option value="breakfast">Breakfast</option>
+                                                <option value="meeting">Meeting</option>
+                                                <option value="proposal">proposal</option>
+                                                <option value="demo">Demo</option>
+                                                <option value="first_touch">First Touch</option>
+                                              </optgroup>
+                                            </select>
+                                          </div>
+                                        <div style="position: relative;">
+                                          <span class="mkb_btn mkb_cf_btn pull-right mkb_greenbtn addTasks true" style="right: 0px; top: -38px;">Add New</span>
+                                          
+                                          <div class="content-wrapper height90 height130 task_expand_height mks_outlook_tasks_wrapper" style="position: relative;">
+                                            <div class="contact_found mks_tasks_lists_user task_status_P" style="padding: 10px 12px;">
+                                              <div class="cf_silhouette">
+                                                <div class="cf_silhouette_text c_txt_s c_txt_s_blue">
+                                                  <i class="mksicon-Meeting mks-task-icons"></i>
+                                                </div>
+                                              </div>
+                                              <div class="cf_email_wrap">
+                                                <div class="cf_email">
+                                                  <p class="mkb_elipsis mkb_text_break" title="Meeting" style="width: 145px;">Meeting</p>
+                                                  <span class="ckvwicon">03 May 2018 02:58 PM</span>
+                                                </div>
+                                                <div class="cf_task_right">
+                                                  <span data-tip="high" class="mks_priority_icon mks_priority_high pclr12" currentitem="false">
+                                                    <i class="mksicon-Triangle_Up"></i>
+                                                    <div class="__react_component_tooltip place-top type-dark " data-id="tooltip"></div>
+                                                  </span>
+                                                  <span class="mkb_btn mkb_cf_btn pull-right mkb_greenbtn addCF show mkb_task_compBtn" style="top: 13px; right: 0px;">
+                                                    <i class="mksicon-Check"></i>Complete</span>
+                                                    <span class="mkb_tast_completed_btn mkb_btn mkb_cf_btn pull-right mkb_greenbtn addCF mkb_task_compBtn" style="top: 13px; right: 0px;">Completed</span>
+                                                  </div>
+                                                </div>
+                                                <div class="mks_task_edit_delete_wrap">
+                                                  <div class="cf_silhouette">
+                                                    <div class="cf_silhouette_text c_txt_s c_txt_s_blue">
+                                                      <i class="mksicon-Edit mks-task-icons"></i>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                <div class="mks_task_edit_delete_wrap _mks_task_delete_task" style="left: 37px; width: 8%; background: transparent;">
+                                                  <div class="cf_silhouette">
+                                                    <div class="cf_silhouette_text c_txt_s c_txt_s_blue">
+                                                      <i class="mksicon-Delete mks-task-icons"></i>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                              <div class="contact_found mks_tasks_lists_user task_status_P" style="padding: 10px 12px;">
+                                                <div class="cf_silhouette">
+                                                  <div class="cf_silhouette_text c_txt_s c_txt_s_blue">
+                                                    <i class="mksicon-Lunch mks-task-icons"></i>
+                                                  </div>
+                                                </div>
+                                                <div class="cf_email_wrap">
+                                                  <div class="cf_email">
+                                                    <p class="mkb_elipsis mkb_text_break" title="Lunch" style="width: 145px;">Lunch</p>
+                                                    <span class="ckvwicon">03 May 2018 02:58 PM</span>
+                                                  </div>
+                                                  <div class="cf_task_right">
+                                                    <span data-tip="medium" class="mks_priority_icon mks_priority_medium pclr19" currentitem="false">
+                                                      <i class="mksicon-More"></i>
+                                                      <div class="__react_component_tooltip place-top type-dark " data-id="tooltip"></div>
+                                                    </span>
+                                                    <span class="mkb_btn mkb_cf_btn pull-right mkb_greenbtn addCF show mkb_task_compBtn" style="top: 13px; right: 0px;">
+                                                      <i class="mksicon-Check"></i>Complete</span>
+                                                      <span class="mkb_tast_completed_btn mkb_btn mkb_cf_btn pull-right mkb_greenbtn addCF mkb_task_compBtn" style="top: 13px; right: 0px;">Completed</span>
+                                                    </div>
+                                                  </div>
+                                                  <div class="mks_task_edit_delete_wrap">
+                                                    <div class="cf_silhouette">
+                                                      <div class="cf_silhouette_text c_txt_s c_txt_s_blue">
+                                                        <i class="mksicon-Edit mks-task-icons"></i></div>
+                                                      </div>
+                                                    </div>
+                                                    <div class="mks_task_edit_delete_wrap _mks_task_delete_task" style="left: 37px; width: 8%; background: transparent;">
+                                                      <div class="cf_silhouette">
+                                                        <div class="cf_silhouette_text c_txt_s c_txt_s_blue">
+                                                          <i class="mksicon-Delete mks-task-icons"></i></div>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                    
+                                                    <div class="contact_found mks_tasks_lists_user task_status_P" style="padding: 10px 12px;"><div class="cf_silhouette">
+                                                      <div class="cf_silhouette_text c_txt_s c_txt_s_blue">
+                                                        <i class="mksicon-Demo mks-task-icons"></i></div>
+                                                      </div>
+                                                      <div class="cf_email_wrap">
+                                                        <div class="cf_email">
+                                                          <p class="mkb_elipsis mkb_text_break" title="Demo" style="width: 145px;">Demo</p>
+                                                          <span class="ckvwicon">03 May 2018 02:58 PM</span>
+                                                        </div>
+                                                        <div class="cf_task_right">
+                                                          <span data-tip="low" class="mks_priority_icon mks_priority_low pclr9" currentitem="false">
+                                                            <i class="mksicon-Triangle_Down"></i>
+                                                            <div class="__react_component_tooltip place-top type-dark " data-id="tooltip"></div>
+                                                          </span>
+                                                          <span class="mkb_btn mkb_cf_btn pull-right mkb_greenbtn addCF show mkb_task_compBtn" style="top: 13px; right: 0px;">
+                                                            <i class="mksicon-Check"></i>Complete</span>
+                                                            <span class="mkb_tast_completed_btn mkb_btn mkb_cf_btn pull-right mkb_greenbtn addCF mkb_task_compBtn" style="top: 13px; right: 0px;">Completed</span>
+                                                          </div>
+                                                        </div>
+                                                        <div class="mks_task_edit_delete_wrap">
+                                                          <div class="cf_silhouette">
+                                                            <div class="cf_silhouette_text c_txt_s c_txt_s_blue">
+                                                              <i class="mksicon-Edit mks-task-icons"></i>
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                        <div class="mks_task_edit_delete_wrap _mks_task_delete_task" style="left: 37px; width: 8%; background: transparent;">
+                                                          <div class="cf_silhouette">
+                                                            <div class="cf_silhouette_text c_txt_s c_txt_s_blue"><i class="mksicon-Delete mks-task-icons"></i>
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                    <div class="expand hide msk_collapse_tasks">
+                                                      <span>Click to expand</span>
+                                                      <span class="mksicon-ArrowNext"></span>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                      <!-- Notes  -->
+                                      <div id="notes" class="tabcontent mksph_cardbox">
+                                        <h3>Notes</h3>
+                                        <div class="_mks_NotesWrap">
+                                          <a class="mkb_btn mkb_cf_btn pull-right mkb_greenbtn show mkb_notes-save" style="color: rgb(255, 255, 255); top: -38px; right: -1px;">save</a>
+                                          <a class="mkb_btn mkb_cf_btn pull-right mkb_notes-close mks_cc_action_gray hide" style="color: rgb(255, 255, 255); top: -38px; right: -1px;">close</a>
+                                          <a class="mkb_btn mkb_cf_btn pull-right mkb_notes-update c_txt_s_blue hide" style="color: rgb(255, 255, 255); top: -38px; right: 56px;">update</a>
+                                          <textarea placeholder="Add your notes here" maxlength="500" id="note_textarea" style="min-height: 60px; font-size: 13px;"></textarea>
+                                          <div class="height90 height130  notes_lists_wrap">
+                                            <ul>
+                                              
+                                                <li class="_mks_item">
+                                                  <div class="cf_silhouette">
+                                                    <div class="mks-notestEdit-wrap cf_silhouette_text c_txt_s pclr8 hide">
+                                                      <i class="mksicon-Edit mks-task-icons"></i></div>
+                                                      <div class="mks-notestDel-wrap cf_silhouette_text c_txt_s pclr12 hide">
+                                                        <i class="mksicon-Delete mks-task-icons"></i>
+                                                      </div>
+                                                      <div class="mks-notestNote-wrap cf_silhouette_text c_txt_s pclr15">
+                                                        <i class="mksicon-Notepad mks-task-icons"></i>
+                                                      </div>
+                                                    </div>
+                                                    <div class="cf_email_wrap">
+                                                      <div class="cf_email">
+                                                        <span class="mkb_text_break" title="Umair notes">Umair notes</span>
+                                                        <p>
+                                                          <strong>You</strong>made a note at 04:44 AM,27 Apr 2018
+                                                        </p>
+                                                      </div>
+                                                    </div>
+                                                  </li>
+                                                  <li class="_mks_item">
+                                                    <div class="cf_silhouette">
+                                                      <div class="mks-notestEdit-wrap cf_silhouette_text c_txt_s pclr8 hide">
+                                                        <i class="mksicon-Edit mks-task-icons"></i>
+                                                      </div>
+                                                      <div class="mks-notestDel-wrap cf_silhouette_text c_txt_s pclr12 hide">
+                                                        <i class="mksicon-Delete mks-task-icons"></i>
+                                                      </div>
+                                                      <div class="mks-notestNote-wrap cf_silhouette_text c_txt_s pclr15">
+                                                        <i class="mksicon-Notepad mks-task-icons"></i>
+                                                      </div>
+                                                    </div>
+                                                    <div class="cf_email_wrap">
+                                                      <div class="cf_email">
+                                                        <span class="mkb_text_break" title="new test needs to be dadeedtest 123 new test needs to be dadeetest 123new test needs to be dade">
+                                                          new test needs to be dadeedvtest 123 new test needs to be dadeed
+                                                        </span>
+                                                        <p><strong>You</strong>made a note at 09:14 AM,06 Apr 2018</p>
+                                                      </div>
+                                                    </div>
+                                                  </li>
+                                                </ul>
+                                              </div>
+                                              <div class="expand hide notes_collapse">
+                                                <span>Click to expand</span>
+                                                <span class="mksicon-ArrowNext"></span>
+                                              </div>
+                                            </div>
+                                          </div>
+                                      <!-- Custom Fields  -->
                                       <div id="custom-fields" class="tabcontent mksph_cardbox">
                                         <h3>Custom Fields</h3>
                                         <div class="customField_ul_wraps">
@@ -1038,12 +1348,15 @@
 
     <script type="text/javascript" src="node_modules/core-js/client/core.js"></script>
     <script type="text/javascript" src="node_modules/jquery/dist/jquery.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script type="text/javascript" src="node_modules/office-ui-fabric-js/dist/js/fabric.js"></script>
     <script src="https://momentjs.com/downloads/moment.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
+    <script src="assets/js/jquery.timepicker.min.js"></script>
     <script type="text/javascript" src="assets/js/jQuery.highlight.js" ></script>
     <script src="assets/js/icheck.min.js"></script>
 
-    <script type="text/javascript" src="app.js?v=0.4"></script>
+    <script type="text/javascript" src="app.js?v=0.5"></script>
 
 </body>
 
