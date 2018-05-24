@@ -166,9 +166,12 @@
                                     commonModule.hideLoadingMask();
                                     baseObject.users_details.splice(0,1);
                                     baseObject.users_details.push(data);
+                                    getUserSFStats();
                                     //localStorage.setItem('pmks_userpass', this.state.username+'__'+this.state.password);
                                     attachedEvents.attachedSearchMks();
                                     attachedEvents.switchContactsTags();
+                                    tasksModule.toggleTasks();
+                                    tasksModule.selectPriorityTask();
                                     checkSubscriberList();
                                   }
                                 });
@@ -264,6 +267,18 @@
 
                                   }
                                 });
+
+                          }
+                          var getUserSFStats =  function(){
+                            var userDetails = baseObject.users_details[0];
+                            var searchUrl = baseObject.baseUrl
+                                            +'/io/salesforce/getData/?BMS_REQ_TK='
+                                            + userDetails.bmsToken +'&type=status&ukey='+userDetails.userKey
+                                            +'&isMobileLogin=Y&userId='+userDetails.userId;
+                            
+                            commonModule.getDataRequest(searchUrl,function(data){
+                              baseObject['isSalesforceUser'] = data.isSalesforceUser;
+                            });
 
                           }
                           var getClickerVisitors =  function(){
@@ -449,6 +464,10 @@
                                 }
                               });
                             setTimeout("$('.dialogBox .focusThis').focus()",500);
+
+                              if(reqObj.initCallBack){
+                                reqObj.initCallBack();
+                              }
                             }
 
                             var dialogView = function(reqObj){
@@ -533,6 +552,29 @@
                 searchContact(event.currentTarget.value);
               }
            });
+           
+           $('.show_tasks_list').on('click',function(){
+             $('.toggleTask').removeClass('active');
+             $('.toggleTask.today').addClass('active');
+              tasksModule.getTasksDashBoard();
+              $('.tasks_wrapper_dashboard').removeClass('hide');
+              $('.mks_task_lists_dash_wrapper .not-found.task-loading-nof').remove()
+              $('.tasks_wrapper_dashboard .mks_task_lists_dash_wrapper .content-wrapper').before('<p class="not-found task-loading-nof">Loading tasks...</p>')
+           });
+           //Create New Contact form Dashboard
+           $('.add_new_btn').on('click',function(){
+             $('.mks_add_new_contact_wrap').parent().show();
+             setTimeout("$('.mks_add_new_contact_wrap .focusThis').focus()",500);
+           });
+
+           $('.mks_add_new_contact_wrap .scfe_close_wrap').on('click',function(){
+            $('.mks_add_new_contact_wrap').parent().hide();
+            $('#cemail,#cfname,#clname').val('')
+           });
+           $('.mks_add_new_contact_wrap .scfe_save_wrap').on('click',function(){
+             contactModule.createNewContact();
+           })
+
            $('.mksicon-logout').unbind('click');
            $('.mksicon-logout').on('click',function(){
             $('.mksph_back').trigger('click');
@@ -564,7 +606,7 @@
              var searchUrl = baseObject.baseUrl+'/io/subscriber/getData/?BMS_REQ_TK='
                              + baseObject.users_details[0].bmsToken +'&type=getSAMSubscriberList&offset=0&searchValue='
                              +value+'&orderBy=lastActivityDate&ukey='+baseObject.users_details[0].userKey
-                             +'&isMobileLogin=Y&userId='+baseObject.users_details[0].userId;
+                             +'&isMobileLogin=Y&isShareSearch='+$('.selectSharedContact').val()+'&userId='+baseObject.users_details[0].userId;
            }
 
            // var searchedEmail = function(email){
@@ -577,11 +619,11 @@
                  success: function(data){
                    try{
                      var result = JSON.parse(data);
-                     if(result.totalCount==0){
+                     if(parseInt(result.totalCount)==0){
                       commonModule.hideLoadingMask();
-                      debugger;
                       $('.searched_results_wrap .total-count-head').hide();
                       $('.searched_results_wrap').show();
+                      $('.search_results_single_value .searched_email_mks').remove();
                       $('.search_results_single_value').append('<p>No contact found.</p>');
                       return false;
                      }
@@ -613,6 +655,7 @@
                      $('.searched_results_wrap').show();
                      $('.searched_email_mks').on('click',function(event){
                        var email = $(this).find('.cf_email p').text();
+                       $('.tasks_wrapper_dashboard').addClass('hide');
                        searchEmailInMks(email);
                      })
                    }catch(e){
@@ -633,18 +676,28 @@
            });
          }
 
-         var searchEmailInMks = function(email){
+         var searchEmailInMks = function(email,isShared){
            commonModule.showLoadingMask({message:"Loading subscriber details..",container : '.mks_wrap_step2'});
            $('.mks_createContact_ .scf_email p').html(email);
            $('.create_slider .scf_email span').html(email);
            $('.mks_createContact_ .scf_silhouette_text p,.create_slider .scf_silhouette_text p').html(email.charAt(0));
+           var searchUrl = '';
+           if(isShared && isShared=="Y"){
+            searchUrl = baseObject.baseUrl
+            +'/io/subscriber/getData/?BMS_REQ_TK='
+            +  baseObject.users_details[0].bmsToken +'&type=getSAMSubscriberList&offset=0&searchValue='
+            +email+'&orderBy=lastActivityDate&ukey='+baseObject.users_details[0].userKey
+            +'&isMobileLogin=Y&userId='+baseObject.users_details[0].userId+'&isShareSearch='+isShared;
 
-           var searchUrl = baseObject.baseUrl
+           }else{
+            searchUrl = baseObject.baseUrl
                            +'/io/subscriber/getData/?BMS_REQ_TK='
                            +  baseObject.users_details[0].bmsToken +'&type=getSAMSubscriberList&offset=0&searchValue='
                            +email+'&orderBy=lastActivityDate&ukey='+baseObject.users_details[0].userKey
-                           +'&isMobileLogin=Y&userId='+baseObject.users_details[0].userId;
+                           +'&isMobileLogin=Y&userId='+baseObject.users_details[0].userId+'&isShareSearch='+$('.selectSharedContact').val();
 
+           }
+           
 
           commonModule.getDataRequest(searchUrl,SubscriberModule.extractSubscriberDetails);
           //$('.debugDiv').html(responseData.totalCount)
@@ -655,6 +708,57 @@
            searchEmailInMks : searchEmailInMks
          };
        })();
+        /*----- contact new Module ----*/
+        var contactModule = (function(){
+          var createNewContact = function(){
+            var isvalid = true;
+            if($('#cemail').val()==""){
+              $('#cemail').addClass('hasError');
+              isvalid=false;
+            }else{
+              $('#cemail').removeClass('hasError');
+            }
+            if(isvalid){
+              
+              var reqObj = {};
+              reqObj['email']= $('#cemail').val();
+              reqObj['ukey']=baseObject.users_details[0].userKey
+              reqObj['firstName']=commonModule.encodeHTML( $('#cfirstname').val());
+              reqObj['lastName'] = commonModule.encodeHTML($('#clastname').val());
+              reqObj['company'] = ""
+              reqObj['telephone'] =""
+              reqObj['city']= ""
+              reqObj['state']= ""
+              reqObj['address1']= ""
+              reqObj['jobStatus']= ""
+              reqObj['salesRep']= ""
+              reqObj['salesStatus']= ""
+              reqObj['birthDate']= ""
+              reqObj['areaCode']= ""
+              reqObj['country']= ""
+              reqObj['zip']= ""
+              reqObj['address2']= ""
+              reqObj['industry']= ""
+              reqObj['source']= ""
+              reqObj['occupation']= ""
+              reqObj['listNum']  =baseObject.users_details[0].listObj['listNum']
+              reqObj['isMobileLogin']='Y'
+              reqObj['userId']=baseObject.users_details[0].userId;
+             var url = baseObject.baseUrl+'/io/subscriber/setData/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken+'&type=addSubscriber';
+              commonModule.showLoadingMask({message : 'Creating new contact...', container: '.mks_add_new_contact_wrap'})
+             commonModule.saveData(url,reqObj,function(response){
+              var email = $('#cemail').val();
+              commonModule.hideLoadingMask();
+              $('.mks_add_new_contact_wrap .scfe_close_wrap').trigger('click')
+              attachedEvents.searchEmailInMks(email);
+              debugger;
+             })
+            }
+          }
+          return {
+            createNewContact : createNewContact
+          }
+        })();
         /*----- Subscriber Module ----*/
        var SubscriberModule = (function () {
                           var extractSubscriberDetails = function (resObj) {
@@ -800,13 +904,44 @@
 
                               $('.debugDiv').html(searchUrl);
                               commonModule.getDataRequest(searchUrl,generateBasicCustomFields)
+                              getAllTags(); // Get all tagss
+                             
                           }
                           var generateBasicCustomFields = function(data){
-
+                            
                             /*--- Calling User Timeline---*/
                             $('.activityLoading .not-found').text('Loading Timeline...')
                             activityModule.getUserTimeLine(0);
-                            activityModule.getServerTime()
+                            activityModule.getServerTime();
+                            tasksModule.getTasks();
+                            notesModule.getNotes();
+                            if(baseObject.taskdash){
+                              baseObject['taskdash'] = false;
+                              setTimeout(function(){
+                                $('.makesbridge_plugin').animate({
+                                  scrollTop: $("#tasks").offset().top - 50
+                              }, 800);
+                            },1000)
+                            }
+                            
+                            /*------Setting up User SF---------*/ 
+                            console.log(baseObject);
+                            baseObject['customFields'] = data.cusFldList;
+                            baseObject['subscriberDetails'] =  data
+
+                            if(baseObject.isSalesforceUser == "Y"){
+                              $('.top_manager_ul_wraps').addClass('six');
+                              $('.top_manager_ul_wraps').removeClass('five');
+                              if(data.sfUrl){
+                                $('.addSf').addClass('hide');
+                                $('.jumpSf').removeClass('hide');
+                                $('#SalesForce').removeClass('hide');
+                              }else{
+                                $('.addSf').removeClass('hide');
+                                $('.jumpSf').addClass('hide');
+                                $('#SalesForce').addClass('hide');
+                              }
+                            }
                             /*---------------*/ 
                             $('.debugDiv').html(data.firstName);
                             $('.new_contact_false').removeClass('hide');
@@ -861,9 +996,11 @@
                             commonModule.hideLoadingMask();
                             attachSubscriberEvents()
                           }
-                          var saveBasicAdvanceFields = function(){
+                          var saveBasicAdvanceFields = function(sfType){
                             var searlizeBasicObj = {};
                             $('.debugDiv').html('Save Basic Adv Function Called');
+                            var sfUrl = (sfType == 'SF') ? '&updateAtSF=y' : '';
+
                             $.each($('.mkb_basicField_wrap input'),function(key,value){
                                searlizeBasicObj[$(value).attr('name')] = $(value).val();
                             });
@@ -874,6 +1011,11 @@
                             searlizeBasicObj['isMobileLogin']='Y';
                             searlizeBasicObj['userId']=baseObject.users_details[0].userId;
                             searlizeBasicObj['subNum']=baseObject.subNum;
+                            debugger;
+                            if(sfUrl){
+                              searlizeBasicObj["conLeadId"] = baseObject.subscriberDetails.conLeadId;
+                              searlizeBasicObj["owner"] =  baseObject.subscriberDetails.salesRep;
+                            }
                             // Add custom fields values
                             if($('ul.customFields_ul li').length > 0){
                               $.each($('ul.customFields_ul li'),function(key,val){
@@ -881,11 +1023,19 @@
                               });
                             }
 
-                            var url = baseObject.baseUrl+'/io/subscriber/setData/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken+'&type=editProfile';
-
-                            commonModule.saveData(url,searlizeBasicObj,updatedBasicAdvField)
-
-                            commonModule.showLoadingMask({message:"Updating contact...",container : '.new_contact_false'});
+                            var url = baseObject.baseUrl+'/io/subscriber/setData/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken+'&type=editProfile'+sfUrl;
+                            if(sfUrl){
+                              commonModule.showLoadingMask({message:"Updating contact to salesforce...",container : '.new_contact_false'});
+                              commonModule.saveData(url,searlizeBasicObj,function(){
+                                commonModule.SuccessAlert({message :'Contact updated successfully on salesforce.'});
+                                commonModule.hideLoadingMask()
+                              });
+                            }else{
+                              commonModule.saveData(url,searlizeBasicObj,updatedBasicAdvField)
+                              commonModule.showLoadingMask({message:"Updating contact...",container : '.new_contact_false'});
+                            }
+                           
+                            
                           }
                           var updatedBasicAdvField = function(data){
                             $('.debugDiv').html('Hit After Updating');
@@ -966,6 +1116,34 @@
                                 dialogModule.dialogView({showTitle:'Add Custom Field',childrenView : bodyHtml, additionalClass : '',container : '.customField_ul_wraps',saveCallBack : addNewCF });
                                 event.stopPropagation();
                               });
+
+                              $('.addTasks').unbind('click');
+                              $('.addTasks').on('click',function(event){
+                                tasksModule.showTasksDialog();
+                                event.stopPropagation();
+                              });
+
+                              $('.tasks_sort_by select').unbind('change');
+                              $('.tasks_sort_by select').on('change',function(event){
+                                if($(this).val() != "-1"){
+                                  if($(this.options[this.selectedIndex]).closest('optgroup').prop('label') == "Tasks Types"){
+                                    tasksModule.getTasksByTask($(this).val());
+                                  }else{
+                                    tasksModule.getTasksByPT($(this).val())
+                                  }
+                                }else{
+                                  tasksModule.getTasks();
+                                }
+                                event.stopPropagation();
+                              });
+
+                              $('.mkb_notes-save').unbind('click');
+                              $('.mkb_notes-save').on('click',function(event){
+                                //tasksModule.showTasksDialog();
+                                notesModule.saveNotes();
+                                event.stopPropagation();
+                              });
+
                               $('.mks_expandable').unbind('click');
                               $('.mks_expandable').on('click',function(event){
                                   $('.debugDiv').html('collapse clicked')
@@ -1004,7 +1182,17 @@
                               $('.addTag').on('click',function(event){
                                   $(this).hide();
                                   $('.addTagWrapper').show();
-                                  setTimeout("$('.addTagWrapper .focusThis').focus()",500);
+                                 
+                                  
+                                  setTimeout(function(){$('.addTagWrapper .focusThis').focus();
+                                  try{
+                                    jQuery('#addTagName').autocomplete({
+                                      source: baseObject.allTags
+                                    });
+                                  }catch(e){
+                                    console.log(e.message);
+                                  }
+                                },500);
                               });
                               $('.tag__input_mks').keypress(function(event){
                                  if(event.which == 13){
@@ -1017,7 +1205,10 @@
                                   $(this).parents('.addTagWrapper').hide();
                                   $('.addTag').show();
                               });
-
+                              $('.scfe_save_wrap').on('click',function(){
+                                debugger;
+                                SubscriberModule.saveBasicAdvanceFields('SF')
+                              })
                               $('ul.mks_tag_ul .icon.cross').on('click',function(){
 
                                 var tagName = $(this).parent().find('span').text();
@@ -1053,6 +1244,7 @@
                                     $('#Activity .act_row_body_wrap').html('');
                                 });
                                 // Attach Events for Action bar
+                                $('.mks_wrap_step3 ul.top_manager_ul_wraps li').unbind('click');
                                 $('.mks_wrap_step3 ul.top_manager_ul_wraps li').on('click',function(event){
                                   console.log($(this).attr('data-tip'));
                                   if($(this).attr('data-tip') == 'Add to Sequence'){
@@ -1064,6 +1256,13 @@
                                   }
                                   else if($(this).attr('data-tip') == 'Suppress contact'){
                                     compressSubs.init();
+                                  }else if($(this).attr('data-tip') == 'Add to Salesforce'){
+                                    salesForceModule.showAddToSF()
+                                  }else if($(this).attr('data-tip') == 'Jump Salesforce'){
+                                    console.log(baseObject)
+                                    debugger;
+                                    var url = baseObject.subscriberDetails.sfUrl;
+                                    window.open(commonModule.decodeHTML(url), 'newwindow', 'scrollbars=yes,resizable=yes');
                                   }
                                 });
 
@@ -1082,7 +1281,7 @@
                                 }*/
                               })
                           };
-
+                          
                           var addNewCF  = function(){
 
 
@@ -1140,17 +1339,1158 @@
                               deleteTags(tagName);
                             });
                           }
-
+                          var getAllTags = function(){
+                            
+                            var searchUrl = baseObject.baseUrl
+                            + '/io/user/getData/?BMS_REQ_TK='
+                            + baseObject.users_details[0].bmsToken +'&type=allSubscriberTags&ukey='+baseObject.users_details[0].userKey
+                            + '&isMobileLogin=Y&userId='+baseObject.users_details[0].userId;
+                            commonModule.getDataRequest(searchUrl,function(data){
+                              var allTagsArray = [];
+                              jQuery.each(data.tags[0],function(key,val){
+                                allTagsArray.push(commonModule.decodeHTML(val[0].tag));
+                              });
+                              baseObject['allTags'] = allTagsArray
+                              console.log(allTagsArray);
+                              
+                            });
+                           
+                          }
                           return {
                             init: init,
                             extractSubscriberDetails : extractSubscriberDetails,
                             getSubscriberDetails   : getSubscriberDetails,
-                            generateBasicCustomFields : generateBasicCustomFields
+                            generateBasicCustomFields : generateBasicCustomFields,
+                            getAllTags : getAllTags,
+                            saveBasicAdvanceFields : saveBasicAdvanceFields
                           };
 
                         })();
 
 
+       /*----- Tasks Module ----*/
+       var tasksModule = (function(){
+        var mapicons = {
+          "lunch" : "mksicon-Lunch",
+          "discovery" : "mksicon-Discovery",
+          "call" : "mksicon-Phone",
+          "email" : "mksicon-Mail",
+          "breakfast" : "mksicon-Breakfast",
+          "meeting" : "mksicon-Meeting",
+          "proposal" : "mksicon-Proposal",
+          "demo"  : "mksicon-Demo",
+          "first_touch":"mksicon-First-Touch"
+        }
+        var priorityIcons = {
+          "low" : {"topClass":"mks_priority_low pclr9","icon" : "mksicon-Triangle_Down"},
+          "high" : {"topClass":"mks_priority_high pclr12","icon" : "mksicon-Triangle_Up"},
+          "medium" : {"topClass":"mks_priority_medium pclr19","icon" : "mksicon-More"}
+        }
+        var taskId = '';
+        var TaskObj = null;
+        var selectedTask = '';
+        var showTasksDialog = function(type){
+          var bodyHtml = ''
+          bodyHtml += '<ul class="mks_ecc_wrap">';
+          bodyHtml += '<span><li class="mks_ecc_first_touch tooltips" data-tip="First Touch" data-value="first_touch" currentitem="false"><div class="mksicon-First-Touch"></div><span>First Touch</span></li></span>';
+          bodyHtml += '<span><li class="mks_ecc_demo tooltips" data-tip="Demo" data-value="demo" currentitem="false"><div class="mksicon-Demo"></div><span>Demo</span></li></span>';
+          bodyHtml += '<span><li class="mks_ecc_discovery tooltips" data-tip="Discovery" data-value="discovery" currentitem="false"><div class="mksicon-Discovery"></div><span>Discovery</span></li></span>';
+          bodyHtml += '<span><li class="mks_ecc_call active tooltips" data-tip="Call" data-value="call" currentitem="false"><div class="mksicon-Phone"></div><span>Call</span></li></span>';
+          bodyHtml += '<span><li class="mks_ecc_email tooltips" data-tip="Email" data-value="email" currentitem="false"><div class="mksicon-Mail"></div><span>Email</span></li></span>';
+          bodyHtml += '<span><li class="mks_ecc_lunch tooltips" data-tip="Lunch" data-value="lunch" currentitem="false"><div class="mksicon-Lunch"></div><span>Lunch</span></li></span>';
+          bodyHtml += '<span><li class="mks_ecc_breakfast tooltips" data-tip="Breakfast" data-value="breakfast" currentitem="false"><div class="mksicon-Breakfast"></div><span>Breakfast</span></li></span>';
+          bodyHtml += '<span><li class="mks_ecc_meeting tooltips" data-tip="Meeting" data-value="meeting" currentitem="false"><div class="mksicon-Meeting"></div><span>Meeting</span></li></span>';
+          bodyHtml += '<span><li class="mks_ecc_proposal tooltips" data-tip="Proposal" data-value="proposal" currentitem="false"><div class="mksicon-Proposal"></div><span>Proposal</span></li></span>';
+          bodyHtml += '</ul>'
+          bodyHtml += '<input type="text" name="ckey" value="Call" id="input2" class="focusThis" data-required="required" placeholder="Enter task name *">'
+          bodyHtml +='<span class="date_wrapper__mks"><input type="text" id="datepicker"></span>'
+          bodyHtml +='<span class="timePicker_wrap"><input type="text" class="timepicker"/></span>'
+          bodyHtml +='<ul class="mks_priorty_wrap"><li class="mks_priotiry_low">Low</li><li class="mks_priotiry_medium active">Medium</li><li class="mks_priotiry_high">High</li></ul>'
+          bodyHtml +='<textarea placeholder="Add notes about your task here" id="notes"></textarea>'
+        
+          dialogModule.dialogView({showTitle: (type=='edit') ? 'Edit Task' : 'Add Task',childrenView : bodyHtml, additionalClass : 'taks_dialog_wrapper',container : '.customField_ul_wraps',saveCallBack : (type=='edit') ? updateTask :tasksModule.addNewTasks,initCallBack : tasksModule.attachTasksEvents });
+        } 
+
+        var attachTasksEvents = function(){
+          $( ".taks_dialog_wrapper #datepicker" ).datepicker();
+          $( ".taks_dialog_wrapper #datepicker" ).datepicker( "setDate", new Date());
+          $('.taks_dialog_wrapper input.timepicker').timepicker({ 'scrollDefault': 'now'});
+          $('.taks_dialog_wrapper input.timepicker').timepicker('setTime', new Date());
+
+          $('.taks_dialog_wrapper .mks_ecc_wrap li').on('click',function(){
+            if($(this).parents('.mks_ecc_wrap').find('li.active').attr('data-tip') == $('.taks_dialog_wrapper #input2').val().trim()){
+              $('.taks_dialog_wrapper #input2').val($(this).attr('data-tip'))
+            }
+            $(this).parents('.mks_ecc_wrap').find('li').removeClass('active');
+            
+            $(this).addClass('active');
+          });
+          $('.taks_dialog_wrapper .mks_priorty_wrap li').on('click',function(){
+            $(this).parent().find('li').removeClass('active');
+            $(this).addClass('active');
+          });
+
+          $('.msk_collapse_tasks').unbind('click');
+          $('.msk_collapse_tasks').on('click',function(event){
+              $('.debugDiv').html('collapse clicked')
+
+              /*-- Adding height --*/
+                if($(this).hasClass('expand')){
+                  $(this).find('span').eq(0).text('Click to collapse')
+                  $('.task_expand_height').addClass('heighAuto');
+                }else{
+                  $(this).find('span').eq(0).text('Click to expand');
+                    $('.task_expand_height').removeClass('heighAuto');
+                }
+
+              if($(this).hasClass('expand')){
+                $(this).removeClass('expand');
+                $(this).addClass('collapse');
+              }else{
+                $(this).removeClass('collapse');
+                $(this).addClass('expand');
+              }
+          });
+          $('.mks_task_edit_delete_wrap').unbind('click');
+          $('.mks_task_edit_delete_wrap').on('click',function(){
+            if($(this).hasClass('_mks_task_delete_task')){
+              deleteTasks($(this).attr('dat-id'))
+            }else{
+              editTasks($(this).attr('dat-id'))
+            }
+          });
+          $('.mkb_task_compBtn').unbind('click');
+          $('.mkb_task_compBtn').on('click',function(){
+            var taskId = $(this).attr('dat-id');
+            commonModule.showLoadingMask({message : 'Marking task completed...',container : '.mks_outlook_tasks_wrapper'});
+            updateTask(true,taskId)
+          });
+        }
+        
+        var addNewTasks = function(){
+          var tasktype = $('.taks_dialog_wrapper .mks_ecc_wrap li.active').attr('data-value');
+          var taskName = $('.taks_dialog_wrapper #input2').val();
+          var taskDate = $('.taks_dialog_wrapper #datepicker').val();
+          var taskTime = $('.taks_dialog_wrapper .timepicker').val();
+          var taskPriorty = $('.taks_dialog_wrapper .mks_priorty_wrap li.active').text().toLowerCase();
+          var taskNotes =  $('.taks_dialog_wrapper #notes').val();
+          var _date = moment(taskDate, 'MM-DD-YYYY')
+          var newtaskDate = _date.format("MM-DD-YYYY");
+          var timeDate = newtaskDate + " " + moment(taskTime, ["h:mm A"]).format("HH:mm")+":00";
+          // type: "add";
+        
+          var reqObj = {
+            type: "add",
+            subNum:  baseObject.subNum,
+            tasktype: tasktype,
+            name: taskName,
+            taskDate: timeDate,
+            priority: taskPriorty,
+            notes: taskNotes,
+            ukey: baseObject.users_details[0].userKey,
+            isMobileLogin:'Y',
+            userId:baseObject.users_details[0].userId
+          }
+          commonModule.showLoadingMask({message:"Saving task...",container : '.taks_dialog_wrapper'})
+          var url = baseObject.baseUrl+'/io/subscriber/subscriberTasks/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken;
+          commonModule.saveData(url,reqObj,function(response){
+            commonModule.hideLoadingMask();
+            if(response[0]=="err"){
+              commonModule.ErrorAlert({message :response[1]});
+              return false;
+            }
+            commonModule.SuccessAlert({message :response.success});
+            dialogModule.hideDialog();
+            getTasks();
+          });
+        }
+        var getTasks = function(url){
+          if(url){
+            commonModule.getDataRequest(url,function(data){
+              if(parseInt(data.totalCount) > 0){
+                TaskObj = data.taskList;
+                $('.mks_outlook_tasks_wrapper').html('');
+                $.each(data.taskList,function(key,val){
+                  if(key > 2){
+                    $('.msk_collapse_tasks').removeClass('hide');
+                  }else{
+                    $('.msk_collapse_tasks').addClass('hide');
+                  }
+                  $('.mks_outlook_tasks_wrapper').append(generateTask(val))
+                });
+              }else{
+                $('.mks_outlook_tasks_wrapper').html('<p class="not-found">No tasks found.</p>')
+                $('.msk_collapse_tasks').addClass('hide');
+              }
+              attachTasksEvents();
+            })
+          }else{
+            var reqObj = {
+              type: "getTasks",
+              subNum: baseObject.subNum,
+              fromDate: "03-01-2018", //"2018-04-01",
+              toDate: moment().add('days', 30).format('MM-DD-YYYY'),
+              orderBy : "updationTime",
+              order: "desc",
+              offset : 0,
+              bucket : 20,
+              ukey:baseObject.users_details[0].userKey,
+              isMobileLogin:'Y',
+              userId:baseObject.users_details[0].userId
+            };
+            var url = baseObject.baseUrl+'/io/subscriber/subscriberTasks/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken;
+            commonModule.saveData(url,reqObj,function(data){
+                $('.mks_outlook_tasks_wrapper').html('')
+                if(parseInt(data.totalCount) > 0){
+                  TaskObj = data.taskList;
+                  $.each(data.taskList,function(key,val){
+                    if(key > 2){
+                      $('.msk_collapse_tasks').removeClass('hide');
+                    }else{
+                      $('.msk_collapse_tasks').addClass('hide');
+                    }
+                    $('.mks_outlook_tasks_wrapper').append(generateTask(val))
+                  });
+                }else{
+                  $('.mks_outlook_tasks_wrapper').html('<p class="not-found">No tasks found.</p>')
+                  $('.msk_collapse_tasks').addClass('hide');
+                }
+                attachTasksEvents();
+            });
+          }
+         
+        }
+        var editTasks = function(taskid){
+          console.log(taskid);
+          $.each(TaskObj,function(key,values){
+            if(values['taskId.encode']==taskid){
+              selectedTask = values;
+              showTaskDialogEdit(values)
+              debugger;
+            }
+          });
+          return false;
+        }
+        var updateTask = function(isComplete,taskId){
+          var tasktype = $('.taks_dialog_wrapper .mks_ecc_wrap li.active').attr('data-value');
+          var taskName = $('.taks_dialog_wrapper #input2').val();
+          var taskDate = $('.taks_dialog_wrapper #datepicker').val();
+          var taskTime = $('.taks_dialog_wrapper .timepicker').val();
+          var taskPriorty = $('.taks_dialog_wrapper .mks_priorty_wrap li.active').text().toLowerCase();
+          var taskNotes =  $('.taks_dialog_wrapper #notes').val();
+          var _date = moment(taskDate, 'MM-DD-YYYY')
+          var newtaskDate = _date.format("MM-DD-YYYY");
+          var timeDate = newtaskDate + " " + moment(taskTime, ["h:mm A"]).format("HH:mm")+":00";
+          
+          var reqObj = {
+            type: (isComplete) ? "complete" : "update",
+            subNum:  baseObject.subNum,
+            tasktype: (isComplete) ? "" :  tasktype,
+            name: (isComplete) ? "" :taskName,
+            taskDate: (isComplete) ? "" :timeDate,
+            priority: (isComplete) ? "" : taskPriorty,
+            notes: (isComplete) ? "" : taskNotes,
+            ukey: baseObject.users_details[0].userKey,
+            isMobileLogin:'Y',
+            userId:baseObject.users_details[0].userId,
+            taskId : (taskId) ? taskId : selectedTask['taskId.encode'],
+          }
+          var url = baseObject.baseUrl+'/io/subscriber/subscriberTasks/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken
+          if(isComplete){
+            commonModule.showLoadingMask({message:"Completing task...",container : '.taks_dialog_wrapper'})
+          }else{
+            commonModule.showLoadingMask({message:"Updating task...",container : '.taks_dialog_wrapper'})
+          }
+          console.log(selectedTask);
+          commonModule.saveData(url,reqObj,function(response){
+            getTasks();
+            commonModule.hideLoadingMask();
+            dialogModule.hideDialog();
+            if(isComplete){
+              commonModule.SuccessAlert({message : 'Task mark as completed'})
+            }else{
+              commonModule.SuccessAlert({message : 'Task updated successfully'})
+            }
+            
+          })
+        }
+        var showTaskDialogEdit = function(task){
+          showTasksDialog('edit');
+          $('.taks_dialog_wrapper #input2').val(task.taskName);
+          $('.taks_dialog_wrapper .mks_ecc_wrap li,.taks_dialog_wrapper .mks_priorty_wrap li').removeClass('active');
+          $('.taks_dialog_wrapper .mks_ecc_wrap li.mks_ecc_'+task.taskType).addClass('active');
+
+          var _date = moment(task.taskDate, 'YYYY-MM-DD hh:mm') //2018-05-14  00:30:00
+          var newtaskDate = _date.format('MM/DD/YYYY');
+          var timeNow = _date.format("hh:mm A")
+          $('.taks_dialog_wrapper #datepicker').val(newtaskDate);
+          $('.taks_dialog_wrapper .mks_ecc_wrap li.mks_ecc_'+task.taskType);
+          $('.taks_dialog_wrapper .timepicker').val(timeNow);
+          $('.taks_dialog_wrapper .mks_priorty_wrap li.mks_priotiry_'+task.priority).addClass('active');
+          $('.taks_dialog_wrapper .notes').val(task.notes)
+        }
+        var generateTask = function(data){
+          var htmlObj = '';
+          var dateObj = generateDateObj(data.taskDate); 
+          var user = (data.taskAddedBy == baseObject.users_details[0].userId) ? "You" : data.taskAddedBy;
+          htmlObj += '<div class="contact_found mks_tasks_lists_user task_status_'+data.status+'" style="padding: 10px 12px;">'
+          htmlObj += '<div class="cf_silhouette">'
+          htmlObj += '<div class="cf_silhouette_text c_txt_s c_txt_s_blue">'
+          htmlObj += '<i class="'+mapicons[data.taskType]+' mks-task-icons"></i>'
+          htmlObj += '</div>'
+          htmlObj += '</div>'
+          htmlObj += '<div class="cf_email_wrap">'
+          htmlObj += '<div class="cf_email">'
+          htmlObj += '<p class="mkb_elipsis mkb_text_break" title="'+data.taskName+'" style="width: 145px;">'+data.taskName+'</p>'
+          htmlObj += '<span class="ckvwicon">at '+dateObj.time +', '+dateObj.date+' | created by <strong>'+user +'</strong></span>'
+          htmlObj += '</div>'
+          htmlObj += '<div class="cf_task_right">'
+          htmlObj += '<span data-tip="'+data.priority+'" class="mks_priority_icon '+priorityIcons[data.priority]["topClass"]+'" currentitem="false">'
+          htmlObj += '<i class="'+priorityIcons[data.priority]["icon"]+'"></i>'
+          htmlObj += '<div class="__react_component_tooltip place-top type-dark " data-id="tooltip"></div>'
+          htmlObj += '</span>'
+          htmlObj += '<span class="mkb_btn mkb_cf_btn pull-right mkb_greenbtn addCF show mkb_task_compBtn" dat-id="'+data['taskId.encode']+'" style="top: 5px; right: 0px;padding:6px 8px;">'
+          htmlObj += '<i class="mksicon-Check"></i>Complete</span>'
+          htmlObj += '<span class="mkb_tast_completed_btn mkb_btn mkb_cf_btn pull-right mkb_greenbtn addCF mkb_task_compBtn" style="top: 13px; right: 0px;">Completed</span>'
+          htmlObj += '</div>'
+          htmlObj += '</div>'
+          htmlObj += '<div class="mks_task_edit_delete_wrap" dat-id="'+data['taskId.encode']+'">'
+          htmlObj += '<div class="cf_silhouette">'
+          htmlObj += '<div class="cf_silhouette_text c_txt_s c_txt_s_blue">'
+          htmlObj += '<i class="mksicon-Edit mks-task-icons"></i>'
+          htmlObj += '</div>'
+          htmlObj += '</div>'
+          htmlObj += '</div>'
+          htmlObj += '<div class="mks_task_edit_delete_wrap _mks_task_delete_task" style="left: 37px; width: 8%; background: transparent;" dat-id="'+data['taskId.encode']+'">'
+          htmlObj += '<div class="cf_silhouette">'
+          htmlObj += '<div class="cf_silhouette_text c_txt_s c_txt_s_blue">'
+          htmlObj += '<i class="mksicon-Delete mks-task-icons"></i>'
+          htmlObj += '</div>'
+          htmlObj += '</div>'
+          htmlObj += '</div>'
+          htmlObj += '</div>';
+          return htmlObj;
+        }
+        var generateDateObj = function(dateString){
+          var _date = moment(commonModule.decodeHTML(dateString),'YYYY-M-D H:m');
+          var format = {date: _date.format("DD MMM YYYY"), time: _date.format("hh:mm A")};
+          return format;
+        }
+        var generateDate = function(dateString){
+          var _date = moment(commonModule.decodeHTML(dateString),'YYYY-M-D H:m');
+          var format = {date: _date.format("DD MMM YYYY"), time: _date.format("hh:mm A")};
+          return format.date +" "+ format.time;
+        }
+        var generateTimeOnly = function(dateString){
+          var _date = moment(commonModule.decodeHTML(dateString),'YYYY-M-D H:m');
+          var format = {date: _date.format("DD MMM YYYY"), time: _date.format("hh:mm A")};
+          return format.time;
+        }
+        var deleteTasks = function(taskID){
+          taskId = taskID
+          var bodyHtml = '<p>Are you sure you want to delete the task?</p>';
+          dialogModule.dialogView({showTitle:'Delete Task',childrenView : bodyHtml, additionalClass : 'addToSuppressWrapper',container : '.top_managerLists_wrappers',saveCallBack : taskDeleteOps,buttonText:'Delete' })
+        }
+        var taskDeleteOps = function(){
+          console.log(taskId);
+          var reqObj = {
+            type: "delete",
+            subNum: baseObject.subNum,
+            taskId : taskId,
+            ukey:baseObject.users_details[0].userKey,
+            isMobileLogin:'Y',
+            userId:baseObject.users_details[0].userId
+          }
+          commonModule.showLoadingMask({message:"Deleting task...",container : '.dialogBox'})
+          var url = baseObject.baseUrl+'/io/subscriber/subscriberTasks/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken;
+          commonModule.saveData(url,reqObj,function(response){
+            
+            if(response.success){
+              commonModule.hideLoadingMask();
+              commonModule.SuccessAlert({message :response.success})
+              dialogModule.hideDialog();
+              getTasks()
+            }
+          })
+          debugger;
+        }
+        var getTasksDashBoard = function(obj){
+          if(obj && obj.hasClass('all')){
+            //https://test.bridgemailsystem.com/pms/io/subscriber/subscriberTasks/?BMS_REQ_TK=6A5xqkpTtBrOTsOFdx6t3Q0keSVXZ1&type=getAllTask&orderBy=creationTime&order=asc&offset=0&bucket=20
+            var url = baseObject.baseUrl+'/io/subscriber/subscriberTasks/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken+'&type=getAllTask&orderBy=updationTime&order=asc&offset=0&bucket=20&ukey='+baseObject.users_details[0].userKey+'&isMobileLogin=Y&userId='+baseObject.users_details[0].userId;
+            commonModule.getDataRequest(url,generateDashTasks)
+          }else{
+            var reqObj = {
+              type: "getAllTask",
+              fromDate: moment().format("MM-DD-YYYY"),
+              toDate: moment().format("MM-DD-YYYY"), // Day +1
+              orderBy : "updationTime",
+              order: "desc",
+              offset : 0,
+              bucket : 20,
+              ukey:baseObject.users_details[0].userKey,
+              isMobileLogin:'Y',
+              userId:baseObject.users_details[0].userId
+            };
+            var url = baseObject.baseUrl+'/io/subscriber/subscriberTasks/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken;
+            commonModule.saveData(url,reqObj,generateDashTasks)
+          }
+          
+        }
+        var getTasksDashBoradByPT = function(option){
+          debugger;
+         var fromDate= moment().format("MM-DD-YYYY");
+         var toDate= moment().format("MM-DD-YYYY");
+          
+          if($('.toggleTask.active').hasClass('all')){
+            //https://test.bridgemailsystem.com/pms/io/subscriber/subscriberTasks/?BMS_REQ_TK=El0915vN5rOLp8t4MmWdC72pT9jWoQ&type=getAllTask&orderBy=updationTime&offset=0&bucket=20&sortType=priority&sortOrderBy=desc&sortBy=low
+            var url = baseObject.baseUrl+'/io/subscriber/subscriberTasks/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken+'&type=getAllTask&orderBy=updationTime&offset=0&bucket=20&sortType=prioritySingle&sortOrderBy=desc&sortBy='+option+'&ukey='+baseObject.users_details[0].userKey+'&isMobileLogin=Y&userId='+baseObject.users_details[0].userId;
+          }else{
+            // https://test.bridgemailsystem.com/pms/io/subscriber/subscriberTasks/?BMS_REQ_TK=6A5xqkpTtBrOTsOFdx6t3Q0keSVXZ1&type=getAllTask&orderBy=creationTime&offset=0&bucket=20&sortType=prioritySingle&sortOrderBy=desc&fromDate=04-25-2018&toDate=04-28-2018&sortBy=medium
+            var url = baseObject.baseUrl+'/io/subscriber/subscriberTasks/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken+'&type=getAllTask&orderBy=updationTime&offset=0&bucket=20&sortType=prioritySingle&sortOrderBy=desc&fromDate='+fromDate+'&toDate='+toDate+'&sortBy='+option+'&ukey='+baseObject.users_details[0].userKey+'&isMobileLogin=Y&userId='+baseObject.users_details[0].userId;
+          }
+          commonModule.showLoadingMask({message : 'filtering tasks as '+option, container: '.mks_task_lists_dash_wrapper'})
+          commonModule.getDataRequest(url,generateDashTasks)
+        }
+        var getTasksByTask = function(option){
+          var url = baseObject.baseUrl+'/io/subscriber/subscriberTasks/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken+'&type=getAllTask&orderBy=updationTime&offset=0&bucket=20&sortType=taskTypeSingle&sortOrderBy=desc&sortBy='+option+'&ukey='+baseObject.users_details[0].userKey+'&isMobileLogin=Y&userId='+baseObject.users_details[0].userId;
+          getTasks(url);
+        }
+        var getTasksByPT = function(option){
+          var url = baseObject.baseUrl+'/io/subscriber/subscriberTasks/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken+'&type=getAllTask&orderBy=updationTime&offset=0&bucket=20&sortType=prioritySingle&sortOrderBy=desc&sortBy='+option+'&ukey='+baseObject.users_details[0].userKey+'&isMobileLogin=Y&userId='+baseObject.users_details[0].userId;
+          getTasks(url);
+        }
+        var getTasksDashBoardByTask = function(option){
+          //https://test.bridgemailsystem.com/pms/io/subscriber/subscriberTasks/?BMS_REQ_TK=El0915vN5rOLp8t4MmWdC72pT9jWoQ&type=getAllTask&orderBy=updationTime&offset=0&bucket=20&sortType=taskTypeSingle&sortOrderBy=desc&sortBy=email
+          var fromDate= moment().format("MM-DD-YYYY");
+         var toDate= moment().format("MM-DD-YYYY");
+          
+          if($('.toggleTask.active').hasClass('all')){
+            var url = baseObject.baseUrl+'/io/subscriber/subscriberTasks/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken+'&type=getAllTask&orderBy=updationTime&offset=0&bucket=20&sortType=taskTypeSingle&sortOrderBy=desc&sortBy='+option+'&ukey='+baseObject.users_details[0].userKey+'&isMobileLogin=Y&userId='+baseObject.users_details[0].userId;
+          }else{
+            //https://test.bridgemailsystem.com/pms/io/subscriber/subscriberTasks/?BMS_REQ_TK=6A5xqkpTtBrOTsOFdx6t3Q0keSVXZ1&type=getAllTask&orderBy=creationTime&order=asc&offset=0&bucket=20&fromDate=04-25-2018&toDate=04-25-2018&sortType=taskTypeSingle&sortBy=demo
+            var url = baseObject.baseUrl+'/io/subscriber/subscriberTasks/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken+'&type=getAllTask&orderBy=updationTime&offset=0&bucket=20&sortType=taskTypeSingle&sortOrderBy=desc&fromDate='+fromDate+'&toDate='+toDate+'&sortBy='+option+'&ukey='+baseObject.users_details[0].userKey+'&isMobileLogin=Y&userId='+baseObject.users_details[0].userId;
+          }
+          commonModule.showLoadingMask({message : 'filtering tasks as '+option, container: '.mks_task_lists_dash_wrapper'})
+          debugger;
+          commonModule.getDataRequest(url,generateDashTasks);
+        }
+        var generateDashTasks = function(data){
+          var pendinTask='';
+          var completeTask ='';
+          var compArray = [];
+          var pendArray = [];
+          commonModule.hideLoadingMask();
+          if(parseInt(data.totalCount) > 0){
+            $('.task-loading-nof').addClass('hide');
+            
+            $.each(data.taskList,function(key,value){
+              console.log(value);
+              if(value.status=="C"){
+                compArray.push(value)
+                completeTask += generateCompleteTaskD(value);
+              }else{
+                pendArray.push(value)
+                pendinTask += generatePendingTaskD(value);
+              }
+            });
+            $('.mks_task_lists_dash_wrapper .total-pending').html(pendArray.length)
+            $('.mks_task_lists_dash_wrapper .total-complete').html(compArray.length)
+        
+            $('.mks_task_lists_dash_wrapper .searchBar').removeClass('hide');
+            $('.tasks_wrapper_dashboard .mks_task_lists_dash_wrapper .content-wrapper').removeClass('hide');
+            
+            $('._mks_completed_tasks .total-count-head').removeClass('hide');
+            $('.mks_task_lists_dash_wrapper .task_status_P_wrapper .task_status_P').remove();
+            $('.mks_task_lists_dash_wrapper .task_status_P_wrapper').append(pendinTask);
+            if(pendArray.length > 2){
+              $('.msk_collapse_tasks_P').removeClass('hide');
+            }else{
+              $('.msk_collapse_tasks_P').addClass('hide');
+            }
+            $('.mks_task_lists_dash_wrapper .contact_found._mks_lists_tasks._mks_complete_tasks').remove();
+            debugger;
+            $('.mks_task_lists_dash_wrapper ._mks_completed_tasks').append(completeTask);
+            
+            if(completeTask.length > 0){
+              $('.mks_task_lists_dash_wrapper ._mks_completed_tasks').removeClass('hide');
+            }
+            commonModule.hideLoadingMask();
+
+            /*==Attaching events===*/
+            $('.c_txt_s_mark_complete').unbind('click');
+            $('.c_txt_s_mark_complete').on('click',function(){
+              debugger;
+              var reqObj = {
+                type: "complete",
+                subNum: $(this).attr('subs-id'),
+                taskId :  $(this).attr('data-id'),
+                ukey:baseObject.users_details[0].userKey,
+                isMobileLogin:'Y',
+                userId:baseObject.users_details[0].userId
+              };
+              commonModule.showLoadingMask({message : 'Marking task completed',container :'.tasks_wrapper_dashboard'})
+              var url = baseObject.baseUrl+'/io/subscriber/subscriberTasks/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken;
+              commonModule.saveData(url,reqObj,function(response){
+                getTasksDashBoard();
+                commonModule.showLoadingMask({message : 'Loading tasks..',container :'.tasks_wrapper_dashboard'});
+
+              })
+            })
+            $('.msk_collapse_tasks_P').unbind('click');
+          $('.msk_collapse_tasks_P').on('click',function(event){
+              $('.debugDiv').html('collapse clicked')
+
+              /*-- Adding height --*/
+                if($(this).hasClass('expand')){
+                  $(this).find('span').eq(0).text('Click to collapse')
+                  $('.task_status_P_wrapper').addClass('heighAuto');
+                }else{
+                  $(this).find('span').eq(0).text('Click to expand');
+                    $('.task_status_P_wrapper').removeClass('heighAuto');
+                }
+
+              if($(this).hasClass('expand')){
+                $(this).removeClass('expand');
+                $(this).addClass('collapse');
+              }else{
+                $(this).removeClass('collapse');
+                $(this).addClass('expand');
+              }
+          });
+          $('.task_status_P').unbind('click');
+          $('.task_status_P').on('click',function(){
+            var subEmail = $(this).attr('data-subs');
+            var isShared = $(this).attr('data-ushared');
+            $('.tasks_wrapper_dashboard').addClass('hide');
+            baseObject['taskdash'] = true;
+            $('.toggleTask.today').click()
+            attachedEvents.searchEmailInMks(subEmail,isShared);
+           
+          })
+            /*===========*/
+          }else{
+            //No task found section
+            debugger;
+            $('.msk_collapse_tasks_P').addClass('hide');
+            $('._mks_completed_tasks').addClass('hide');
+            $('.mks_task_lists_dash_wrapper .contact_found._mks_lists_tasks._mks_complete_tasks').remove();
+            $('.tasks_wrapper_dashboard .mks_task_lists_dash_wrapper .content-wrapper .task_status_P_wrapper').html('<p class="not-found task-loading-nof hide">No tasks found for today.</p>');
+            $('.tasks_wrapper_dashboard .mks_task_lists_dash_wrapper .content-wrapper .total-pending,._mks_completed_tasks .total-complete').text('0');
+            $('._mks_lists_tasks .cf_email_wrap').remove();
+            $('.task-loading-nof').text('No tasks found for today.')
+          }
+        }
+        var generateCompleteTaskD = function(data){
+          var html = '';
+          html +='  <div class="contact_found _mks_lists_tasks _mks_complete_tasks" style="padding: 5px 0px;"><div class="cf_email_wrap" style="padding-left: 0px; width: 277px;">'
+          html +='<div class="cf_email cf_email_taskdash">'
+          html +='<div class="cf_silhouette mks_tasks_lists_empty_icon" style="margin-right:14px;">'
+          html +='<div class="cf_silhouette_text c_txt_s c_txt_s_blue c_txt_s_completed ">'
+          html +='<i class="mksicon-Check mks-tasklists-icons"></i>'
+          html +='</div>'
+          html +='</div>'
+          html +='<p class="mkb_elipsis mkb_text_break">'+data.taskName+'</p>'
+          if($('.toggleTask.active').hasClass('all')){
+            html +=' <span class="ckvwicon mks_task_time" style="display: inline; position: absolute; top: 22px;left: 34px">'+generateDate(data.updationTime)+'</span>'
+            html +=' <span class="ckvwicon" style="position: absolute; top: 22px; display: inherit; left: 148px;">'+data.subscriberInfo['firstName']+" "+data.subscriberInfo['lastName'] +'</span>'
+          }else{
+            html +=' <span class="ckvwicon mks_task_time" style="display: inline; position: absolute; top: 22px;left: 34px">'+generateTimeOnly(data.updationTime)+'</span>'
+            html +=' <span class="ckvwicon" style="position: absolute; top: 22px; display: inherit; left: 88px;">'+data.subscriberInfo['firstName']+" "+data.subscriberInfo['lastName'] +'</span>'
+          }
+          html +='</div>'
+          html +='<div class="cf_task_right">'
+          html +='<span style="top:-18px;right:35px;" class="mks_priority_icon '+priorityIcons[data.priority]["topClass"]+'">'
+          html +='<i class="'+priorityIcons[data.priority]["icon"]+'"></i>'
+          html +='</span>'
+          html +='<div class="cf_silhouette" style="position:relative;left:9px;">'
+          html +='<div class="cf_silhouette_text c_txt_s c_txt_s_blue _mks_task-lists_silhouette_text _mks_task_dash_board_icon_silhouette">'
+          html +='<i class="'+mapicons[data.taskType]+' mks-tasklists-icons"></i>'
+          html +='</div>'
+          html +='</div>'
+          html +='</div>'
+          html +='</div>'
+          html +='<div class="clr"></div></div>';
+          return html;
+        }
+        var generatePendingTaskD = function(data){
+          var html = '';
+          var userShared = (data.subscriberInfo['userId'] != baseObject.users_details[0].userId) ? "Y" : "N";
+          html +=' <div class="contact_found _mks_lists_tasks  task_status_P" data-subs='+data.subscriberInfo['email']+' data-ushared="'+userShared+'"  style="padding: 5px 8px;"><div class="cf_email_wrap" style="padding-left: 0px; width: 277px;">'
+          html +=' <div class="cf_email cf_email_taskdash">'
+          html +=' <div data-tip="Click to complete" class="cf_silhouette mks_tasks_lists_empty_icon" currentitem="false">'
+          html +=' <div subs-id="'+data.subscriberInfo['subscriberNumber.encode']+'" data-id="'+data['taskId.encode']+'" class="cf_silhouette_text c_txt_s c_txt_s_blue c_txt_s_empty c_txt_s_mark_complete">'
+          html +=' <i class="mksicon-Check mks-tasklists-icons" style="display: none;"></i>'
+          html +=' </div>'
+          html +=' </div>'
+          html +=' <div class="__react_component_tooltip place-top type-dark " data-id="tooltip"></div>'
+          html +=' <p title="'+data.taskName+'" class="mkb_elipsis mkb_text_break">'+data.taskName+'</p>'
+          if($('.toggleTask.active').hasClass('all')){
+            html +=' <span class="ckvwicon mks_task_time" style="display: inline; position: absolute; top: 22px;left: 26px">'+generateDate(data.updationTime)+'</span>'
+            html +=' <span class="ckvwicon" style="position: absolute; top: 22px; display: inherit; left: 140px;">'+data.subscriberInfo['firstName']+" "+data.subscriberInfo['lastName'] +'</span>'
+          }else{
+            html +=' <span class="ckvwicon mks_task_time" style="display: inline; position: absolute; top: 22px;left: 26px">'+generateTimeOnly(data.updationTime)+'</span>'
+            html +=' <span class="ckvwicon" style="position: absolute; top: 22px; display: inherit; left: 80px;">'+data.subscriberInfo['firstName']+" "+data.subscriberInfo['lastName'] +'</span>'
+          }
+          html +=' </div>'
+          html +=' <div class="cf_task_right">'
+          html +=' <span data-tip="'+data.priority+'" class="mks_priority_icon '+priorityIcons[data.priority]["topClass"]+'" currentitem="false">'
+          html +=' <i class="'+priorityIcons[data.priority]["icon"]+'"></i>';
+          html +=' <div class="__react_component_tooltip place-top type-dark " data-id="tooltip"></div>'
+          html +=' </span>'
+          html +=' <div class="cf_silhouette" style="top: -2px;position: relative;">'
+          html +='<div data-tip="'+data.taskName+'" class="cf_silhouette_text c_txt_s c_txt_s_blue _mks_task-lists_silhouette_text _mks_task_dash_board_icon_silhouette" currentitem="false">'
+          html +='<i class="'+mapicons[data.taskType]+' mks-tasklists-icons"></i>'
+          html +='<div class="__react_component_tooltip place-top type-dark " data-id="tooltip"></div>'
+          html +='</div>'
+          html +='</div>'
+          html +='</div>'
+          html +='</div>'
+          html +=' <div class="clr"></div></div>';
+          return html;
+        }
+        var toggleTasks = function(){
+          $('.toggleTask').on('click',function(){
+            $(this).parent().find('a').removeClass('active');
+            $(this).addClass('active');
+            if($(this).hasClass('all')){
+              $('.mks_task_lists_dash_wrapper .total-text').addClass('gap-created')
+              $('.mks_task_lists_dash_wrapper .total-text').text('tasks')
+              $('._mks_completed_tasks .total-text').text('completed')
+            }else{
+              $('.mks_task_lists_dash_wrapper .total-text').removeClass('gap-created')
+              $('.mks_task_lists_dash_wrapper .total-text').text('task(s) for today')
+            }
+            $('.contacts-select-by select').find('option[value="-1"]').attr("selected",true);
+            getTasksDashBoard($(this))
+          })
+        }
+        var selectPriorityTask = function(){
+          $('.contacts-select-by select').on('change',function(){
+            if($(this).val() != "-1"){
+              debugger;
+              if($(this.options[this.selectedIndex]).closest('optgroup').prop('label') == "Tasks Types"){
+                getTasksDashBoardByTask($(this).val());
+              }else{
+                getTasksDashBoradByPT($(this).val())
+              }
+            }else{
+              getTasksDashBoard();
+            }
+          })
+        }
+        return {
+          attachTasksEvents : attachTasksEvents,
+          addNewTasks : addNewTasks,
+          getTasks:getTasks,
+          showTasksDialog : showTasksDialog,
+          getTasksDashBoard : getTasksDashBoard,
+          toggleTasks : toggleTasks,
+          selectPriorityTask : selectPriorityTask,
+          getTasksByTask : getTasksByTask,
+          getTasksByPT : getTasksByPT
+        }
+       })();
+       /*----- Notes Module ----*/
+       var notesModule = (function(){
+        var noteID = null;
+        var notesArry = [];
+        var noteObj = '';
+          var saveNotes = function(){
+            if($('#note_textarea').val()==""){
+              return;
+            }
+            commonModule.showLoadingMask({message : 'Saving new note...', container:'._mks_NotesWrap'})
+            var url = baseObject.baseUrl+'/io/subscriber/comments/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken+'&type=add';
+            var reqObj = {
+                            subNum: baseObject.subNum
+                          ,comments: commonModule.encodeHTML($('#note_textarea').val())
+                          ,ukey: baseObject.users_details[0].userKey
+                          ,isMobileLogin:'Y'
+                          ,userId:baseObject.users_details[0].userId
+                        }
+            commonModule.saveData(url,reqObj,function(response){
+              $('#note_textarea').val('');
+              getNotes()
+              commonModule.hideLoadingMask();
+            })
+          }
+          var getNotes = function(){
+            var Url = baseObject.baseUrl
+                            +'/io/subscriber/comments/?BMS_REQ_TK='
+                            + baseObject.users_details[0].bmsToken +'&type=getComments&subNum='+baseObject.subNum+'&ukey='+baseObject.users_details[0].userKey
+                            +'&isMobileLogin=Y&orderBy=updationTime&order=desc&userId='+baseObject.users_details[0].userId;
+            commonModule.getDataRequest(Url,generateNotes);
+          }
+          var generateNotes = function(data){
+            if(parseInt(data.totalCount) > 0){
+              var htmlObj = '';
+              $('.notes_lists_wrap').find('.not-found').remove();
+              $.each(data.comments[0],function(key,value){
+                notesArry.push(value[0])
+                var _date = moment(commonModule.decodeHTML(value[0].updationDate),'YYYY-M-D H:m');
+                var user = (value[0].commentAddedBy == baseObject.users_details[0].userId) ? "You" : value[0].userId;
+                var format = {date: _date.format("DD MMM YYYY"), time: _date.format("hh:mm A")};
+                htmlObj += '<li class="_mks_item">'
+                htmlObj += '<div class="cf_silhouette">'
+                htmlObj += '<div data-id="'+value[0]['commentId.encode']+'" class="mks-notestEdit-wrap cf_silhouette_text c_txt_s pclr8 hide">'
+                htmlObj += '<i class="mksicon-Edit mks-task-icons"></i>'
+                htmlObj += '</div>'
+                htmlObj += '<div data-id="'+value[0]['commentId.encode']+'" class="mks-notestDel-wrap cf_silhouette_text c_txt_s pclr12 hide">'
+                htmlObj += '<i class="mksicon-Delete mks-task-icons"></i>'
+                htmlObj += '</div>'
+                htmlObj += '<div class="mks-notestNote-wrap cf_silhouette_text c_txt_s pclr15">'
+                htmlObj += '<i class="mksicon-Notepad mks-task-icons"></i>'
+                htmlObj += '</div>'
+                htmlObj += '</div>'
+                htmlObj += '<div class="cf_email_wrap">'
+                htmlObj += '<div class="cf_email">'
+                htmlObj += '<span class="mkb_text_break" title="'+commonModule.decodeHTML(value[0].comment,true)+'">'+commonModule.decodeHTML(value[0].comment,true)+'</span>'
+                htmlObj += '<p>'
+                htmlObj += '<strong>'+user+' </strong> made a note at '+format.time+', '+format.date+'</p>'
+                htmlObj += '</div>'
+                htmlObj += '</div>'
+                htmlObj += '</li>' 
+              })
+              $('.notes_lists_wrap ul').html(htmlObj);
+              $('.notes_lists_wrap ul').removeClass('hide');
+              //show/hide collapsable
+              var heightofNotes = 0;
+              $.each($('._mks_item'),function(key,val){
+                heightofNotes = heightofNotes + $(val).outerHeight();
+              })
+              if(heightofNotes > 140){
+                $('.notes_collapse').removeClass('hide');
+              }else{
+                $('.notes_collapse').addClass('hide')
+              }
+            }else{
+              $('.notes_lists_wrap ul').addClass('hide');
+              $('.notes_lists_wrap .not-found').remove();
+              $('.notes_lists_wrap').append('<p class="not-found">No tasks found.</p>')
+                $('.notes_collapse').addClass('hide');
+            }
+            attachEvents()
+          }
+          var attachEvents = function(){
+            $('.mkb_notes-close').unbind('click');
+            $('.mkb_notes-close').on('click',function(){
+             $(this).addClass('hide');
+             $('.mkb_notes-save').removeClass('hide');
+             $('.mkb_notes-update').addClass('hide');
+             $('#note_textarea').val('');
+            })
+
+            //Delete 
+            $('.mks-notestDel-wrap').unbind('click');
+            $('.mks-notestDel-wrap').on('click',function(){
+              noteID = $(this).attr('data-id');
+                var bodyHtml = '<p>Are you sure you want to delete this note?</p>';
+              dialogModule.dialogView({showTitle:'Delete Note',childrenView : bodyHtml, additionalClass : 'addToSuppressWrapper',container : '.top_managerLists_wrappers',saveCallBack : deleteNotes,buttonText:'Delete' })
+            });
+            // Edit 
+            $('.mks-notestEdit-wrap').unbind('click');
+            $('.mks-notestEdit-wrap').on('click',function(){
+              noteID = $(this).attr('data-id');
+              
+              $.each(notesArry,function(key,value){
+                if(value['commentId.encode'] == noteID){
+                  noteObj = value;
+                }
+              });
+              console.log(noteObj);
+              $('#note_textarea').val(commonModule.decodeHTML(noteObj.comment,true));
+              $('.mkb_notes-close').removeClass('hide');
+              $('.mkb_notes-save').addClass('hide');
+              $('.mkb_notes-update').removeClass('hide');
+              
+            });
+            // Update
+            $('.mkb_notes-update').unbind('click');
+            $('.mkb_notes-update').on('click',function(){
+                var note = $('#note_textarea').val();
+                var url = baseObject.baseUrl+'/io/subscriber/comments/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken+'&type=update';
+                var reqObj = {
+                  subNum: baseObject.subNum
+                  ,updatedComment:commonModule.encodeHTML(note)
+                  ,commentId:noteID
+                  ,ukey:baseObject.users_details[0].userKey
+                  ,isMobileLogin:'Y'
+                  ,userId:baseObject.users_details[0].userId
+                }
+                commonModule.showLoadingMask({message:'Updating Note....',container : '._mks_NotesWrap'});
+                commonModule.saveData(url,reqObj,function(response){
+                if(response.success){
+                    commonModule.hideLoadingMask();
+                    $('.mkb_notes-close').click();
+                    commonModule.SuccessAlert({message :'Task Updated Successfully.'});
+                    getNotes()
+                }
+              })
+            });
+            // collapse 
+            $('.notes_collapse').unbind('click');
+            $('.notes_collapse').on('click',function(event){
+                $('.debugDiv').html('collapse clicked')
+
+                /*-- Adding height --*/
+                  if($(this).hasClass('expand')){
+                    $(this).find('span').eq(0).text('Click to collapse')
+                    $('.notes_lists_wrap').addClass('heighAuto');
+                  }else{
+                    $(this).find('span').eq(0).text('Click to expand');
+                      $('.notes_lists_wrap').removeClass('heighAuto');
+                  }
+
+                if($(this).hasClass('expand')){
+                  $(this).removeClass('expand');
+                  $(this).addClass('collapse');
+                }else{
+                  $(this).removeClass('collapse');
+                  $(this).addClass('expand');
+                }
+            });
+          }
+          var deleteNotes = function(){
+            console.log(noteID);
+            var url = baseObject.baseUrl+'/io/subscriber/comments/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken+'&type=delete';
+            commonModule.showLoadingMask({message:'Deleting Note....',container : '.addToSuppressWrapper'});
+            var reqObj = {
+              subNum: baseObject.subNum
+              ,commentIds:noteID
+              ,ukey:baseObject.users_details[0].userKey
+              ,isMobileLogin:'Y'
+              ,userId:baseObject.users_details[0].userId
+            }
+            commonModule.saveData(url,reqObj,function(response){
+              if(response.success){
+                commonModule.hideLoadingMask();
+                commonModule.SuccessAlert({message :'Task Deleted Successfully.'});
+                dialogModule.hideDialog();
+                getNotes();
+              }
+            })
+          }
+
+          var editNotes = function(){
+
+          }
+          return {
+            saveNotes : saveNotes,
+            getNotes : getNotes,
+           
+          }
+       })();
+       /*----- Salesforce Module ----*/
+       var salesForceModule = (function(){
+         var addToSalesForceObj = {};
+         var salesReps ="";
+         var saveObject = {
+          addAsVal : 'lead'
+         };
+         var addToSF = function(){
+           console.log(baseObject);
+          if(saveObject.ruleVal == 1 && saveObject.ruleIdVal == -1){
+            commonModule.ErrorAlert({message:'Assign rule must be selected'});
+            return false;
+            }
+            if(saveObject.ruleVal == 2 && saveObject.salesRepVal == -1){
+              commonModule.ErrorAlert({message:'Sales Rep must be selected'});
+                return false;
+            }
+      
+            if(!baseObject.subscriberDetails.lastName){
+              commonModule.ErrorAlert({message:'Please update contact Last name.'});
+              return false;
+            }
+            else if(saveObject.addAsVal == "lead" && !baseObject.subscriberDetails.company){
+              commonModule.ErrorAlert({message:'Please update contact Company name.'});
+              return false;
+            }
+           var requestObj = {}
+           var basicAr = [];
+           commonModule.showLoadingMask({message:"Saving subscriber to salesforce...",container : '.mkssf_wrap_rendering'})
+           $.each ($('.sf_basic_div_wrap input'),function(key,val){
+            if(val.checked){
+              basicAr.push(val.value)
+            }
+           });
+
+           // get Custom fields
+           if($('.sf_lead_custom_fields').css('display')=='block'){
+            $.each($('.sf_lead_custom_fields input:checkbox:checked'),function(key,val){
+              requestObj['LCust_'+key] = $(this).val();
+              requestObj['SF_LCust_'+key] = $(this).parent().find('select').val();
+            });
+           }else{
+            $.each($('.sf_contact_contact_fields input:checkbox:checked'),function(key,val){
+              requestObj['CCust_'+key] = $(this).val();
+              requestObj['SF_CCust_'+key] = $(this).parent().find('select').val();
+            });
+           }
+
+          requestObj['BasicField'] = basicAr.toString();
+          requestObj['salesStatus'] =  saveObject.addAsVal;
+          requestObj['source'] = saveObject.source;
+          requestObj['rule'] = saveObject['ruleVal'] 
+          requestObj['ruleId']= saveObject['ruleIdVal']
+          requestObj['salesRep'] = saveObject.salesRep;
+          requestObj['type']   = 'addToSf';
+          requestObj['subNum'] = baseObject.subNum;
+          requestObj['act'] = 'add';
+          requestObj['isMobileLogin']= 'Y';
+          requestObj['userId'] = baseObject.users_details[0].userId
+          requestObj['ukey'] = baseObject.users_details[0].userKey
+          console.log(saveObject,requestObj);
+          var Url = baseObject.baseUrl
+          +'/io/salesforce/setData/?BMS_REQ_TK='
+          + baseObject.users_details[0].bmsToken;
+          commonModule.saveData(Url,requestObj,function(response){
+            if(response[0]=="err"){
+              commonModule.ErrorAlert({message :response[1]});
+            }
+            commonModule.SuccessAlert({message :response[1]});
+                commonModule.hideLoadingMask();
+                dialogModule.hideDialog();
+          }) 
+         }
+         
+         var showAddToSF = function(){
+          var bodyHtml = ''
+          bodyHtml += ' <div class="Rendering mkssf_wrap_rendering">';
+          bodyHtml += ' <h4>Add as </h4>'
+          bodyHtml += ' <select name="salesStatus" class="twoHunderWidth" id="first_wf_drop_down">'
+          bodyHtml += ' <option value="lead">Lead</option>'
+          bodyHtml += ' <option value="contact">Contact</option>'
+          bodyHtml += ' </select>'
+          bodyHtml += ' <h4>Source </h4>'
+          bodyHtml += ' <select class="mks_sf_source source twoHunderWidth">'
+          bodyHtml += ' <option value="-1">Select Source...</option>'
+          bodyHtml += ' </select>'
+          bodyHtml += ' <div class="sf_leads_owner show">'
+          bodyHtml += ' <h4 class="mskLogog_bluetext">Lead\'s Owner</h4>'
+          bodyHtml += ' <div class="sf_lead_owner_div_wrap">'
+          bodyHtml += ' <input type="radio" name="lowner" value="0"><span>Do not Assign</span>'
+          bodyHtml += ' </div>'
+          bodyHtml += ' <div class="sf_lead_owner_div_wrap">'
+          bodyHtml += ' <input type="radio" name="lowner" value="3">'
+          bodyHtml += ' <span>Use SalesForce Default Assignment Rule</span>'
+          bodyHtml += ' </div>'
+          bodyHtml += ' <div class="sf_lead_owner_div_wrap">'
+          bodyHtml += ' <input type="radio" name="lowner" value="1">'
+          bodyHtml += ' <span>Use SalesForce Assignment Rule</span>'
+          bodyHtml += ' <select class="hide mkssf_lead_rule">'
+          bodyHtml += ' <option value="-1">Select Rule</option>'
+          bodyHtml += ' </select>'
+          bodyHtml += ' </div>'
+          bodyHtml += ' <div class="sf_lead_owner_div_wrap">'
+          bodyHtml += ' <input type="radio" name="lowner" value="2">'
+          bodyHtml += ' <span>Assign To</span>'
+          bodyHtml += ' <select class="hide mkssf_sales_rule" style="width: 200px;">'
+          bodyHtml += ' <option value="-1">Select Salesrep</option>'
+          bodyHtml += ' </select>'
+          bodyHtml += ' </div>'
+          bodyHtml += ' </div>'
+          bodyHtml += ' <div class="sf_contacts_owner hide">'
+          bodyHtml += ' <h4 class="mskLogog_bluetext">Contact Owner</h4>'
+          bodyHtml += ' <div class="sf_cont_owner_div_wrap">'
+          bodyHtml += ' <input type="radio" name="cowner" value="0"><span>Do not Assign</span>'
+          bodyHtml += ' </div>'
+          bodyHtml += ' <div class="sf_cont_owner_div_wrap">'
+          bodyHtml += ' <input type="radio" name="cowner" value="2"><span>Assign To</span>'
+          bodyHtml += ' <select class="hide mkssf_sales_rule">'
+          bodyHtml += ' <option value="-1">Select Salesrep</option>'
+          bodyHtml += ' </select>'
+          bodyHtml += ' </div>'
+          bodyHtml += ' </div>'
+          bodyHtml += ' <div class="sf_basic_fields">'
+          bodyHtml += ' <h4 class="mskLogog_bluetext">Tell Us What Fields To Include </h4>'
+          bodyHtml += ' <div class="sf_basic_div_wrap"><input type="checkbox" name="firstName" value="firstName"><span>First Name</span></div>'
+          bodyHtml += ' <div class="sf_basic_div_wrap"><input type="checkbox" disabled="" checked="checked" name="lastName" value="lastName"><span>Last Name</span></div>'
+          bodyHtml += ' <div class="sf_basic_div_wrap"><input type="checkbox" disabled="" checked="checked" name="email" value="email"><span>Email</span></div>'
+          bodyHtml += ' <div class="sf_basic_div_wrap show"><input type="checkbox" disabled="" checked="checked" name="company" value="company"><span>Company</span></div>'
+          bodyHtml += ' <div class="sf_basic_div_wrap"><input type="checkbox" name="title" value="title"><span>Title</span></div>'
+          bodyHtml += ' <div class="sf_basic_div_wrap"><input type="checkbox" name="telephone" value="telephone"><span>Telephone</span></div>'
+          bodyHtml += ' <div class="sf_basic_div_wrap"><input type="checkbox" name="address1" value="address1"><span>Address 1</span></div>'
+          bodyHtml += ' <div class="sf_basic_div_wrap"><input type="checkbox" name="city" value="city"><span>City</span></div>'
+          bodyHtml += ' <div class="sf_basic_div_wrap"><input type="checkbox" name="state" value="state"><span>State</span></div>'
+          bodyHtml += ' <div class="sf_basic_div_wrap"><input type="checkbox" name="industry" value="industry"><span>Industry</span></div>'
+          bodyHtml += ' <div class="sf_basic_div_wrap"><input type="checkbox" name="zip" value="zip"><span>Zip Code</span></div>'
+          bodyHtml += ' <div class="sf_basic_div_wrap"><input type="checkbox" name="country" value="country"><span>Country</span></div>'
+          bodyHtml += ' </div>'
+          bodyHtml += ' <div class="sf_lead_custom_fields show">'
+          bodyHtml += ' <h4 class="mskLogog_bluetext">Custom Field(s)</h4></div>'
+          bodyHtml += ' <div class="sf_contact_contact_fields hide"><h4 class="mskLogog_bluetext">Custom Field(s)</h4>'
+          bodyHtml += ' </div></div>';
+          
+          dialogModule.dialogView({showTitle:'Add to salesfroce',childrenView : bodyHtml, additionalClass : 'increase_dialog_size_sf',container : '.top_managerLists_wrappers',saveCallBack : addToSF,initCallBack : initApiCalls });
+          event.stopPropagation();
+         }
+         var generateLeadCustomFields = function(){
+          if(!baseObject.customFields){
+            return;
+          }
+          var customFieldsArr = [];
+          $.each(baseObject.customFields[0],function(key,value){
+              customFieldsArr.push(value[0]);
+          });
+          
+          console.log(customFieldsArr);
+
+          var cfhtml='';
+          // Lead Custom Fields 
+          $('.sf_lead_custom_fields .sf_cf_div_wrap').remove();
+          $.each(customFieldsArr,function(key,val){
+            cfhtml += '<div class="sf_cf_div_wrap">'
+            cfhtml += '<input type="checkbox" id="LCust_'+key+'" value="'+val[Object.keys(val)[0]]+'">'
+            cfhtml += '<span class="sf_cus_span1">'+Object.keys(val)[0]+'</span>'
+            cfhtml += '<span class="sf_cus_span2 hide" id="SF_LCust_0_label">Add at Salesforce as</span>'
+            cfhtml += '<select id="SF_LCust_'+key+'" class="hide">'
+            $.each(addToSalesForceObj.sfLeadCustomFields,function(key,values){
+              cfhtml += '<option value="'+values.value+'">'+values.name+'</option>';
+            });
+            cfhtml += '</select>';
+            cfhtml += '</div>';
+          
+          });
+          $('.sf_lead_custom_fields').append(cfhtml);
+          // Contact Custom Fields 
+          
+          $('.sf_contact_contact_fields').append(cfhtml);
+
+          // Attached event with custom fields
+          $('.sf_lead_custom_fields .sf_cf_div_wrap  input:checkbox,.sf_contact_contact_fields .sf_cf_div_wrap input:checkbox').on('change',function(event){
+            console.log('cf input checkbox clicked');
+            event.preventDefault();
+            if($(this).prop("checked")){
+              $(this).parent().find('.sf_cus_span2').removeClass('hide');
+              $(this).parent().find('select').removeClass('hide');
+
+            }else{
+              $(this).parent().find('.sf_cus_span2').addClass('hide');
+              $(this).parent().find('select').addClass('hide');
+            }
+            
+            event.stopPropagation();
+            return false;
+          })
+
+        } 
+         var initApiCalls = function(){
+          commonModule.showLoadingMask({message:"Loading...",container : '.mkssf_wrap_rendering'})
+          getSalesforceData();
+          
+          initAttachEvents();
+         } 
+         var initAttachEvents = function(){
+           console.log("Time to attach events");
+           $('.sf_lead_owner_div_wrap').eq(0).click();
+           // Change first wf  
+           $('#first_wf_drop_down').on('change',function(event){
+            if(event.currentTarget.value == "contact"){
+              $('.sf_leads_owner').addClass('hide');
+              $('.sf_contacts_owner').removeClass('hide');
+              $('.sf_contact_contact_fields').removeClass('hide');
+              $('.sf_lead_custom_fields').addClass('hide');
+              saveObject['addAsVal'] = 'contact';
+              $('.sf_cont_owner_div_wrap').eq(0).click()
+            }else{
+              $('.sf_leads_owner').removeClass('hide');
+              $('.sf_contacts_owner').addClass('hide');
+              $('.sf_contact_contact_fields').addClass('hide');
+              $('.sf_lead_custom_fields').removeClass('hide');
+              $('.sf_lead_owner_div_wrap').eq(0).click()
+            }
+           });
+           // On click of radio buttons for leads
+           $('.sf_leads_owner div.sf_lead_owner_div_wrap,.sf_contacts_owner div.sf_cont_owner_div_wrap').on('click',function(event){
+   
+            $('.sf_leads_owner div.sf_lead_owner_div_wrap select,.sf_contacts_owner div.sf_cont_owner_div_wrap select').addClass('hide');
+             var $e = $(event.currentTarget);
+             $e.find('input').prop("checked", true);
+             saveObject['ruleVal'] = $e.find('input').val();
+             saveObject['ruleIdVal'] = -1;
+             if($e.find('select').length > 0){
+               $e.find('select').removeClass('hide');
+             }
+             event.stopPropagation();
+           });
+           // Change of mkssf_sales_rule
+           $('.mkssf_sales_rule').on('change',function(event){
+             event.preventDefault();
+             saveObject['salesRep'] = $(this).val(); 
+           })
+           $('.mkssf_lead_rule').on('change',function(event){
+             event.preventDefault();
+             saveObject['ruleIdVal'] = $(this).val(); 
+           });
+           $('.mks_sf_source').on('change',function(event){
+            saveObject['source'] = $(this).val(); 
+           });
+
+          
+         }
+        
+         var getSalesforceData = function(){
+          var Url = baseObject.baseUrl
+                    +'/io/salesforce/getData/?BMS_REQ_TK='
+                    + baseObject.users_details[0].bmsToken +'&type=addToSfData&subNum='+baseObject.subNum
+                    +'&isMobileLogin=Y&userId='+baseObject.users_details[0].userId+'&ukey='+baseObject.users_details[0].userKey;
+            commonModule.getDataRequest(Url,function(res){
+              if(res){
+                var jsonResponse =  res;
+                
+                if(jsonResponse.sfContactCustomFields.length > 0 || jsonResponse.sfLeadCustomFields.length > 0 || jsonResponse.source.length > 0){
+                  addToSalesForceObj['sfContactCustomFields'] =  (jsonResponse.sfContactCustomFields.length > 0) ? jsonResponse.sfContactCustomFields : []
+                  addToSalesForceObj['sfLeadCustomFields'] =  (jsonResponse.sfLeadCustomFields.length > 0) ? jsonResponse.sfLeadCustomFields : [],
+                  addToSalesForceObj['source'] = (jsonResponse.source.length > 0) ? jsonResponse.source : [],
+                  addToSalesForceObj['rules'] = (jsonResponse.rules.length > 0) ? jsonResponse.rules : []
+                }
+                generateLeadCustomFields();
+                commonModule.hideLoadingMask()
+                getSalesrep()
+              }
+              
+            });
+            var getSalesrep = function(){
+              var salesRepsArray =[];
+              var Url = baseObject.baseUrl
+                        +'/io/user/getSalesrepData/?BMS_REQ_TK='
+                        + baseObject.users_details[0].bmsToken +'&type=allSalesreps&offset=0&bucket=1000&isMobileLogin=Y&userId='+baseObject.users_details[0].userId
+                        commonModule.getDataRequest(Url,function(res){
+                          var jsonResponse = res;
+                          if(parseInt(jsonResponse.count) > 0){
+                            console.log('Sales Reps : ',jsonResponse);
+                            $.each(jsonResponse.salesreps[0],function(key,value){
+                                salesRepsArray.push(value[0]);
+                            });
+              
+                            console.log(salesRepsArray);
+              
+                              salesReps = salesRepsArray
+                              generatesSFDropDowns();
+                             
+                          }
+                        })
+            }
+            
+           var generatesSFDropDowns = function(){
+              $.each(addToSalesForceObj.source, function(key,value){
+                $('.mkssf_wrap_rendering .mks_sf_source').append('<option value="'+value+'">'+value+'</option>');
+              });
+              $.each(addToSalesForceObj.rules,function(key,val){
+                $('.mkssf_wrap_rendering .mkssf_lead_rule').append('<option value="'+val.value+'">'+val.name+'</option>')
+              });
+              $.each(salesReps,function(k,v){
+                $('.mkssf_wrap_rendering .mkssf_sales_rule').append('<option value="'+v.name+'">'+v.name+'</option>');
+              })
+           }
+         }
+         return {
+          addToSF : addToSF,
+          showAddToSF : showAddToSF
+         }
+       })()
        /*----- Timeline Module ----*/
        var activityModule = (function(){
           var flag = false;
@@ -1626,7 +2966,7 @@
               listLi += '</div></li>';              
               });
 
-            $('.addContactListWrapper .addBox_body').html('<div><input type="text" placeholder="Search lists" id="searchListInput" style="display:none" /></div><ul class="subsriberList-wrap">'+listLi+'</ul>');
+            $('.addContactListWrapper .addBox_body').html('<div><input type="text" placeholder="Search lists" id="searchListInput" /></div><ul class="subsriberList-wrap">'+listLi+'</ul>');
             init();
           }
           var saveSubsriberToList = function(){
@@ -1951,7 +3291,7 @@
                                   setCookie : setCookie
                                 };
                            })();
-       //$('#username').val('ahyan');
+       $('#username').val('ahyan');
        } catch(e){
          console.log(e);
          $("#error").html(e);
