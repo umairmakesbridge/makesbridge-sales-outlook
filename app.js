@@ -1892,10 +1892,10 @@
           html +='</div>'
           html +='<p class="mkb_elipsis mkb_text_break">'+data.taskName+'</p>'
           if($('.toggleTask.active').hasClass('all')){
-            html +=' <span class="ckvwicon mks_task_time" style="display: inline; position: absolute; top: 22px;left: 34px">'+generateDate(data.updationTime)+'</span>'
+            html +=' <span class="ckvwicon mks_task_time" style="display: inline; position: absolute; top: 22px;left: 34px">'+generateDate(data.taskDate)+'</span>'
             html +=' <span class="ckvwicon" style="position: absolute; top: 22px; display: inherit; left: 148px;">'+data.subscriberInfo['firstName']+" "+data.subscriberInfo['lastName'] +'</span>'
           }else{
-            html +=' <span class="ckvwicon mks_task_time" style="display: inline; position: absolute; top: 22px;left: 34px">'+generateTimeOnly(data.updationTime)+'</span>'
+            html +=' <span class="ckvwicon mks_task_time" style="display: inline; position: absolute; top: 22px;left: 34px">'+generateTimeOnly(data.taskDate)+'</span>'
             html +=' <span class="ckvwicon" style="position: absolute; top: 22px; display: inherit; left: 88px;">'+data.subscriberInfo['firstName']+" "+data.subscriberInfo['lastName'] +'</span>'
           }
           html +='</div>'
@@ -1926,10 +1926,10 @@
           html +=' <div class="__react_component_tooltip place-top type-dark " data-id="tooltip"></div>'
           html +=' <p title="'+data.taskName+'" class="mkb_elipsis mkb_text_break">'+data.taskName+'</p>'
           if($('.toggleTask.active').hasClass('all')){
-            html +=' <span class="ckvwicon mks_task_time" style="display: inline; position: absolute; top: 22px;left: 26px">'+generateDate(data.updationTime)+'</span>'
+            html +=' <span class="ckvwicon mks_task_time" style="display: inline; position: absolute; top: 22px;left: 26px">'+generateDate(data.taskDate)+'</span>'
             html +=' <span class="ckvwicon" style="position: absolute; top: 22px; display: inherit; left: 140px;">'+data.subscriberInfo['firstName']+" "+data.subscriberInfo['lastName'] +'</span>'
           }else{
-            html +=' <span class="ckvwicon mks_task_time" style="display: inline; position: absolute; top: 22px;left: 26px">'+generateTimeOnly(data.updationTime)+'</span>'
+            html +=' <span class="ckvwicon mks_task_time" style="display: inline; position: absolute; top: 22px;left: 26px">'+generateTimeOnly(data.taskDate)+'</span>'
             html +=' <span class="ckvwicon" style="position: absolute; top: 22px; display: inherit; left: 80px;">'+data.subscriberInfo['firstName']+" "+data.subscriberInfo['lastName'] +'</span>'
           }
           html +=' </div>'
