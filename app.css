@@ -124,6 +124,13 @@ h6 {
 
 
 /* ---------------------------------------------- Plugin Custom CSS by Abdullah ------------------------------------*/
+body{
+    font-family: Segoe UI WestEuropean,Segoe UI,-apple-system,BlinkMacSystemFont,Roboto,Helvetica Neue,sans-serif;
+}
+input::-moz-placeholder,textarea::-moz-placeholder {
+    font-family: Segoe UI WestEuropean,Segoe UI,-apple-system,BlinkMacSystemFont,Roboto,Helvetica Neue,sans-serif;  
+ }
+ 
 .mkspanelhead {
     position: sticky;
     top: 0px;
@@ -341,7 +348,7 @@ Login form CSS
       color: #fff;
       border-radius: 4px 4px 0 0;
       margin: 0 2px 0 0px;
-      width: 107px;
+      width: 100px;
    }
 
    /* Change background color of buttons on hover */
@@ -931,6 +938,9 @@ p.not-found.task-loading-nof {
     font-size: 12px;
 }
 /*==================Contact Info , Tags, Custom Fields===================*/
+#Tags{
+    position: relative;
+}
 .mksph_cardbox h3{
    font-weight: 200;
    color: #474747;
@@ -1292,7 +1302,7 @@ div#custom-fields ul li {
    .top-header.contact_found ul li {
        list-style-type: none;
        display: inline-block;
-       margin-right: 6px;
+       margin-right: 0px;
        cursor: pointer;
    }
    .top-header.contact_found ul li .badge{
@@ -1484,7 +1494,7 @@ div#custom-fields ul li {
        height: 14px;
        position: absolute;
        right: 0;
-       top: 14px;
+       top: 16px;
    }
 
    ul.top_manager_ul_wraps li:last-child div::after {
@@ -1497,10 +1507,10 @@ div#custom-fields ul li {
        width: 0;
    }
    ul.top_manager_ul_wraps.six .top_manage_lists .wrap_scf_o_i {
-       width: 45px;
+       width: 42px;
    }
    ul.top_manager_ul_wraps.five .top_manage_lists .wrap_scf_o_i{
-   width: 58px;
+       width: 58px;
    }
    ul.top_manager_ul_wraps.six .scf_o_txt{
        font-size: 7px;
@@ -1533,6 +1543,7 @@ div#custom-fields ul li {
    .addBox_body{
        max-height: 270px;
        overflow-y: auto;
+       overflow-x: hidden;
    }
    li.mngList_li_wrap {
     width: 95%;
@@ -1564,6 +1575,18 @@ div#custom-fields ul li {
    }
    .addToSuppressWrapper .scfe_save_wrap{
        width: 91px;
+   }
+   .mksicon-act_workflow:before{
+    top: -1px;
+    position: relative;
+   }
+   .mksicon-ManageLists:before{
+    top: 1px;
+    position: relative;
+   }
+   .mksicon-jump_to_salesforce_record:before{
+    top: 1px;
+    position: relative;
    }
    /*====================
     Tool Tip Styling
@@ -1603,7 +1626,9 @@ div#custom-fields ul li {
     margin-left: -58px;
     z-index: 999;
   }
-
+  li.tooltips span.subscriber_cc_tooltips:after {
+    left: 15%;
+}
   
    /*=============================
     Add Subscriber List
@@ -1769,7 +1794,7 @@ div#custom-fields ul li {
    .wrap_scf_o_i_md{
        display: table-cell;
        vertical-align: middle;
-       padding: 6px 0 0 0;
+       padding: 0;
    }
    .mks_hideRightBorder.mks_cc_li_wrap .wrap_scf_o_i_md{
      padding: 3px 0;
@@ -2124,8 +2149,9 @@ Suppressed contact
     position: absolute;
     top: 0px;
     width: 3px;
+    z-index: 0;
 }
-.new_activities .timestop {   margin: 0 -10px 0 -60px;}
+.new_activities .timestop {   margin: 0 -10px 0 0px;}
 .new_activities.future .timestop span {  background: none repeat scroll 0 0 #72d8ff; color:#fff;}
 .new_activities.future .timestop:before {  border-bottom: 1px dashed #72d8ff;}
 
@@ -2285,6 +2311,8 @@ position:relative; z-index:9;
   max-height: 475px;
   overflow-y: scroll;
   overflow-x: hidden;
+  z-index: 2;
+  position: relative;
 }
 .LoadMore-wrapper{
   position: relative;
@@ -2309,6 +2337,20 @@ position:relative; z-index:9;
     position: relative;
     top: 2px;
 }
+.futureTimeCard{
+    position: relative;
+  }
+  .futureTimeCard::before {
+      content: "";
+      /* width: 3px; */
+      height: 100%;
+      background: #fff;
+      display: block;
+      position: absolute;
+      left: 9px;
+      border: 2px dashed #b7d6e3;
+      z-index: 2;
+  }
 /*=================activity icons================*/
 .new_activities .act_row.red > .icon {
   background-color: rgb(253, 64, 64);
@@ -2370,8 +2412,8 @@ position:relative; z-index:9;
   }
   .task_status_C .mkb_tast_completed_btn{
     display : block !important;
-    background: transparent;
-  color: rgb(1, 110, 253) !important;
+    /* background: transparent; */
+  /* color: rgb(1, 110, 253) !important; */
   }
   .task_status_C .mks_task_edit_delete_wrap{
     display: none;
@@ -2383,6 +2425,13 @@ position:relative; z-index:9;
   .task_status_C:hover{
     color:#000;
   }
+  .task_status_C .mkb_tast_completed_btn {
+    background: #23ce8c !important;
+    border: 1px solid #23ce8c;
+}
+.task_status_C .mkb_tast_completed_btn .mksicon-Check {
+    line-height: 16px !important;
+}
   .task_status_C ._mks_task_delete_task{
     left: 1px !important;
       width: 65% !important;
@@ -2625,7 +2674,7 @@ left: 3px;
     top: 0px;
     margin-right: 5px;
 }
-.mks_tasks_lists_empty_icon:hover .c_txt_s_empty {
+.mks_tasks_lists_empty_icon:hover .c_txt_s_empty,.task_status_C .mks_completed_tasks .c_txt_s_empty {
     background: #23ce8c !important;
     border-color: #23ce8c;
 }
@@ -2633,15 +2682,20 @@ left: 3px;
     font-size: 12px;
     line-height: 14px !important;
     display:block !important;
+    left: 0;
 }
-
+.task_status_C .mks_completed_tasks .mksicon-Check {
+    font-size: 12px;
+    line-height: 14px !important;
+    display: block !important;
+}
 .mks_task_lists_dash_wrapper .cf_email_taskdash{
     display: block;
     width: 215px;
 }
 #notes {
     font-size: 100%;
-    font-family: arial,sans-serif;
+    /* font-family: arial,sans-serif; */
     width:91%;
     margin: 0;
 }
@@ -2680,7 +2734,7 @@ font-size: 13px;
     height: 18px;
     width: 18px;
 }
-.mks_task_lists_dash_wrapper .c_txt_s_empty {
+.mks_task_lists_dash_wrapper .c_txt_s_empty,.mks_outlook_tasks_wrapper .c_txt_s_empty{
     line-height: 0;
     top: 5px;
     position: relative;
@@ -2692,6 +2746,10 @@ font-size: 13px;
     background: transparent !important;
     width: 14px;
     height: 14px;
+}
+.mks_outlook_tasks_wrapper .c_txt_s_empty{
+    left:-8px;
+    top:-39px;
 }
 .mks_task_lists_dash_wrapper .mks_priority_icon{
     width: 18px;
@@ -2821,6 +2879,297 @@ Notes
       left: 26px;
       z-index: 1;
   }
+/*------------------------------
+Course Correct
+--------------------------------*/
+#contactBFCO{
+    position: relative;
+}
+.courseCorrect_wrap{
+    top: 74px;
+    right: 16px;
+}
+.courseCorrect_wrap .addBox_body {
+    max-height: 370px;
+}
+.courseCorrect_wrap .mksicon-act_workflow.icon-cc{
+    top: 5px;
+    position: relative;
+}
+.hide_save .dialogBox_save_btn{
+    display: none;
+}
+.mks_cc_wf_wrap{
+    color:#748592;
+  }
+  .mks_mnglist_wrap.mks_cc_wf_wrap,.mks_cc_wf_wrap_top_title {
+      color: #93abbc;
+  }
+  .icon-cc {
+      float: left;
+      margin-right: 5px;
+  }
+  .mks_cc_steps_wrapper{
+    /* background: #97C6DC; */
+    background: #f8f7fc;
+    clear: both;
+    padding: 5px;
+    margin-top: 5px;
+    min-height: 220px;
+    display: none;
+    -webkit-transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    -o-transition: all 0.5s ease-in-out;
+  }
+  .cc_steps_break {
+    clear: both;
+    background: #97C6DC;
+    color: #fff;
+    font-size: 13px;
+    padding: 10px 9px;
+    margin: 5px 0;
+    font-size: 14px;
+  }
+  
+  .cc_show_details{
+    height: auto !important;
+  }
+  .cc_steps_actions_wrap{
+    background: #eff7fb;
+    padding: 0 9px;
+    height: 35px;
+  }
+  .cc_steps_actions_wrap > div.cc_action_wraps{
+    float: right;
+  }
+  .cc_show_details .mks_cc_steps_wrapper{
+    display: block;
+  }
+  .cc_show_c{
+    display: none;
+  }
+  .cc_show_details .cc_show_c{
+    display: block;
+  }
+  .cc_show_details .cc_show_d{
+    display: none;
+  }
+  .mks_cc_steps_wrapper .cc_steps_break_time{
+      display: block;
+      float: right;
+      font-size: 11px;
+  top: 3px;
+  position: relative;
+  }
+  .mks_cc_steps_wrapper .cc_steps_break_title{
+    font-size: 11px;
+    text-transform: capitalize;
+  }
+  .mks_cc_steps_wrapper h4{
+        font-size: 12px;
+  }
+  .mks_cc_steps_wrapper h4.cc_basic_rule_title{
+      width: 100%;
+      background: transparent;
+      margin-bottom: 5px;
+      margin-top: 2px;
+      font-size: 12px;
+  }
+  .cc_steps_actions_title{
+    font-size: 13px;
+  }
+  span.cc_basic_rule_head {
+      color: rgb(116, 133, 146);
+      width: 126px;
+      display: inline-block;
+      font-size: 12px;
+      font-weight: bold;
+  }
+  span.cc_basic_rule_value {
+      color: #748592;
+      font-size: 12px;
+  }
+  .single_action_wrap .act_subj_title,.single_action_wrap .act_sent_time {
+      font-size: 11px;
+      color: rgb(116, 133, 146);
+      font-weight: 600;
+  }
+  span.act_subj_title_value {
+      color: rgb(2, 175, 239);
+      font-size: 11px;
+  }
+  
+  .single_action_wrap .act_sent_time_value{
+      font-size: 11px;
+      color: rgb(116, 133, 146);
+  }
+  .cc_act_extra_details{
+      background: #fff;
+      padding: 5px 15px;
+      margin: 5px 0;
+  }
+  
+  .cc_act_adv_details{
+    background: transparent;
+    padding: 0 0 5px;
+    border-bottom: 1px solid #fff;
+  }
+  .cc_act_adv_details a{
+    color : rgb(2, 175, 239);
+    line-height: 19px;
+  }
+  
+  .cc_act_extra_details ul li {
+      color: rgb(116, 133, 146);
+      font-size: 12px;
+      list-style-type: none;
+      margin: 5px 0;
+  }
+  .cc_act_extra_details ul li span {
+      font-weight: bold;
+      width: 105px;
+      display: inline-block;
+  }
+  .mks_cc_wf_wrap .expand, .mks_cc_wf_wrap .collapse{
+      display: inline-block;
+      position: relative;
+      top: -11px;
+      font-size: 11px;
+      right: -12px;
+  }
+  .mks_cc_action{
+    padding: 7px;
+    position: relative;
+    top: 11px;
+    margin-right: 3px;
+  }
+  .mks_cc_action_gray{
+      background: #7996a8;
+  }
+  .mks_cc_action_pink{
+      background: #f3a795;
+  }
+  .mks_cc_action_red{
+    background:#F21A05;
+  }
+  .cc_basic_opt_wrap_label{
+  display: block;
+  background: #fff;
+  padding: 5px;
+  font-size: 12px;
+  padding: 5px 11px;
+  font-weight: 100;
+  position: relative;
+  }
+  .cc_basic_opt_wrap_label .mksicon-CPlay{
+    color: #738591;
+    position: absolute;
+    display: inline-block;
+    width: 22px;
+    right: 6px;
+    top: 3px;
+    font-size: 15px;
+    cursor: pointer;
+  }
+  .cc_basic_opt_wrap_label .mksicon-CPlayNext{
+    color: #738591;
+    position: absolute;
+    width: 22px;
+    right: 30px;
+    display: inline-block;
+    top: 3px;
+    font-size: 15px;
+    cursor: pointer;
+  }
+  .cc_option_basic_rule_wrap{
+    padding: 5px 10px;
+  border: 2px solid #fff;
+  border-bottom: unset;
+  }
+  .cc_option_action_rule_wrap{
+    padding: 5px 10px;
+    border: 2px solid #fff;
+    border-top: unset;
+  }
+  .cc_step_options_wrap{
+    margin-top: 8px;
+  }
+  .cc_title_h3{
+    color: #2bafef;
+      font-weight: normal;
+      letter-spacing: 1px;
+      margin: 10px 0px 8px;
+      font-size: 16px;
+  }
+  .addBox_wrapper_container.cc_wrap h2{
+      font-size: 13px;
+  }
+  h3.cc_title_h3 span {
+      margin-right: 4px;
+  }
+  .act_subj_title,.act_sent_time{
+    display: inline-block;
+    width: 106px;
+  }
+  .cc_action_icons_wrap{
+    background: #fff;
+  }
+  .cc_action_icons_wrap li{
+    display: inline-block;
+  }
+  .cc_action_icons_wrap .mks_manageList_wrap {
+      font-size: 16px;
+  }
+  .cc_action_icons_wrap .wrap_scf_o_i_md {
+    padding: 0;
+  }
+  .cc_action_icons_wrap ul.top_manager_ul_wraps.five .top_manage_lists .wrap_scf_o_i {
+      height: 42px;
+  }
+  .cc_action_icons_wrap ul li > div.scf_option_icon {
+      display: flex;
+  }
+  .cc_disabled{
+  opacity: 0.2;
+  }
+  .mks_hideRightBorder .top_manage_lists .mks_manageList_wrap::after {
+    width: 0px;
+  }
+  .cc_last_opened{
+    width: 155px !important;
+      position: relative;
+      left: 106px;
+      font-weight: 100 !important;
+      font-size: 11px;
+  }
+  .cc_option_adv_rule_wrap div.mks_cc_action_wraper:last-child .cc_act_adv_details {
+      border-bottom: unset;
+  }
+  .cc_act_adv_details .act_subj_title_value{
+    color: rgb(116, 133, 146);
+  }
+  .cc_action_icons_wrap{
+    background: #fff;
+  }
+  .cc_action_icons_wrap li{
+    display: inline-block;
+  }
+  .cc_action_icons_wrap .mks_manageList_wrap {
+      font-size: 16px;
+  }
+  .cc_action_icons_wrap .wrap_scf_o_i_md {
+    padding: 0;
+  }
+  .cc_action_icons_wrap ul.top_manager_ul_wraps.five .top_manage_lists .wrap_scf_o_i {
+      height: 42px;
+  }
+  .cc_action_icons_wrap ul li > div.scf_option_icon {
+      display: flex;
+  }
+
+  /*------------------------------
+  Course Correct Ends
+  --------------------------------*/
 
 /* ======================================
 jquery UI 

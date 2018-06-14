@@ -20,8 +20,8 @@
   <Description DefaultValue="It helps sales professionals interact and manage contacts. Makesbridge account needed to login."/>
 
   <!-- Icon for your add-in. Used on installation screens and the add-ins dialog. -->
-  <IconUrl DefaultValue="https://makesbridge.com/mkssalesassistant/assets/hi-res-icon.png" />
-  <HighResolutionIconUrl DefaultValue="https://makesbridge.com/mkssalesassistant/assets/icon-128.png"/>
+  <IconUrl DefaultValue="https://makesbridge.com/mkssalesassistantdev2/assets/hi-res-icon.png" />
+  <HighResolutionIconUrl DefaultValue="https://makesbridge.com/mkssalesassistantdev2/assets/icon-128.png"/>
   <SupportUrl DefaultValue="https://www.makesbridge.com/contact-us/" />
 
   <!--If you plan to submit this add-in to the Office Store, uncomment the SupportUrl element below-->
@@ -46,7 +46,7 @@
   <FormSettings>
     <Form xsi:type="ItemRead">
       <DesktopSettings>
-        <SourceLocation DefaultValue="https://makesbridge.com/mkssalesassistant/index.html"/>
+        <SourceLocation DefaultValue="https://makesbridge.com/mkssalesassistantdev2/index.html"/>
         <RequestedHeight>250</RequestedHeight>
       </DesktopSettings>
     </Form>
@@ -105,13 +105,13 @@
 
     <Resources>
       <bt:Images>
-        <bt:Image id="icon16" DefaultValue="https://makesbridge.com/mkssalesassistant/assets/icon-16.png"/>
-        <bt:Image id="icon32" DefaultValue="https://makesbridge.com/mkssalesassistant/assets/icon-32.png"/>
-        <bt:Image id="icon80" DefaultValue="https://makesbridge.com/mkssalesassistant/assets/icon-80.png"/>
+        <bt:Image id="icon16" DefaultValue="https://makesbridge.com/mkssalesassistantdev2/assets/icon-16.png"/>
+        <bt:Image id="icon32" DefaultValue="https://makesbridge.com/mkssalesassistantdev2/assets/icon-32.png"/>
+        <bt:Image id="icon80" DefaultValue="https://makesbridge.com/mkssalesassistantdev2/assets/icon-80.png"/>
       </bt:Images>
       <bt:Urls>
-        <bt:Url id="functionFile" DefaultValue="https://makesbridge.com/mkssalesassistant/function-file/function-file.html"/>
-        <bt:Url id="messageReadTaskPaneUrl" DefaultValue="https://makesbridge.com/mkssalesassistant/index.html"/>
+        <bt:Url id="functionFile" DefaultValue="https://makesbridge.com/mkssalesassistantdev2/function-file/function-file.html"/>
+        <bt:Url id="messageReadTaskPaneUrl" DefaultValue="https://makesbridge.com/mkssalesassistantdev2/index.html"/>
       </bt:Urls>
       <bt:ShortStrings>
         <bt:String id="groupLabel" DefaultValue="Makesbridge"/>

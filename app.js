@@ -125,7 +125,210 @@
             gmail_email_list : [],
             subNum : ""
        }
+        /*----- Common Module ----*/
 
+        var commonModule = (function(){
+          var showLoadingMask = function(paramObj){
+            var loadingHtml = "";
+            loadingHtml += '<div class="loader-mask '+paramObj.extraClass+'">'
+            loadingHtml += '<div class="spinner">'
+            loadingHtml += '<div class="bounce1"></div>'
+            loadingHtml += '<div class="bounce2"></div>'
+            loadingHtml += '<div class="bounce3"></div>'
+            loadingHtml +=  '</div>'
+            loadingHtml +=   '<p>'+paramObj.message+'</p>'
+            loadingHtml +=    '</div>';
+            $(paramObj.container).append(loadingHtml);
+          }
+
+          var hideLoadingMask = function(paramObj){
+            $('.loader-mask').remove();
+          }
+
+          var extractEmailsFromBody = function(text){
+              //return text.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi);
+              return 'fahad';
+          }
+
+          var encodeHTML= function(str){
+           if (typeof (str) !== "undefined") {
+                       str = str.replace(/:/g, "&#58;");
+                       str = str.replace(/\'/g, "&#39;");
+                       str = str.replace(/=/g, "&#61;");
+                       str = str.replace(/\(/g, "&#40;");
+                       str = str.replace(/\)/g, "&#41;");
+                       str = str.replace(/</g, "&lt;");
+                       str = str.replace(/>/g, "&gt;");
+                       str = str.replace(/\"/g, "&quot;");
+                       str = str.replace(/\‘/g, "&#8216;");
+                       str = str.replace(//g, "");
+                       // str = str.replace(/ /g,'+')
+                   }
+                   else {
+                       str = "";
+                   }
+                   return str;
+          }
+
+          var decodeHTML= function (str,lineFeed){
+           //decoding HTML entites to show in textfield and text area
+                  if (typeof (str) !== "undefined") {
+                      str = str.replace(/&amp;/g, "&");
+                      str = str.replace(/&#58;/g, ":");
+                      str = str.replace(/&#39;/g, "\'");
+                      str = str.replace(/&#40;/g, "(");
+                      str = str.replace(/&#41;/g, ")");
+                      str = str.replace(/&lt;/g, "<");
+                      str = str.replace(/&gt;/g, ">");
+                      str = str.replace(/&gt;/g, ">");
+                      str = str.replace(/&#9;/g, "\t");
+                      str = str.replace(/&nbsp;/g, " ");
+                      str = str.replace(/&quot;/g, "\"");
+                      str = str.replace(/&#8216;/g, "‘");
+                      str = str.replace(/&#61;/g, "=");
+                      str = str.replace(/%252B/g,' ');
+                      str = str.replace(/\+/g, " ");
+                      if (lineFeed) {
+                          str = str.replace(/&line;/g, "\n");   // NEED TO DISCUSS THIS WITH UMAIR
+                      }
+                  }
+                  else {
+                      str = "";
+                  }
+                  return str;
+         }
+
+          var getDataRequest = function(url,callBack){
+            $('.debugDiv').html(url);
+            
+            $.ajax({
+                  url:url,
+                  type:"GET",
+                  success: function(data){
+                    try{
+
+                      if(data[0]!='err'){
+                        $('.debugDiv').html(JSON.stringify(data))
+                        var result = JSON.parse(data);
+                        callBack(result);
+                      }else{
+                        if(data[1]=='SESSION_EXPIRED'){
+                          // Show Alert and logout
+                            $('.mksicon-logout').trigger('click');
+                          commonModule.ErrorAlert({message:data[1]});
+                        }else{
+                          //Just show Alert message
+                          commonModule.ErrorAlert({message:data.errorDetail});
+                        }
+                      }
+                    }catch(e){
+                      $("#error").html(e.message);
+                    }
+                  }
+                });
+          }
+
+        var saveData = function(url,data,callBack){
+            $('.debugDiv').html('Creating The ACCount')
+            $.ajax({
+                  url:url,
+                  type:"POST",
+                  data:data,
+                  contentType:"application/x-www-form-urlencoded",
+                  dataType:"json",
+                  success: function(data){
+                    try{
+                      //$('.debugDiv').html(data)
+                      if(data[1]=='SESSION_EXPIRED'){
+                        // Show Alert and logout
+                          $('.mksicon-logout').trigger('click');
+                        commonModule.ErrorAlert({message:data[1]})
+                      }else if(data.errorDetail){
+                        //call alert
+                        commonModule.ErrorAlert({message:data.errorDetail})
+                        commonModule.hideLoadingMask();
+                        return;
+                      }
+                      commonModule.hideLoadingMask();
+                      $('.debugDiv').html('Created The ACCount')
+                      //var jsonResponse = JSON.parse(data);
+                      callBack(data);
+                    }catch(e){
+                      console.log(e);
+                      $('.debugDiv').html(e.message);
+                    }
+
+                  }
+                });
+          }
+
+          var ErrorAlert = function(props) {
+            if (props.message) {
+                        var inlineStyle = '0px';
+                        var fixed_position = "fixed";
+                        var cl = 'error';
+                        var title = 'Error';
+                        var icon  = 'mksicon-Close';
+                        if (props && props.type == 'caution')
+                        {
+                            cl = 'caution';
+                            title = 'Caution';
+                        }
+                        else if (props && props.type == 'Disabled')
+                        {
+                            cl = 'caution';
+                            title = props.type;
+                        }
+
+                        var message_box = $('<div class="messagebox messsage_alert messagebox_ ' + cl + '" style=' + inlineStyle + '><span class="alert_icon '+icon+'"></span><h3>' + title + '</h3><p>' + props.message + '</p><a class="alert_close_icon mksicon-Close"></a></div> ');
+                        $('.ms-welcome').append(message_box);
+
+                            setTimeout(function(){
+                              message_box.fadeOut("fast", function () {
+                                  $(this).remove();
+                              })
+                            }, 4000);
+
+                        message_box.find(".alert_close_icon").click(function (e) {
+                            message_box.fadeOut("fast", function () {
+                                $(this).remove();
+                            })
+                            e.stopPropagation()
+                        });
+                    }
+          }
+
+          var SuccessAlert = function(props) {
+            var message_box = $('<div class="global_messages messagebox success"><span class="alert_icon mksicon-Check"></span><h3>Success</h3><p>'+props.message+'</p><a class="alert_close_icon mksicon-Close"></a></div>')
+              $('.ms-welcome').append(message_box);
+              $(".global_messages").hide();
+              $(".global_messages").slideDown("medium", function () {
+                  setTimeout('$(".global_messages").remove()', 4000);
+              });
+              $(".global_messages .alert_close_icon").click(function () {
+                  $(".global_messages").fadeOut("fast", function () {
+                      $(this).remove();
+                  })
+            });
+          }
+         var setCookie = function (cname, cvalue, exdays) {
+            var d = new Date();
+            d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+            var expires = "expires="+d.toUTCString();
+            document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+         }
+          return {
+            showLoadingMask: showLoadingMask,
+            hideLoadingMask: hideLoadingMask,
+            getDataRequest : getDataRequest,
+            saveData : saveData,
+            encodeHTML : encodeHTML,
+            decodeHTML : decodeHTML,
+            ErrorAlert : ErrorAlert,
+            SuccessAlert : SuccessAlert,
+            setCookie : setCookie
+          };
+     })();
        /*----- Login Module ----*/
        var LoginModule = (function () {
                           var loginAjaxCall = function (reqObj) {
@@ -299,7 +502,7 @@
                               //$('.debugDiv').html('visits : ' + data.visitCount);
                               $('.clickers span').text(data.clickCount);
                               $('.visitors span').text(data.visitCount);
-
+                              $('.last24 li').unbind('click');
                               $('.last24 li').on('click',function(event){
                                 $('.last24 li').removeClass('active');
                                 $(this).addClass('active');
@@ -334,8 +537,8 @@
                           }
                           var generateEmailsOfWV = function(data){
                             var wvEmails = "";
+                            $('.visitors_wraps').html('');
                             jQuery.each(data.subscriberList[0],function(key,val){
-                                //console.log(val[0]);
                                 $('.debugDiv').html(val[0].email);
                                     wvEmails += '<div class="contact_found searched_email_mks click_pointer ripple">';
                                     wvEmails +='<div class="cf_silhouette">'
@@ -354,8 +557,9 @@
                                     wvEmails += '</div>'
                                     wvEmails += '<div class="clr"></div>'
                                     wvEmails += '</div>'
-                                  $('.visitors_wraps').append(wvEmails);
+                                  
                             });
+                            $('.visitors_wraps').append(wvEmails);
                             $('.visitors_wraps .contact_found').on("click",function(event){
                              var email = $(this).find('.cf_email p').text();
                              attachedEvents.searchEmailInMks(email);
@@ -384,9 +588,9 @@
                                      ckEmails += '</div>'
                                     ckEmails +=  '<div class="clr"></div>'
                                     ckEmails += '</div>';
-                                  $('.clicker_wraps').append(ckEmails);
+                                 
                             });
-
+                            $('.clicker_wraps').append(ckEmails);
                             //$('.visitors_wraps').addClass('hide');
                             $('.clicker_wraps .contact_found').on("click",function(event){
                              var email = $(this).find('.cf_email p').text();
@@ -395,17 +599,21 @@
 
                           }
                           var init = function (text) {
+                            commonModule.hideLoadingMask();
+                            commonModule.showLoadingMask({message:"Loading sales assistance...",container : '.autoLoading'});
                             //loginAjaxCall(text);
                             if($.cookie('userId') && $.cookie('password')){
                               $('.autoLoading').show();
                               var username = $.cookie('userId');
                               var password = $.cookie('password');
                               setTimeout(function(){
+                                commonModule.hideLoadingMask();
                                 commonModule.showLoadingMask({message:"Loading user...",container : '.autoLoading'});
                                 loginAjaxCall({url:baseObject.baseUrl,username:username,password:password});
                               },500);
                               
                             }else{
+                              commonModule.hideLoadingMask();
                               $('.login-wrap').show();
                             }
                             
@@ -414,6 +622,7 @@
                               var username = $('#username').val();
                               var password = $('#password').val();
                               if(username && password){
+                                  commonModule.hideLoadingMask();
                                   commonModule.showLoadingMask({message:"Logging user...",container : '.mksph_login_wrap'});
                                   loginAjaxCall({url:baseObject.baseUrl,username:username,password:password});
                                 }
@@ -422,6 +631,7 @@
 
                             $('#usernae,#password').keypress(function(event){
                               if(event.which==13){
+                                commonModule.hideLoadingMask();
                                 commonModule.showLoadingMask({message:"Logging user...",container : '.mksph_login_wrap'});
                                 var username = $('#username').val();
                                 var password = $('#password').val();
@@ -656,6 +866,7 @@
                      $('.searched_email_mks').on('click',function(event){
                        var email = $(this).find('.cf_email p').text();
                        $('.tasks_wrapper_dashboard').addClass('hide');
+                       debugger;
                        searchEmailInMks(email);
                      })
                    }catch(e){
@@ -677,7 +888,8 @@
          }
 
          var searchEmailInMks = function(email,isShared){
-           commonModule.showLoadingMask({message:"Loading subscriber details..",container : '.mks_wrap_step2'});
+          commonModule.hideLoadingMask();
+           commonModule.showLoadingMask({message:"Loading subscriber details..",container : '.makesbridge_plugin'});
            $('.mks_createContact_ .scf_email p').html(email);
            $('.create_slider .scf_email span').html(email);
            $('.mks_createContact_ .scf_silhouette_text p,.create_slider .scf_silhouette_text p').html(email.charAt(0));
@@ -745,13 +957,13 @@
               reqObj['isMobileLogin']='Y'
               reqObj['userId']=baseObject.users_details[0].userId;
              var url = baseObject.baseUrl+'/io/subscriber/setData/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken+'&type=addSubscriber';
-              commonModule.showLoadingMask({message : 'Creating new contact...', container: '.mks_add_new_contact_wrap'})
+             commonModule.hideLoadingMask(); 
+             commonModule.showLoadingMask({message : 'Creating new contact...', container: '.mks_add_new_contact_wrap'})
              commonModule.saveData(url,reqObj,function(response){
               var email = $('#cemail').val();
               commonModule.hideLoadingMask();
               $('.mks_add_new_contact_wrap .scfe_close_wrap').trigger('click')
               attachedEvents.searchEmailInMks(email);
-              debugger;
              })
             }
           }
@@ -771,6 +983,8 @@
                                 init()
                               }else{
                                 $('.debugDiv').html(resObj.subscriberList[0].subscriber1[0].subNum);
+                                commonModule.hideLoadingMask();
+                                commonModule.showLoadingMask({message : 'Loading subscriber...',container:$('.makesbridge_plugin')})
                                 $('.mks_wrap_step2').addClass('hide');
                                 $('.mksph_back').removeClass('hide');
                                 $('.mks_wrap_step3').removeClass('hide');
@@ -778,7 +992,7 @@
                                 baseObject['subNum'] = resObj.subscriberList[0].subscriber1[0].subNum;
                                 baseObject['creationDate'] = resObj.subscriberList[0].subscriber1[0].creationDate;
                                 baseObject['email'] = resObj.subscriberList[0].subscriber1[0].email;
-                                commonModule.showLoadingMask({message:"Loading subscriber details..",container : '.mks_wrap_step2'});
+                                //commonModule.showLoadingMask({message:"Loading subscriber details..",container : '.mks_wrap_step2'});
                                 getSubscriberDetails();
                               }
                           };
@@ -816,6 +1030,7 @@
                                   }
                                   $('.debugDiv').html(JSON.stringify(searlizeBasicObj))
                                   var url = baseObject.baseUrl+'/io/subscriber/setData/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken+'&type=addSubscriber';
+                                  commonModule.hideLoadingMask();
                                  commonModule.showLoadingMask({message:"Saving contact...",container : '.new_contact_true'});
                                  commonModule.saveData(url,searlizeBasicObj,NewSubscriberCreated);
                                  //$('.debugDiv').html(JSON.stringify(searlizeBasicObj))
@@ -876,6 +1091,7 @@
                                     //$('#mks_tab_activity .not-found').removeClass('red_color_mks')
                                     $('#mks_tab_activity .not-found').text('Loading Activtiy...')
                                     $('#Activity .act_row_body_wrap').html('');
+                                    $('.dialogBox').remove();
                                      commonModule.hideLoadingMask();
                                 });
 
@@ -895,7 +1111,8 @@
 
                           var getSubscriberDetails = function(){
                             $('.ms-welcome__main').removeClass('mks_suppresContact');
-                            commonModule.showLoadingMask({message:"Loading contact details...",container : '.mkb_basicField_wrap'});
+                            commonModule.hideLoadingMask();
+                            commonModule.showLoadingMask({message:"Loading contact details...",container : '.makesbridge_plugin'});
                             var searchUrl = baseObject.baseUrl
                                             +'/io/subscriber/getData/?BMS_REQ_TK='
                                             + baseObject.users_details[0].bmsToken +'&type=getSubscriber&subNum='
@@ -945,8 +1162,16 @@
                             /*---------------*/ 
                             $('.debugDiv').html(data.firstName);
                             $('.new_contact_false').removeClass('hide');
-                            if(data.firstName){$('.edit_top_slider_title .scf_email span').eq(0).html(data.firstName)}
-                            if(data.lastName){$('.edit_top_slider_title .scf_email span').eq(1).html(data.lastName)}
+                            if(data.firstName){
+                              $('.edit_top_slider_title .scf_email span').eq(0).html(data.firstName)
+                            }else{
+                              $('.edit_top_slider_title .scf_email span').eq(0).html('')
+                            }
+                            if(data.lastName){
+                              $('.edit_top_slider_title .scf_email span').eq(1).html(data.lastName)
+                            }else{
+                              $('.edit_top_slider_title .scf_email span').eq(1).html('')
+                            }
                             $('.edit_top_slider_title .scf_email span').eq(2).html(data.email)
                             $('.new_contact_false .scf_silhouette_text p').html(data.email.charAt(0));
 
@@ -1011,7 +1236,6 @@
                             searlizeBasicObj['isMobileLogin']='Y';
                             searlizeBasicObj['userId']=baseObject.users_details[0].userId;
                             searlizeBasicObj['subNum']=baseObject.subNum;
-                            debugger;
                             if(sfUrl){
                               searlizeBasicObj["conLeadId"] = baseObject.subscriberDetails.conLeadId;
                               searlizeBasicObj["owner"] =  baseObject.subscriberDetails.salesRep;
@@ -1025,6 +1249,7 @@
 
                             var url = baseObject.baseUrl+'/io/subscriber/setData/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken+'&type=editProfile'+sfUrl;
                             if(sfUrl){
+                              commonModule.hideLoadingMask();
                               commonModule.showLoadingMask({message:"Updating contact to salesforce...",container : '.new_contact_false'});
                               commonModule.saveData(url,searlizeBasicObj,function(){
                                 commonModule.SuccessAlert({message :'Contact updated successfully on salesforce.'});
@@ -1032,7 +1257,8 @@
                               });
                             }else{
                               commonModule.saveData(url,searlizeBasicObj,updatedBasicAdvField)
-                              commonModule.showLoadingMask({message:"Updating contact...",container : '.new_contact_false'});
+                              commonModule.hideLoadingMask();
+                              commonModule.showLoadingMask({message:"Updating contact...",container : '#contactBFCO'});
                             }
                            
                             
@@ -1196,6 +1422,7 @@
                               });
                               $('.tag__input_mks').keypress(function(event){
                                  if(event.which == 13){
+                                   $('.ui-menu.ui-widget.ui-widget-content.ui-autocomplete').hide();
                                    $('.addTagWrapper .scfe_save_wrap .scfe_ach').trigger('click');
                                  }
                                 
@@ -1206,7 +1433,6 @@
                                   $('.addTag').show();
                               });
                               $('.scfe_save_wrap').on('click',function(){
-                                debugger;
                                 SubscriberModule.saveBasicAdvanceFields('SF')
                               })
                               $('ul.mks_tag_ul .icon.cross').on('click',function(){
@@ -1228,6 +1454,7 @@
                                            ,userId:baseObject.users_details[0].userId
                                          };
                                       $('.debugDiv').html(JSON.stringify(addTag));
+                                      commonModule.hideLoadingMask();
                                     commonModule.showLoadingMask({message:"Adding Tag...",container : '.addTagWrapper'});
                                     commonModule.saveData(url,addTag,generateAddedTag);
                               });
@@ -1240,7 +1467,9 @@
                                     $('#mks_tab_activity #Activity').addClass('hide');
                                     $('#mks_tab_activity .activityLoading').removeClass('hide');
                                     // $('#mks_tab_activity .not-found').removeClass('red_color_mks')
-                                    $('#mks_tab_activity .not-found').text('Loading Activtiy...')
+                                    $('#mks_tab_activity .not-found').text('Loading Activtiy...');
+                                    $('.dialogBox').remove();
+                                    $('.OverLay').remove();
                                     $('#Activity .act_row_body_wrap').html('');
                                 });
                                 // Attach Events for Action bar
@@ -1259,10 +1488,10 @@
                                   }else if($(this).attr('data-tip') == 'Add to Salesforce'){
                                     salesForceModule.showAddToSF()
                                   }else if($(this).attr('data-tip') == 'Jump Salesforce'){
-                                    console.log(baseObject)
-                                    debugger;
                                     var url = baseObject.subscriberDetails.sfUrl;
                                     window.open(commonModule.decodeHTML(url), 'newwindow', 'scrollbars=yes,resizable=yes');
+                                  }else if($(this).attr('data-tip') == 'Course Correct'){
+                                    courseModule.showCCDialog();
                                   }
                                 });
 
@@ -1307,6 +1536,7 @@
                                      ,userId:baseObject.users_details[0].userId
                                    }
                                    $('.debugDiv').html(tagName);
+                                   commonModule.hideLoadingMask();
                                    commonModule.showLoadingMask({message:"Deleting tag "+tagName+"...",container : '#Tags'});
                                    commonModule.saveData(url,tag,deletedTag)
                           }
@@ -1389,6 +1619,13 @@
         var taskId = '';
         var TaskObj = null;
         var selectedTask = '';
+        var loadedMore = false;
+        var compArray = [];
+        var pendArray = [];
+        var pendinTask='';
+        var completeTask ='';
+        var loadedMoreTask = false;
+
         var showTasksDialog = function(type){
           var bodyHtml = ''
           bodyHtml += '<ul class="mks_ecc_wrap">';
@@ -1451,6 +1688,16 @@
                 $(this).addClass('expand');
               }
           });
+
+          $('.loadMore-tasksSub').unbind('click');
+          $('.loadMore-tasksSub').on('click',function(){
+            loadedMoreTask = true;
+            $('.tasks_loading_mask_sub').removeClass('hide');
+            $('.loadMore-tasksSub').addClass('hide');
+            var url = baseObject.baseUrl+'/io/subscriber/subscriberTasks/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken+'&type=getAllTask&orderBy=updationTime&order=asc&offset='+$('.loadMore-tasksSub').attr('data-offset')+'&bucket=20&ukey='+baseObject.users_details[0].userKey+'&isMobileLogin=Y&userId='+baseObject.users_details[0].userId;
+            getTasks(url);
+          })
+
           $('.mks_task_edit_delete_wrap').unbind('click');
           $('.mks_task_edit_delete_wrap').on('click',function(){
             if($(this).hasClass('_mks_task_delete_task')){
@@ -1462,7 +1709,8 @@
           $('.mkb_task_compBtn').unbind('click');
           $('.mkb_task_compBtn').on('click',function(){
             var taskId = $(this).attr('dat-id');
-            commonModule.showLoadingMask({message : 'Marking task completed...',container : '.mks_outlook_tasks_wrapper'});
+            commonModule.hideLoadingMask();
+            commonModule.showLoadingMask({message : 'Marking task completed...',container : '#tasks'});
             updateTask(true,taskId)
           });
         }
@@ -1473,7 +1721,7 @@
           var taskDate = $('.taks_dialog_wrapper #datepicker').val();
           var taskTime = $('.taks_dialog_wrapper .timepicker').val();
           var taskPriorty = $('.taks_dialog_wrapper .mks_priorty_wrap li.active').text().toLowerCase();
-          var taskNotes =  $('.taks_dialog_wrapper #notes').val();
+          var taskNotes = commonModule.encodeHTML($('.taks_dialog_wrapper #notes').val());
           var _date = moment(taskDate, 'MM-DD-YYYY')
           var newtaskDate = _date.format("MM-DD-YYYY");
           var timeDate = newtaskDate + " " + moment(taskTime, ["h:mm A"]).format("HH:mm")+":00";
@@ -1491,6 +1739,7 @@
             isMobileLogin:'Y',
             userId:baseObject.users_details[0].userId
           }
+          commonModule.hideLoadingMask();
           commonModule.showLoadingMask({message:"Saving task...",container : '.taks_dialog_wrapper'})
           var url = baseObject.baseUrl+'/io/subscriber/subscriberTasks/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken;
           commonModule.saveData(url,reqObj,function(response){
@@ -1505,23 +1754,48 @@
           });
         }
         var getTasks = function(url){
+          commonModule.showLoadingMask({message:'Loading tasks...',container:'#tasks'})
           if(url){
             commonModule.getDataRequest(url,function(data){
               if(parseInt(data.totalCount) > 0){
                 TaskObj = data.taskList;
-                $('.mks_outlook_tasks_wrapper').html('');
+                if(!loadedMoreTask){
+                  $('.mks_outlook_tasks_wrapper').html('');
+                }
+               
                 $.each(data.taskList,function(key,val){
-                  if(key > 2){
-                    $('.msk_collapse_tasks').removeClass('hide');
-                  }else{
-                    $('.msk_collapse_tasks').addClass('hide');
+                  if(!loadedMoreTask){
+                    if(key > 2){
+                      $('.msk_collapse_tasks').removeClass('hide');
+                    }else{
+                      $('.msk_collapse_tasks').addClass('hide');
+                    }
                   }
-                  $('.mks_outlook_tasks_wrapper').append(generateTask(val))
+                  
+                  
+                  $('.mks_outlook_tasks_wrapper').append(generateTask(val));
+                  
                 });
+                
+                $('.loadMore-tasksSub').remove();
+                $('.tasks_loading_mask_sub').remove();
+                if(data.nextOffset != "-1"){
+                  var load_more = '';
+                    load_more +='<div class="LoadMore-wrapper hide loading_false tasks_loading_mask_sub">'
+                    load_more +='<div class="LoadMore loading_false">Loading more...</div>'
+                    load_more +='</div>'
+                    load_more +='<div class="LoadMore-wrapper loadMore-tasksSub" data-offset="'+data.nextOffset+'">'
+                    load_more +='<div class="LoadMore"><span class="mksicon-Add"></span>Show more Activities</div>'
+                    load_more +='</div>';
+                    $('.mks_outlook_tasks_wrapper').append(load_more);
+                }else{
+                  loadedMoreTask = false;
+                }
               }else{
                 $('.mks_outlook_tasks_wrapper').html('<p class="not-found">No tasks found.</p>')
                 $('.msk_collapse_tasks').addClass('hide');
               }
+              commonModule.hideLoadingMask();
               attachTasksEvents();
             })
           }else{
@@ -1541,6 +1815,7 @@
             var url = baseObject.baseUrl+'/io/subscriber/subscriberTasks/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken;
             commonModule.saveData(url,reqObj,function(data){
                 $('.mks_outlook_tasks_wrapper').html('')
+                commonModule.showLoadingMask({message:'Loading tasks...',container:'#tasks'})
                 if(parseInt(data.totalCount) > 0){
                   TaskObj = data.taskList;
                   $.each(data.taskList,function(key,val){
@@ -1549,12 +1824,28 @@
                     }else{
                       $('.msk_collapse_tasks').addClass('hide');
                     }
-                    $('.mks_outlook_tasks_wrapper').append(generateTask(val))
+                    $('.mks_outlook_tasks_wrapper').append(generateTask(val));
+                   
                   });
+                  $('.loadMore-tasksSub').remove();
+                  $('.tasks_loading_mask_sub').remove();
+                  if(data.nextOffset != "-1"){
+                    var load_more = '';
+                    load_more +='<div class="LoadMore-wrapper hide loading_false tasks_loading_mask_sub">'
+                    load_more +='<div class="LoadMore loading_false">Loading more...</div>'
+                    load_more +='</div>'
+                    load_more +='<div class="LoadMore-wrapper loadMore-tasksSub" data-offset="'+data.nextOffset+'">'
+                    load_more +='<div class="LoadMore"><span class="mksicon-Add"></span>Show more Activities</div>'
+                    load_more +='</div>';
+                    $('.mks_outlook_tasks_wrapper').append(load_more);
+                  }else{
+                    loadedMoreTask = false;
+                  }
                 }else{
                   $('.mks_outlook_tasks_wrapper').html('<p class="not-found">No tasks found.</p>')
                   $('.msk_collapse_tasks').addClass('hide');
                 }
+                commonModule.hideLoadingMask();
                 attachTasksEvents();
             });
           }
@@ -1565,8 +1856,7 @@
           $.each(TaskObj,function(key,values){
             if(values['taskId.encode']==taskid){
               selectedTask = values;
-              showTaskDialogEdit(values)
-              debugger;
+              showTaskDialogEdit(values);
             }
           });
           return false;
@@ -1595,17 +1885,19 @@
             userId:baseObject.users_details[0].userId,
             taskId : (taskId) ? taskId : selectedTask['taskId.encode'],
           }
-          var url = baseObject.baseUrl+'/io/subscriber/subscriberTasks/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken
+          var url = baseObject.baseUrl+'/io/subscriber/subscriberTasks/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken;
           if(isComplete){
             commonModule.showLoadingMask({message:"Completing task...",container : '.taks_dialog_wrapper'})
           }else{
-            commonModule.showLoadingMask({message:"Updating task...",container : '.taks_dialog_wrapper'})
+            commonModule.showLoadingMask({message:"Updating task...",container : '#tasks'})
           }
           console.log(selectedTask);
           commonModule.saveData(url,reqObj,function(response){
-            getTasks();
+            
             commonModule.hideLoadingMask();
             dialogModule.hideDialog();
+            var url = baseObject.baseUrl+'/io/subscriber/subscriberTasks/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken+'&type=getAllTask&orderBy=updationTime&order=asc&offset=0&bucket=20&ukey='+baseObject.users_details[0].userKey+'&isMobileLogin=Y&userId='+baseObject.users_details[0].userId;
+            getTasks();
             if(isComplete){
               commonModule.SuccessAlert({message : 'Task mark as completed'})
             }else{
@@ -1649,10 +1941,12 @@
           htmlObj += '<i class="'+priorityIcons[data.priority]["icon"]+'"></i>'
           htmlObj += '<div class="__react_component_tooltip place-top type-dark " data-id="tooltip"></div>'
           htmlObj += '</span>'
-          htmlObj += '<span class="mkb_btn mkb_cf_btn pull-right mkb_greenbtn addCF show mkb_task_compBtn" dat-id="'+data['taskId.encode']+'" style="top: 5px; right: 0px;padding:6px 8px;">'
-          htmlObj += '<i class="mksicon-Check"></i>Complete</span>'
-          htmlObj += '<span class="mkb_tast_completed_btn mkb_btn mkb_cf_btn pull-right mkb_greenbtn addCF mkb_task_compBtn" style="top: 13px; right: 0px;">Completed</span>'
-          htmlObj += '</div>'
+          //htmlObj += '<span class="mkb_btn mkb_cf_btn pull-right mkb_greenbtn addCF show mkb_task_compBtn" dat-id="'+data['taskId.encode']+'" style="top: 5px; right: 0px;padding:6px 8px;">'
+          //htmlObj += '<i class="mksicon-Check"></i>Complete</span>'
+          htmlObj += '<div data-tip="Click to complete" class="cf_silhouette mks_tasks_lists_empty_icon" currentitem="false" style="float: right;"> <div dat-id="'+data['taskId.encode']+'" class="mkb_task_compBtn cf_silhouette_text c_txt_s c_txt_s_blue c_txt_s_empty c_txt_s_mark_complete"> <i class="mksicon-Check mks-tasklists-icons" style="display: none;"></i> </div> </div>'
+          htmlObj += '<div data-tip="Click to complete" class="cf_silhouette mks_tasks_lists_empty_icon mks_completed_tasks" currentitem="false" style="float: right;"> <div dat-id="'+data['taskId.encode']+'" class="mkb_tast_completed_btn cf_silhouette_text c_txt_s c_txt_s_blue c_txt_s_empty c_txt_s_mark_complete"> <i class="mksicon-Check mks-tasklists-icons" style="display: none;"></i> </div> </div>'
+          //htmlObj += '<span class="mkb_tast_completed_btn mkb_btn mkb_cf_btn pull-right mkb_greenbtn addCF mkb_task_compBtn" style="top: 13px; right: 0px;">Completed</span>'
+          //htmlObj += '</div>'
           htmlObj += '</div>'
           htmlObj += '<div class="mks_task_edit_delete_wrap" dat-id="'+data['taskId.encode']+'">'
           htmlObj += '<div class="cf_silhouette">'
@@ -1701,6 +1995,7 @@
             isMobileLogin:'Y',
             userId:baseObject.users_details[0].userId
           }
+          commonModule.hideLoadingMask();
           commonModule.showLoadingMask({message:"Deleting task...",container : '.dialogBox'})
           var url = baseObject.baseUrl+'/io/subscriber/subscriberTasks/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken;
           commonModule.saveData(url,reqObj,function(response){
@@ -1711,13 +2006,15 @@
               dialogModule.hideDialog();
               getTasks()
             }
-          })
-          debugger;
+          });
         }
         var getTasksDashBoard = function(obj){
           if(obj && obj.hasClass('all')){
             //https://test.bridgemailsystem.com/pms/io/subscriber/subscriberTasks/?BMS_REQ_TK=6A5xqkpTtBrOTsOFdx6t3Q0keSVXZ1&type=getAllTask&orderBy=creationTime&order=asc&offset=0&bucket=20
             var url = baseObject.baseUrl+'/io/subscriber/subscriberTasks/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken+'&type=getAllTask&orderBy=updationTime&order=asc&offset=0&bucket=20&ukey='+baseObject.users_details[0].userKey+'&isMobileLogin=Y&userId='+baseObject.users_details[0].userId;
+            commonModule.getDataRequest(url,generateDashTasks)
+          }else if(loadedMore){
+            var url = baseObject.baseUrl+'/io/subscriber/subscriberTasks/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken+'&type=getAllTask&orderBy=updationTime&order=asc&offset='+$('.loadMore-tasksDash').attr('data-offset')+'&bucket=20&ukey='+baseObject.users_details[0].userKey+'&isMobileLogin=Y&userId='+baseObject.users_details[0].userId;
             commonModule.getDataRequest(url,generateDashTasks)
           }else{
             var reqObj = {
@@ -1738,7 +2035,6 @@
           
         }
         var getTasksDashBoradByPT = function(option){
-          debugger;
          var fromDate= moment().format("MM-DD-YYYY");
          var toDate= moment().format("MM-DD-YYYY");
           
@@ -1749,6 +2045,7 @@
             // https://test.bridgemailsystem.com/pms/io/subscriber/subscriberTasks/?BMS_REQ_TK=6A5xqkpTtBrOTsOFdx6t3Q0keSVXZ1&type=getAllTask&orderBy=creationTime&offset=0&bucket=20&sortType=prioritySingle&sortOrderBy=desc&fromDate=04-25-2018&toDate=04-28-2018&sortBy=medium
             var url = baseObject.baseUrl+'/io/subscriber/subscriberTasks/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken+'&type=getAllTask&orderBy=updationTime&offset=0&bucket=20&sortType=prioritySingle&sortOrderBy=desc&fromDate='+fromDate+'&toDate='+toDate+'&sortBy='+option+'&ukey='+baseObject.users_details[0].userKey+'&isMobileLogin=Y&userId='+baseObject.users_details[0].userId;
           }
+          commonModule.hideLoadingMask();
           commonModule.showLoadingMask({message : 'filtering tasks as '+option, container: '.mks_task_lists_dash_wrapper'})
           commonModule.getDataRequest(url,generateDashTasks)
         }
@@ -1771,16 +2068,19 @@
             //https://test.bridgemailsystem.com/pms/io/subscriber/subscriberTasks/?BMS_REQ_TK=6A5xqkpTtBrOTsOFdx6t3Q0keSVXZ1&type=getAllTask&orderBy=creationTime&order=asc&offset=0&bucket=20&fromDate=04-25-2018&toDate=04-25-2018&sortType=taskTypeSingle&sortBy=demo
             var url = baseObject.baseUrl+'/io/subscriber/subscriberTasks/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken+'&type=getAllTask&orderBy=updationTime&offset=0&bucket=20&sortType=taskTypeSingle&sortOrderBy=desc&fromDate='+fromDate+'&toDate='+toDate+'&sortBy='+option+'&ukey='+baseObject.users_details[0].userKey+'&isMobileLogin=Y&userId='+baseObject.users_details[0].userId;
           }
-          commonModule.showLoadingMask({message : 'filtering tasks as '+option, container: '.mks_task_lists_dash_wrapper'})
-          debugger;
+          commonModule.hideLoadingMask();
+          commonModule.showLoadingMask({message : 'filtering tasks as '+option, container: '.mks_task_lists_dash_wrapper'});
           commonModule.getDataRequest(url,generateDashTasks);
         }
         var generateDashTasks = function(data){
-          var pendinTask='';
-          var completeTask ='';
-          var compArray = [];
-          var pendArray = [];
-          commonModule.hideLoadingMask();
+          if(!loadedMore){
+            pendinTask='';
+            completeTask ='';
+            compArray = [];
+            pendArray = [];
+          }
+         
+          commonModule.showLoadingMask({message:'Loading tasks...',container:'#tasks'});
           if(parseInt(data.totalCount) > 0){
             $('.task-loading-nof').addClass('hide');
             
@@ -1809,7 +2109,6 @@
               $('.msk_collapse_tasks_P').addClass('hide');
             }
             $('.mks_task_lists_dash_wrapper .contact_found._mks_lists_tasks._mks_complete_tasks').remove();
-            debugger;
             $('.mks_task_lists_dash_wrapper ._mks_completed_tasks').append(completeTask);
             
             if(completeTask.length > 0){
@@ -1817,10 +2116,24 @@
             }
             commonModule.hideLoadingMask();
 
+            //Removing loading more tasks section to show only one time
+            $('.tasks_loading_mask').remove();
+            $('.loadMore-tasksDash').remove();
+
+            if(data.nextOffset != "-1"){
+              var load_more = '';
+              load_more +='<div class="LoadMore-wrapper hide loading_false tasks_loading_mask">'
+              load_more +='<div class="LoadMore loading_false">Loading more...</div>'
+              load_more +='</div>'
+              load_more +='<div class="LoadMore-wrapper loadMore-tasksDash" data-offset="'+data.nextOffset+'">'
+              load_more +='<div class="LoadMore"><span class="mksicon-Add"></span>Show more Activities</div>'
+              load_more +='</div>';
+              $('.mks_task_lists_dash_wrapper .task_status_P_wrapper').append(load_more);
+            }
+
             /*==Attaching events===*/
             $('.c_txt_s_mark_complete').unbind('click');
             $('.c_txt_s_mark_complete').on('click',function(){
-              debugger;
               var reqObj = {
                 type: "complete",
                 subNum: $(this).attr('subs-id'),
@@ -1829,14 +2142,24 @@
                 isMobileLogin:'Y',
                 userId:baseObject.users_details[0].userId
               };
-              commonModule.showLoadingMask({message : 'Marking task completed',container :'.tasks_wrapper_dashboard'})
+              commonModule.hideLoadingMask();
+              commonModule.showLoadingMask({message : 'Marking task completed..',container :'#tasks'})
               var url = baseObject.baseUrl+'/io/subscriber/subscriberTasks/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken;
               commonModule.saveData(url,reqObj,function(response){
-                getTasksDashBoard();
-                commonModule.showLoadingMask({message : 'Loading tasks..',container :'.tasks_wrapper_dashboard'});
+              getTasksDashBoard();
+              commonModule.showLoadingMask({message : 'Loading tasks..',container :'#tasks'});
 
               })
+            });
+
+            $('.loadMore-tasksDash').unbind('click');
+            $('.loadMore-tasksDash').on('click',function(){
+              loadedMore = true;
+              $(this).addClass('hide');
+              $('.tasks_loading_mask').removeClass('hide');
+              getTasksDashBoard();
             })
+
             $('.msk_collapse_tasks_P').unbind('click');
           $('.msk_collapse_tasks_P').on('click',function(event){
               $('.debugDiv').html('collapse clicked')
@@ -1864,14 +2187,15 @@
             var isShared = $(this).attr('data-ushared');
             $('.tasks_wrapper_dashboard').addClass('hide');
             baseObject['taskdash'] = true;
-            $('.toggleTask.today').click()
+            $('.toggleTask.today').click();
+            commonModule.hideLoadingMask();
+            commonModule.showLoadingMask({message : 'Loading subscriber...',container:$('.makesbridge_plugin')})
             attachedEvents.searchEmailInMks(subEmail,isShared);
            
           })
             /*===========*/
           }else{
             //No task found section
-            debugger;
             $('.msk_collapse_tasks_P').addClass('hide');
             $('._mks_completed_tasks').addClass('hide');
             $('.mks_task_lists_dash_wrapper .contact_found._mks_lists_tasks._mks_complete_tasks').remove();
@@ -1890,7 +2214,7 @@
           html +='<i class="mksicon-Check mks-tasklists-icons"></i>'
           html +='</div>'
           html +='</div>'
-          html +='<p class="mkb_elipsis mkb_text_break">'+data.taskName+'</p>'
+          html +='<p title="'+data.taskName+'" class="mkb_elipsis mkb_text_break"  style="display:block;width:145px;">'+data.taskName+'</p>'
           if($('.toggleTask.active').hasClass('all')){
             html +=' <span class="ckvwicon mks_task_time" style="display: inline; position: absolute; top: 22px;left: 34px">'+generateDate(data.updationTime)+'</span>'
             html +=' <span class="ckvwicon" style="position: absolute; top: 22px; display: inherit; left: 148px;">'+data.subscriberInfo['firstName']+" "+data.subscriberInfo['lastName'] +'</span>'
@@ -1924,7 +2248,7 @@
           html +=' </div>'
           html +=' </div>'
           html +=' <div class="__react_component_tooltip place-top type-dark " data-id="tooltip"></div>'
-          html +=' <p title="'+data.taskName+'" class="mkb_elipsis mkb_text_break">'+data.taskName+'</p>'
+          html +=' <p title="'+data.taskName+'" style="display:block;width:145px;" class="mkb_elipsis mkb_text_break">'+data.taskName+'</p>'
           if($('.toggleTask.active').hasClass('all')){
             html +=' <span class="ckvwicon mks_task_time" style="display: inline; position: absolute; top: 22px;left: 26px">'+generateDate(data.updationTime)+'</span>'
             html +=' <span class="ckvwicon" style="position: absolute; top: 22px; display: inherit; left: 140px;">'+data.subscriberInfo['firstName']+" "+data.subscriberInfo['lastName'] +'</span>'
@@ -1962,20 +2286,21 @@
               $('.mks_task_lists_dash_wrapper .total-text').text('task(s) for today')
             }
             $('.contacts-select-by select').find('option[value="-1"]').attr("selected",true);
+            commonModule.hideLoadingMask();
+            commonModule.showLoadingMask({message : 'Loading Tasks...', container: '.mks_task_lists_dash_wrapper'})
             getTasksDashBoard($(this))
           })
         }
         var selectPriorityTask = function(){
           $('.contacts-select-by select').on('change',function(){
             if($(this).val() != "-1"){
-              debugger;
               if($(this.options[this.selectedIndex]).closest('optgroup').prop('label') == "Tasks Types"){
                 getTasksDashBoardByTask($(this).val());
               }else{
                 getTasksDashBoradByPT($(this).val())
               }
             }else{
-              getTasksDashBoard();
+             $('.all.toggleTask').click();
             }
           })
         }
@@ -1990,6 +2315,1014 @@
           getTasksByTask : getTasksByTask,
           getTasksByPT : getTasksByPT
         }
+       })();
+       
+       /*----- Course Correct Module ----*/
+       var courseModule = (function(){
+         var ccObj = {
+          showHideSkip : 'show',
+          skippedObjAr : [], 
+         };
+         var basicFields = {
+            "{{EMAIL_ADDR}}" : "Email",
+            "{{FIRSTNAME}}"  : "First Name",
+            "{{LASTNAME}}"   : "Last Name",
+            "{{ADDRESS}}"    : "Address Line 1",
+            "{{ADDRESS2}}"   : "Address Line 2",
+            "{{CITY}}"       : "City",
+            "{{STATE}}"      : "State",
+            "{{ZIP}}"        : "Zip",
+            "{{COUNTRY}}"    : "Country",
+            "{{PHONE}}"      : "Telephone",
+            "{{BIRTH_DATE}}" : "Birth Date",
+            "{{OCCUPATION}}" : "Occupation",
+            "{{INDUSTRY}}"   : "Industry",
+            "{{COMPANY}}"    : "Company",
+            "{{SOURCE}}"     : "Source",
+            "{{SALESREP}}"   : "Sales Rep",
+            "{{SALESSTATUS}}": "Sales Status",
+            "{{SUBSCRIPTION_DATE}}"   : "Subscribe Date"
+          }
+          var showCCDialog = function(){
+            var bodyHtml = '';
+            bodyHtml += '<div class="sl_lists_wrapper">'
+            bodyHtml += '<div class="sl_wrap_list">'
+            bodyHtml += '<h2 style="text-align: center; margin-bottom: 0px; background: transparent; color: rgb(100, 148, 175); padding: 0px 15px;">Drip Messages for '+baseObject.subscriberDetails['firstName'] +' '+ baseObject.subscriberDetails['lastName']+'</h2>'
+            bodyHtml += '<ul id="mks_cc_ul_wrap">'
+            bodyHtml += '</ul></div>'
+            bodyHtml += '</div>'
+            dialogModule.dialogView({showTitle:'Course Correct',childrenView : bodyHtml, additionalClass : 'courseCorrect_wrap hide_save',container : '.top_managerLists_wrappers',saveCallBack : saveCourseCorrect,buttonText:'Save' })
+            commonModule.hideLoadingMask();
+            commonModule.showLoadingMask({message : 'Loading Course Correct...',container: '.courseCorrect_wrap'})
+            getCourseCorrect();
+          };
+          var saveCourseCorrect = function(){
+            // not needed as course correct doesn't have save data 
+
+          }
+          var getCourseCorrect = function(){
+            var Url = baseObject.baseUrl
+                        +'/io/workflow/getWorkflowData/?BMS_REQ_TK='
+                        + baseObject.users_details[0].bmsToken +'&type=getCourseCorrect&isMobileLogin=Y&subNum='+baseObject.subNum+'&userId='+baseObject.users_details[0].userId
+            var workflowObj = null;
+            var nurtureTrackObj = [];
+            var workFlowHTML ='';
+            $('#mks_cc_ul_wrap').html('<p class="not-found">Loading course correct...</p>');
+            commonModule.getDataRequest(Url,function(jsonResponse){
+              
+              if(Object.keys(jsonResponse.Workflows[0]).length !=0){
+                workflowObj = generateSingleObjectWF(jsonResponse.Workflows[0]);
+                workFlowHTML = generateCCWorkFlow(workflowObj);
+                
+                $('#mks_cc_ul_wrap').html('');
+                $('#mks_cc_ul_wrap').append(workFlowHTML);
+                setTimeout(function(){commonModule.hideLoadingMask()},500);
+              }else{
+                workflowObj = "empty";
+                setTimeout(function(){commonModule.hideLoadingMask()},500);
+              }
+              if(Object.keys(jsonResponse.NutureTracks[0].length != 0)){
+                  $.each(jsonResponse.NutureTracks[0],function(key,val){
+                    let messagesArray = [];
+                    $.each(val[0].messages,function(key,value){
+                      for(var i=0;i < Object.keys(value).length; i++){
+                        messagesArray.push(value["message"+(i+1)][0]);
+                      }
+                    });
+
+                    val[0]['messages'] = messagesArray;
+                    nurtureTrackObj.push(val[0]);
+
+                });
+              }else{
+                nurtureTrackObj = "empty";
+              }
+              if(nurtureTrackObj != "empty"){
+                var NTHTML = generateNurturetracks(nurtureTrackObj);
+                $('#mks_cc_ul_wrap').append(NTHTML);
+              }
+              debugger;
+              attachedEvents();
+            });
+            
+          }
+          /*=WORKFLOWS of CC=*/
+          var generateSingleObjectWF = function(serverJsonWF){
+            var newObject = []
+  
+            // 1. generate WF
+            $.each(serverJsonWF,function(key,val){
+                var stepArray = [];
+                  //2. generate StepsWF
+                $.each(val[0].steps[0],function(key,val){
+  
+                  var optionArr = [];
+                  // 3. Generate Options array
+                  $.each(val[0].options[0],function(key,value){
+                    // 4. Generate Basic Rules
+                    var basicRuleArr = [];
+                    $.each(value[0].basicRules[0],function(key,value){
+                      basicRuleArr.push(value[0]);
+                    });
+                    // 5. Generate actions rules
+                    var actionsArr = [];
+                    $.each(value[0].actions[0],function(key,value){
+                      actionsArr.push(value[0])
+                    });
+                    // 6. Generate advanceRules
+                    var advanceRulesArr = [];
+                    $.each(value[0].advanceRules[0],function(key,value){
+                      advanceRulesArr.push(value[0]);
+                    })
+                    value[0].basicRules = basicRuleArr;
+                    value[0].actions = actionsArr;
+                    value[0].advanceRules = advanceRulesArr;
+  
+                    optionArr.push(value[0]);
+                  })
+                  val[0].options = optionArr;
+                  stepArray.push(val[0]);
+  
+                });
+                val[0].steps = stepArray;
+                newObject.push(val[0]);
+            });
+            console.log('Workflow : ', newObject);
+            return newObject;
+        }
+       var generateCCWorkFlow = function(workflows){
+            if(!workflows || workflows == "empty"){
+              return;
+            }
+            var ListItems = '<h3 class="cc_title_h3"><span class="mksicon-act_workflow"></span>Workflows</h3>';
+            $.each(workflows,function(key,list){
+              ListItems +='<li class="mngList_li_wrap">'
+              ListItems +='<div class="mks_mnglist_wrap mks_cc_wf_wrap">'
+              ListItems +='<span class="mksicon-act_workflow icon-cc"></span>'
+              ListItems +='<h4 class="mks_cc_wf_wrap_top_title triggerToggleOnh4" title='+commonModule.decodeHTML(list.name)+' >'+commonModule.decodeHTML(list.name)+'</h4>'
+              ListItems +='<div class="expand collapseable showToggle">'
+              ListItems +='<span class="collapseMsg">Click to expand</span>'
+              ListItems +='<span class="mksicon-ArrowNext"></span>'
+              ListItems +='</div>'
+              ListItems +='<div class="mks_cc_steps_wrapper">';
+              if(list.workflowStatus=="Completed" && list.isSubscriberManuallyAdded=="N"){
+                ListItems +='<div class="scf_o_right cc_action_icons_wrap hide"}>'
+              }else{
+                ListItems +='<div class="scf_o_right cc_action_icons_wrap"}>'
+              }
+              
+              ListItems +='<ul class="top_manager_ul_wraps five">'
+              if(list.isSubscriberManuallyAdded=="N" ){
+                var isHide = "hide";
+              }else{
+                var isHide = "";
+              }
+              if(list.workflowStatus=="Completed" && list.isSubscriberManuallyAdded=="N"){
+                var showRightBo = ""
+              }else{
+                var showRightBo = "mks_hideRightBorder"
+              }
+              ListItems +='<li data-tip="Subscriber was manually added to this Workflow Step 1 (override all steps) on '+list.subscriberManuallyAddedTime+' Pacific" class="tooltips '+ isHide +' '+showRightBo+'">'
+              ListItems +='<div class="scf_option_icon ripple top_manage_lists">'
+              ListItems +='<a href="#" style="text-decoration: unset" >'
+              ListItems +='<div class="wrap_scf_o_i">'
+              ListItems +='<div class="wrap_scf_o_i_md">'
+              ListItems +='<div class="scf_o_icon scf_o_edit mksicon-Silhouette mks_manageList_wrap"></div>'
+              ListItems +='</div>'
+              ListItems +='</div>'
+              ListItems +='</a>'
+              ListItems +='</div>'
+              ListItems +='<span class="subscriber_cc_tooltips" style="width: 241px;word-wrap: break-word;height: 29px;line-height: 13px;font-size: 10px;left: 49px;padding:3px;">Subscriber was manually added to this Workflow Step 1 (override all steps) on '+list.subscriberManuallyAddedTime+' Pacific</span></li>'
+              ListItems +='<li data-tip="Click to play" >'
+              ListItems +='<div data-wfid='+list['workflow.encode']+' data-wftype="play" class="scf_option_icon ripple top_manage_lists playPauseWorkFlows '+((list.workflowStatus=="Completed") ? "hide" : "" )+' '+((list.workflowStatus) ? "" : "cc_disabled" )+' " >' //'+ 
+              ListItems +='<a href="#" style="text-decoration: unset">'
+              ListItems +='<div class="wrap_scf_o_i">'
+              ListItems +='<div class="wrap_scf_o_i_md">'
+              ListItems +='<div class="scf_o_icon scf_o_edit  mksicon-Play mks_manageList_wrap"></div>'
+              ListItems +='</div>'
+              ListItems +='</div>'
+              ListItems +='</a>'
+              ListItems +='</div>'
+              ListItems +='</li>'
+              ListItems +='<li data-tip="Click to pause" class="mks_hideRightBorder">'
+              ListItems +='<div data-wfid='+list['workflow.encode']+' data-wftype="pause" class="scf_option_icon playPauseWorkFlows ripple top_manage_lists '+((list.workflowStatus=="Completed") ? "hide" : "")+' '+((list.workflowStatus=="paused") ? "cc_disabled" : "") +' " >' //'+ +'" "' + (list.workflowStatus=="paused") ? "cc_disabled" : "" +'"
+              ListItems +='<a href="#" style="text-decoration:unset">'
+              ListItems +='<div class="wrap_scf_o_i">'
+              ListItems +='<div class="wrap_scf_o_i_md">'
+              ListItems +='<div class="scf_o_icon scf_o_edit mksicon-Pause mks_manageList_wrap"></div>'
+              ListItems +='</div>'
+              ListItems +='</div>'
+              ListItems +='</a>'
+              ListItems +='</div>'
+              ListItems +='</li>'
+              ListItems +='<li data-tip="Add to list" style="visibility: hidden">'
+              ListItems +='<div class="scf_option_icon ripple top_manage_lists">'
+              ListItems +='<a href="#" style="text-decoration:unset">'
+              ListItems +='<div class="wrap_scf_o_i">'
+              ListItems +='<div class="wrap_scf_o_i_md">'
+              ListItems +='<div class="scf_o_icon scf_o_edit mksicon-Pause mks_manageList_wrap"></div>'
+              ListItems +='</div>'
+              ListItems +='</div>'
+              ListItems +='</a>'
+              ListItems +='</div>'
+              ListItems +='</li>'
+              ListItems +='</ul>'
+              ListItems +='</div>'
+              ListItems +=generateSteps(list.steps,list['workflow.encode'])
+              ListItems +='</div>'
+              ListItems +='</div>'
+              ListItems +='</li>'
+            });
+            return ListItems;
+        }
+        var generateSteps = function(steps,wfId){
+          //console.log('My Steps : ', steps);
+          var items = '';
+           $.each(steps,function(i,item){
+            debugger;
+            if(item.skipped == "true"){
+              items +='<div class="cc_steps_break_wraps">'
+              items +='<div  class="autocomplete__item cc_steps_break autocomplete__item--disabled">'
+              items +='<span class="cc_steps_break_title">Step '+(i+1)+' :</span>'
+              items +='<span class="cc_steps_break_time"><span style="color: #e0e0e0">Skipped</span> : '+parseDateToMoment(item.stepSkipped)+' Pacific</span>'
+              items +='</div>'
+              items +='<div class="cc_steps_options_wrap">'+generateOptions(item.options,{workflowId : wfId,skipped: item.skipped,skippedId:item.stepId,stepSkipped:item.stepSkipped},"skipped")+'</div>'
+              items +='</div>'
+              
+            } else if(item.stepCompleted && item.label != "DO NOTHING") {
+              items +='<div class="cc_steps_break_wraps">'
+              items +='<div  class="autocomplete__item cc_steps_break autocomplete__item--disabled">'
+              items +='<span class="cc_steps_break_title">Step '+(i+1)+':</span>'
+              items +='<span class="cc_steps_break_time"><span style="color : #fff;">Completed </span> : '+parseDateToMoment(item.stepCompleted)+' Pacific</span>'
+              items +='</div>'
+              items +='<div class="cc_steps_options_wrap">'+generateOptions(item.options)+'</div>'
+              items +='</div>'
+            }else if(item.nextAction){
+              items +='<div class="cc_steps_break_wraps">'
+              items +='<div class="autocomplete__item cc_steps_break autocomplete__item--disabled">'
+              items +='<span class="cc_steps_break_title">Step '+(i+1)+':</span>'
+              items +='<span class="cc_steps_break_time"><span style="color : #13a9ff;">Next Action</span> : '+parseDateToMoment(item.nextAction)+' Pacific</span>'
+              items +='</div>'
+              items +='<div class="cc_steps_options_wrap">'+generateOptions(item.options,{workflowId : wfId,skipped: item.skipped,skippedId:item.stepId,stepSkipped:item.nextAction},"nextAction")+'</div>'
+              items +='</div>'
+            }else if(item.label == "DO NOTHING"){
+              
+              items +='<div class="cc_steps_break_wraps">'
+              items +='<div  class="autocomplete__item cc_steps_break autocomplete__item--disabled">'
+              items +='<span class="cc_steps_break_title">Step '+(i+1)+':</span>'
+              items +='<span class="cc_steps_break_time"><span style="color : #fff">Completed </span> : '+parseDateToMoment(item.stepCompleted)+' Pacific</span>'
+              items +='</div>'
+              items +='<div class="cc_steps_options_wrap">'+generateOptions(item.options,"doNothing")+'</div>';
+              items +='</div>'
+            }else{
+              items +='<div>Rest steps needs to be taken care of</div>'
+            }
+          });
+          return items;
+      }
+        var triggerToggleOnh4 = function(event){
+          $('div.mks_cc_wf_wrap').removeClass('cc_show_details');
+          if($(event.currentTarget).parents('div.mks_cc_wf_wrap').find('.collapseable').hasClass('collapse')){
+            $(event.currentTarget).parents('div.mks_cc_wf_wrap').find('.collapseable').removeClass('collapse');
+            $(event.currentTarget).parents('div.mks_cc_wf_wrap').find('.collapseable').addClass('expand');
+            $(event.currentTarget).parents('div.mks_cc_wf_wrap').find('.collapseable').find('.collapseMsg').text('Click to expand')
+          }else{
+            $('div.collapseable').removeClass('collapse');
+            $('div.collapseable').addClass('expand');
+            $('div.collapseable').find('.collapseMsg').text('Click to expand')
+  
+            $(event.currentTarget).parents('div.mks_cc_wf_wrap').find('.collapseable').removeClass('expand');
+            $(event.currentTarget).parents('div.mks_cc_wf_wrap').find('.collapseable').addClass('collapse');
+            $(event.currentTarget).parents('div.mks_cc_wf_wrap').find('.collapseable').find('.collapseMsg').text('Click to collapse');
+            $(event.currentTarget).parents('div.mks_cc_wf_wrap').toggleClass('cc_show_details');
+          }
+        }
+        var showToggle = function(event){
+          //let stepFlag = this.state.showStepsFlag;
+          $('div.mks_cc_wf_wrap').removeClass('cc_show_details');
+  
+          //let collapseExpand = this.state.collapseExpand;
+          if($(event.currentTarget).hasClass('collapse')){
+            $(event.currentTarget).removeClass('collapse');
+            $(event.currentTarget).addClass('expand');
+            $(event.currentTarget).find('.collapseMsg').text('Click to expand')
+          }
+          else{
+            $('div.collapseable').removeClass('collapse');
+            $('div.collapseable').addClass('expand');
+            $('div.collapseable').find('.collapseMsg').text('Click to expand')
+            $(event.currentTarget).removeClass('expand');
+            $(event.currentTarget).addClass('collapse');
+            $(event.currentTarget).find('.collapseMsg').text('Click to collapse')
+            $(event.currentTarget).parents('div.mks_cc_wf_wrap').toggleClass('cc_show_details');
+          }
+        }
+
+        var generateOptions = function(options,skippedObj,actType){
+          // let optionArr = [];
+          var optionLabel = "";
+          var ListItems = "";
+          if(actType=='nextAction' || actType=='skipped'){
+            $.each(options,function(key,list){
+              if(key > 0){
+                return;
+              }
+              ListItems +='<div class="cc_step_options_wrap">'
+              ListItems +='<span class="cc_basic_opt_wrap_label">'+((list.optionLabel) ? list.optionLabel : "Option "+list.optionNumber);
+              checkStateStep(skippedObj.stepSkipped);
+              ListItems +='<span data-tip="Click to unskip step" data-wfId='+skippedObj.workflowId+' data-skipId='+skippedObj.skippedId+' data-actType="unskip" class="'+ccObj.showHideSkip+'  '+((skippedObj.skipped=="false") ? "cc_disabled" : "") +'  skippWF scf_o_icon scf_o_edit mksicon-CPlay mks_manageList_wrap"></span>'
+              ListItems +='<span data-tip="Click to skip step"  data-wfId='+skippedObj.workflowId+' data-skipId='+skippedObj.skippedId+' data-actType="skip"  class="'+ccObj.showHideSkip+' '+((skippedObj.skipped=="true") ? "cc_disabled" : "" )+' skippWF scf_o_icon scf_o_edit  mksicon-CPlayNext mks_manageList_wrap"></span>'
+              ListItems +='</span>'
+              ListItems +='<div className="cc_option_basic_rule_wrap">'+generateBasicRules(list.basicRules)+'</div>';
+              if(list.advanceRuleDetail){
+                ListItems +='<div className="cc_option_action_rule_wrap cc_option_adv_rule_wrap">'+generateAdvanceRules(list.advanceRules,list.advanceRuleDetail[0])+'</div>'
+              }
+             
+              ListItems +='<div className="cc_option_action_rule_wrap">'+generateActionRules(list.actions)+'</div>';
+              ListItems +='</div>'
+            })
+           
+          } else if(skippedObj=='doNothing'){
+            $.each(options,function(key,list){
+                if(key > 0){
+                  return;
+                }
+              ListItems += '<div key={key} class="cc_step_options_wrap">'
+              ListItems += '<span class="cc_basic_opt_wrap_label">'+((list.optionLabel) ? list.optionLabel : "Option "+list.optionNumber)
+              ListItems += checkStateStep(skippedObj.stepSkipped)
+              ListItems += '<span data-tip="Click to unskip step" class="'+ccObj.showHideSkip+' '+((skippedObj.skipped=="false") ? "cc_disabled" : "") +' scf_o_icon scf_o_edit mksicon-CPlay mks_manageList_wrap skippWF"></span>'
+              ListItems += '<span data-tip="Click to skip step"   class="'+ccObj.showHideSkip+' '+(skippedObj.skipped=="true") ? "cc_disabled" : "" +' scf_o_icon scf_o_edit  mksicon-CPlayNext mks_manageList_wrap skippWF"></span>'
+          
+              ListItems += '</span>'
+              ListItems += '<div class="cc_option_basic_rule_wrap">'+generateBasicRules(list.basicRules)+'</div>'
+
+              ListItems += '<div class="mks_cc_action_wraper">'
+              ListItems += '<div  class="autocomplete__item cc_steps_break autocomplete__item--disabled '+((key > 0) ? "hide":"") + '">'
+              ListItems += '<span class="cc_steps_break_title cc_steps_actions_title ">Perform the following action(s):</span>'
+              ListItems += '</div>'
+              ListItems += '<div class="single_action_wrap">'
+
+              ListItems += '<div class="cc_act_extra_details">'
+              ListItems += '<div class="cc_option_action_rule_wrap" style="padding: 0">'
+              ListItems += '<div class="single_action_wrap" style="background: rgb(255, 255, 255);padding:15px;font-size: 14px;textTransform: capitalize">'
+              ListItems += '<h4 style="background: transparent; width: 100%;position: relative;top: -5px">'
+              ListItems += '<i class="mksicon-Prohibition" style="margin-right: 4px;color : red"></i>Do Nothing</h4>'
+
+              ListItems += '</div>'
+              ListItems += '</div>'
+              ListItems += '</div>'
+              ListItems += '</div>'
+              ListItems += '</div>'
+              ListItems += '</div>'
+            })
+          }
+          else{
+            $.each(options,function(key,list){
+              if(key > 0){
+                return;
+              }
+              ListItems +='<div class="cc_step_options_wrap">'
+              ListItems +='<span class="cc_basic_opt_wrap_label">'+(list.optionLabel ? list.optionLabel : 'Option '+list.optionNumber)+'</span>';
+              if(list.actions[0] && list.actions[0].type == "do nothing"){
+                ListItems +='<div class="cc_option_action_rule_wrap">'+generateActions(list.actions)+'</div>';
+              }
+              ListItems +='<div class="cc_option_basic_rule_wrap">'+generateBasicRules(list.basicRules,list.applyRuleCount)+'</div>'
+              ListItems +='<div class="cc_option_action_rule_wrap">'+generateAdvanceRules(list.advanceRules,list.advanceRuleDetail[0])+'</div>'
+              ListItems +='<div class="cc_option_action_rule_wrap">'+generateActionRules(list.actions)+'</div>';
+              
+              
+              ListItems +='</div>'
+            })
+            
+          }
+
+          return ListItems;
+      }
+        var parseDateToMoment = function(serverDate){
+          if(serverDate){
+            var _date = moment(serverDate, 'YYYY/M/D h:m');
+            var _formatedDate = {date: _date.format("DD MMM YYYY"), time: _date.format("hh:mm")};
+            var _formatedDateN = _formatedDate.date+","+_formatedDate.time;
+            console.log(_formatedDate)
+            return _formatedDateN;
+          }
+  
+        }
+        var skippWF = function(wfid,skipid,actType){
+         
+          if($(event.currentTarget).hasClass('cc_disabled')){
+            return false;
+          }
+          var bodyHtml = "Are you sure you want to " + actType + " workflow for current subscriber?";
+          ccObj['skippedObj'] = {workflowId : wfid,skippedId : skipid,actionT : actType};
+          $('.courseCorrect_wrap').css('visibility','hidden');
+          dialogModule.dialogView({showTitle:'Skipped Action',childrenView : bodyHtml, additionalClass : 'skipped_dialog_wrap',container : '.top_managerLists_wrappers',saveCallBack : saveSkippWF,buttonText:'Ok' })
+          $('.skipped_dialog_wrap .dialogBox_close_btn').unbind('click');
+          $('.skipped_dialog_wrap .dialogBox_close_btn').click(function(event){
+            $('.skipped_dialog_wrap').remove();
+            $($('.OverLay').eq(0)).remove();
+            $('.courseCorrect_wrap').css('visibility','visible');
+            event.stopPropagation();
+          })
+        }
+        var saveSkippWF = function(){
+            console.log(ccObj);
+            var reqObj ={
+              type:'setCourseCorrectForSub',
+              subNum: baseObject.subNum,
+              workflowId: ccObj.skippedObj.workflowId,
+              stepId : ccObj.skippedObj.skippedId,
+              ukey:baseObject.users_details[0].userKey,
+              isMobileLogin:'Y',
+              userId:baseObject.users_details[0].userId,
+              action : ccObj.skippedObj.actionT
+            };
+            commonModule.hideLoadingMask();
+            commonModule.showLoadingMask({message : 'Updating step...', container:'.skipped_dialog_wrap'})
+            var url = baseObject.baseUrl+'/io/workflow/saveWorkflowData/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken+'&type=setCourseCorrectForSub';
+
+            commonModule.saveData(url,reqObj,function(response){
+              if(response[0]=="err"){
+                commonModule.ErrorAlert({message:response[1]})
+              }else{
+                commonModule.SuccessAlert({message :response[1]})
+                commonModule.hideLoadingMask();
+                commonModule.showLoadingMask({message : 'Updating course correct...', container : '.courseCorrect_wrap'})
+                getCourseCorrect();
+              }
+              commonModule.hideLoadingMask();
+              $('.skipped_dialog_wrap .dialogBox_close_btn').click();
+            });
+        }
+        var PlayPauseWorkFlows = function(wfId,actiont,event){
+          console.log(wfId);
+          if($(event.currentTarget).hasClass('cc_disabled')){
+            return false;
+          }
+          var bodyHtml = "Are you sure you want to " + actiont + " workflow for current subscriber?";
+          ccObj['PPObj'] = {workflowId : wfId,actionT : actiont};
+          $('.courseCorrect_wrap').css('visibility','hidden');
+          dialogModule.dialogView({showTitle:'Play/Pause Workflow',childrenView : bodyHtml, additionalClass : 'pp_dialog_wrap',container : '.top_managerLists_wrappers',saveCallBack : savePPWF,buttonText:'Ok' })
+          $('.pp_dialog_wrap .dialogBox_close_btn').unbind('click');
+          $('.pp_dialog_wrap .dialogBox_close_btn').click(function(event){
+            $('.pp_dialog_wrap').remove();
+            $($('.OverLay').eq(0)).remove();
+            $('.courseCorrect_wrap').css('visibility','visible');
+            event.stopPropagation();
+          })
+          /*var r = confirm("Are you sure you want to " + actiont + " workflow for current subscriber?");
+          if (r == true) {
+            this.setState({showLoading:true,message: actiont + " workflow for current user."});
+            //https://test.bridgemailsystem.com/pms/io/workflow/saveWorkflowData/?BMS_REQ_TK=HM4r0TmFm6Hx0L0yyAlCQqJBPpBVH2&type=setCourseCorrectForSub
+            request.post(this.baseUrl+'/io/workflow/saveWorkflowData/?BMS_REQ_TK='+this.props.users_details[0].bmsToken+'&type=setCourseCorrectForSub')
+               .set('Content-Type', 'application/x-www-form-urlencoded')
+               .send({
+                        type:'setCourseCorrectForSub'
+                        ,subNum: this.props.contact.subNum
+                        ,workflowId: wfId
+                        ,action : actiont
+                        ,ukey:this.props.users_details[0].userKey
+                        ,isMobileLogin:'Y'
+                        ,userId:this.props.users_details[0].userId
+                      })
+               .then((res) => {
+                  console.log(res);
+
+                  var jsonResponse =  JSON.parse(res.text);
+                  console.log(jsonResponse);
+                  if(res.status==200){
+                    this.setState({showLoading:false,message:""})
+                    SuccessAlert({message:jsonResponse[1]});
+                    this.setState({showLoading:true,message:"Updating course correct."});
+                    this.getCourseCorrect();
+                    //_this.getSubscriberDetails();
+                  }else{
+                    if(jsonResponse[1] == "SESSION_EXPIRED"){
+                      ErrorAlert({message:jsonResponse[1]});
+                      jQuery('.mksph_logout').trigger('click');
+                    }else{
+                      ErrorAlert({message:jsonResponse[1]});
+                    }
+                  }
+                });
+          } else {
+              return false;
+          }*/
+
+      }
+      var playPauseNurtureTrack = function(wfId,actiont,event){
+        if($(event.currentTarget).hasClass('cc_disabled')){
+          return false;
+        }
+        var bodyHtml = "Are you sure you want to " + actiont + " nurturetrack for current subscriber?";
+        ccObj['NTObj'] = {ntId : wfId,actionT : actiont};
+        $('.courseCorrect_wrap').css('visibility','hidden');
+
+        dialogModule.dialogView({showTitle:'Play/Pause Nurture Track',childrenView : bodyHtml, additionalClass : 'nt_dialog_wrap',container : '.top_managerLists_wrappers',saveCallBack : savePPNT,buttonText:'Ok' })
+          $('.nt_dialog_wrap .dialogBox_close_btn').unbind('click');
+          $('.nt_dialog_wrap .dialogBox_close_btn').click(function(event){
+            $('.nt_dialog_wrap').remove();
+            $($('.OverLay').eq(0)).remove();
+            $('.courseCorrect_wrap').css('visibility','visible');
+            event.stopPropagation();
+          })
+      }
+      var savePPNT = function(){
+        console.log(ccObj['NTObj']);
+        commonModule.hideLoadingMask();
+        commonModule.showLoadingMask({message : 'Saving nurture tracks...',container : '.nt_dialog_wrap'});
+        var url = baseObject.baseUrl+'/io/trigger/saveNurtureData/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken+'&type=setCourseCorrectForSub'
+        var object ={
+          type:'setCourseCorrectForSub'
+          ,subNum: baseObject.subNum
+          ,trackId: ccObj.NTObj.ntId
+          ,action : ccObj.NTObj.actionT
+          ,ukey:baseObject.users_details[0].userKey
+          ,isMobileLogin:'Y'
+          ,userId:baseObject.users_details[0].userId
+        } 
+        commonModule.saveData(url,object,function(response){
+          commonModule.hideLoadingMask();
+          if(response[0]=="success"){
+            commonModule.SuccessAlert({message: response[1]});
+            commonModule.hideLoadingMask();
+            commonModule.showLoadingMask({message : 'Updating course correct...', container : '.courseCorrect_wrap'});
+            getCourseCorrect();
+          }else{
+            commonModule.ErrorAlert({message : response[1]});
+          }
+          $('.nt_dialog_wrap .dialogBox_close_btn').click();
+        });
+      }
+      var savePPWF = function(){
+        var obj ={
+          type:'setCourseCorrectForSub'
+          ,subNum: baseObject.subNum
+          ,workflowId: ccObj.PPObj.workflowId
+          ,action : ccObj.PPObj.actionT
+          ,ukey:baseObject.users_details[0].userKey
+          ,isMobileLogin:'Y'
+          ,userId:baseObject.users_details[0].userId
+        }
+      commonModule.showLoadingMask({message : ccObj.PPObj.actionT+'ing workflow...',container:'.pp_dialog_wrap'})
+      var url = baseObject.baseUrl+'/io/workflow/saveWorkflowData/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken+'&type=setCourseCorrectForSub';
+      commonModule.saveData(url,obj,function(response){
+        commonModule.hideLoadingMask();
+        if(response[0]=="success"){
+          commonModule.SuccessAlert({message :response[1]})
+          commonModule.hideLoadingMask();
+          commonModule.showLoadingMask({message : 'Updating course correct...', container : '.courseCorrect_wrap'})
+          getCourseCorrect();
+        }else{
+          commonModule.ErrorAlert({message :response[1]})
+        }
+        $('.pp_dialog_wrap .dialogBox_close_btn').click();
+      })
+      }
+       var checkStateStep= function(skipTime){
+          console.log(skipTime,baseObject);
+
+          if(!skipTime){
+            return;
+          }
+          var skipdate = skipTime.split(" ")[0];
+          var skipdateObj = new Date(skipdate);
+          var NewSkippedObj = skipdateObj.getTime();
+          var currentDate = baseObject.serverTime.date;
+          var newCurrentObj = new Date(currentDate);
+          var newCurrentDate = newCurrentObj.getTime();
+
+          if(newCurrentDate > NewSkippedObj){
+            ccObj['showHideSkip'] = 'hide';
+          }else{
+            ccObj['showHideSkip'] = 'show';
+          }
+      }
+      var generateBasicRules = function(basicRuleObj,ruleCount){
+        if(basicRuleObj.length > 0){
+          var orAll = (ruleCount == "A") ? "All" : "One";
+          var ListItems = '';
+          $.each(basicRuleObj,function(key,list){
+            ListItems += '<div key={key} class="cc_basic_rule_wrap">'
+            ListItems += '<h4 class="cc_basic_rule_title '+((key > 0) ? "hide":"")+'">'+orAll+' of the condition(s) below were met</h4>'
+            ListItems += '<span class="cc_basic_rule_head">Field:</span>'
+            ListItems += '<span class="cc_basic_rule_value">'+grabBasicCustomField(list.field)+'</span>'
+            ListItems += '<br/>'
+            ListItems += '<span class="cc_basic_rule_head">Match Type:</span>'
+            ListItems += '<span class="cc_basic_rule_value">'+((list.rule == "ct") ? "contains" : (list.rule == "!ct") ? "does not contain" : "equals to") +'</span>'
+            ListItems += '<br/>'
+            ListItems += '<span class="cc_basic_rule_head">Format:</span>'
+            ListItems += '<span class="cc_basic_rule_value">'+(list.format) ? list.format : "--" +'</span>'
+            ListItems += '<br/>'
+            ListItems += '<span class="cc_basic_rule_head">Match Value(s):</span>'
+            ListItems += '<span class="cc_basic_rule_value">'+list.matchValue+'</span>'
+            ListItems += '<br/><br/>'
+            ListItems += '</div>'
+          })
+          return ListItems;              
+        }else{
+          return "";
+        }
+      }
+      var grabBasicCustomField = function(myval){
+        if(basicFields[myval]){
+          return "[Basic] "+ basicFields[myval];
+        }else{
+          return "[Custom] "+myval.split('_')[1].substring(0, myval.split('_')[1].length - 2);
+        }
+      }
+      var generateAdvanceRules = function(advRules,baseDetails){
+        var orAll = "";
+            if(!jQuery.isEmptyObject(baseDetails)){
+              orAll = (baseDetails.applyRuleCount == "1") ? "One" : "All";
+            }
+          var items ='';
+            $.each(advRules,function(i,item){
+              if(item.type=="E"){
+                  items +='<div key={i} className="mks_cc_action_wraper">'
+
+                  items +='<span style="textTransform: none;font-size: 12px;color: rgb(2, 175, 239)" class="cc_steps_break_title cc_steps_actions_title '+((i > 0) ? "hide":"")+' ">'+orAll+' of the advanced filters below were met:</span>'
+
+                  items +='<div class="single_action_wrap">'
+
+                  items +='<div class="cc_act_extra_details cc_act_adv_details">'
+
+                  items +='<span class="act_subj_title">Email Filter: </span>'
+                  items +='<span class="act_subj_title_value">'+item.campaignName+'</span>'
+
+                  if(item['filterBy']== "OP"){
+                  items +='<span><span class="act_sent_time" style="margin-left: 0px">opened: </span>'
+                  items +='<span class="act_sent_time_value">'+item['frequency']+' or more times in last '+item['timeSpanInDays']+' day(s)</span></span>'
+                  }
+                  if(item['filterBy']== "CK"){
+                  items +='<span><span class="act_sent_time" style="margin-left: 0px">clicked on: </span>'
+                  items +='<span class="act_sent_time_value">'+item['frequency']+' or more times in last '+item['timeSpanInDays']+' day(s)</span></span>'
+                  }
+                  if(item['filterBy']== "NC"){
+                  items +='<span><span class="act_sent_time" style="margin-left: 0px">non-clickers: </span>'
+                  items +='<span class="act_sent_time_value">'+item['frequency']+' or more times in last'+ item['timeSpanInDays']+' day(s)</span></span>'
+                  }
+                  items +='</div>'
+                  items +='</div>'
+                  items +='</div>'
+              }
+              if(item.type=="S"){
+                items +='<div class="mks_cc_action_wraper">'
+                items +='<span style="textTransform: none;font-size: 12px;color: rgb(2, 175, 239)" class="cc_steps_break_title cc_steps_actions_title '+((i > 0) ? "hide":"") +'">'+orAll+' of the advanced filters below were met:</span>';
+                items +='<div class="single_action_wrap">';
+                items +='<div class="cc_act_extra_details cc_act_adv_details">';
+                items +='<span class="act_subj_title">Score '+((item.rule=="eq") ? "equals" : (item.rule=="less") ? "less than" : "greater than") +': </span>';
+                items +='<span class="act_subj_title_value">'+item.score+'</span>';
+                items +='</div>';
+                items +='</div>';
+                items +='</div>';
+              }
+              if(item.type=="W"){
+                
+                items +='<div className="mks_cc_action_wraper">'
+                  items +='<span style="textTransform: none;font-size: 12px; color: rgb(2, 175, 239)" class="cc_steps_break_title cc_steps_actions_title '+((i > 0) ? "hide":"") +'">'+orAll+' of the advanced filters below were met:</span>'
+                  items +=' <div class="single_action_wrap">'
+                  items +='<div class="cc_act_extra_details cc_act_adv_details">'
+                  items +='<h4 style="background: transparent;width: 100%;color: rgb(116, 133, 146)">Web visits performed against</h4>'
+                  items +='<span class="act_subj_title"> '+(item.filterBy=="PU") ? "Page URL" : "" +': </span>';
+                  items +='<span class="act_subj_title_value mkb_elipsis" style="width: 245px;display: block;wordWrap: break-word">'
+                  items +='<a href='+commonModule.decodeHTML(item.pageURL)+' target="_blank">'+commonModule.decodeHTML(item.pageURL)+'</a><br/> '+item['frequency'] +'or more times in last '+item['timeSpanInDays']+'  day(s)</span>';
+                  items +='</div>';
+                  items +='</div>';
+                  items +='</div>';
+              }
+              if(item.type=="F"){
+                items +='<div class="mks_cc_action_wraper">'
+                items +='<span style="textTransform: none;font-size: 12px;color: rgb(2, 175, 239)" class="cc_steps_break_title cc_steps_actions_title '+((i > 0) ? "hide":"" )+'">'+orAll+' of the advanced filters below were met:</span>'
+                items +='<div className="single_action_wrap">'
+                items +='<div className="cc_act_extra_details cc_act_adv_details">'
+                items +='<h4 style="background: transparent;width: 100%;color: rgb(116, 133, 146)"> Sign Up Form</h4>'
+                items +='<span class="act_subj_title">'+ item.formName + '</span>'
+                items +='<span className="act_subj_title_value">	in last '+ item.timeSpanInDays+' day(s).</span>'
+                items +='</div>'
+                items +='</div>'
+                items +='</div>'
+              } 
+              if(item.type=="L"){
+                items +='<div class="mks_cc_action_wraper">'
+                items +='<span style="textTransform: none;font-size: 12px;color: rgb(2, 175, 239)" class="cc_steps_break_title cc_steps_actions_title '+((i > 0) ? "hide":"" )+'">'+orAll+' of the advanced filters below were met:</span>'
+                items +='<div class="single_action_wrap">'
+                items +='<div class="cc_act_extra_details cc_act_adv_details">'
+                items +='<h4 style="background: transparent;width: 100%;color: rgb(116, 133, 146)">List Filter:</h4>'
+                if(item['matchAll']!="false"){
+                  items +='<span class="act_subj_title" style="width: 100%" >Subscriber is Member of all of the following list(s):</span>'
+                }
+                if(item['matchAll']=="false"){
+                  items +='<span class="act_subj_title" style="width: 100%" >Subscriber is Non Member of any of the following list(s):</span>'
+                }
+                items +='<span class="act_subj_title_value">'
+                items +='<select style="float: none;top : 4px;margin-bottom: 5px;width: 96%"}}>'
+                items += generateListNames(item.listNames);
+                items +='</select>'
+                items +='</span>'
+                items +='</div>'
+                items +='</div>'
+                items +='</div>'
+              }
+            })
+            return items;
+      }
+      var generateActions = function(list){
+        var listItem ='';
+        listItem +='<div  class="cc_steps_break_wraps">'
+        listItem +='<div style="height: 45px;background: #fff;color: #97C6DC;" class="autocomplete__item cc_steps_break autocomplete__item--disabled">'
+        listItem +='<span class="cc_steps_break_title"><span class="icon mksicon-Prohibition" style="margin-right: 6px;"></span>'+list[0].type+':</span>'
+        listItem +='<span class="cc_steps_break_time">Action Taken : '+list[0]['Action Taken']+'</span>';
+        listItem +='</div>'
+        listItem +='</div>';
+        return listItem; 
+      }
+      var generateListNames = function(lists){
+        var listName = lists.split(',');
+        var ListItems = '';
+        $.each(listName,function(key,list){
+          ListItems += '<option class="mngList_li_wrap ">'+list+'</option>';
+        });
+        
+        return ListItems;
+      }
+      var generateActionRules = function(actions){
+        if(actions.length == 0){
+          return "";
+        }
+        var items = '';
+        $.each(actions,function(i,item){
+          if(item.type == "email"){
+            items += '<div class="mks_cc_action_wraper">'
+            items += '<div  class="autocomplete__item cc_steps_break autocomplete__item--disabled' + ((i > 0) ? "hide":"") +'">';
+            items += '<span class="cc_steps_break_title cc_steps_actions_title ">Perform the following action(s):</span>'
+            items += '</div>'
+            items += '<div class="single_action_wrap">'
+
+            items += '<div class="cc_act_extra_details">'
+            items += '<h4 style="background: transparent;width: 100%">'
+            items += '<i className="mksicon-Mail" style="margin-right : 4px"></i>Email</h4>'
+            items += '<span class="act_subj_title"><i className="mksicon-Mail"></i> Subject: </span>'
+            items += '<span class="act_subj_title_value">'+item.subject+'</span>'
+            items += '<br/>'
+            items += '<span class="'+((item.Sent) ? "act_sent_time" : "act_sent_time hide")+'">Sent: </span>';
+            items += '<span class="'+((item.Sent) ? "act_sent_time_value" : "act_sent_time_value hide")+'">'+parseDateToMoment(item.Sent)+'</span>';
+
+            items += '<span class="'+((item['Send Email']) ? "act_sent_time" : "act_sent_time hide")+'">Due Date: </span>';
+            items += '<span class="'+((item['Send Email']) ? "act_sent_time_value" : "act_sent_time_value hide") +'">'+parseDateToMoment(item['Send Email'])+' Pacific</span>'
+
+            items += '<span class="act_sent_time '+((item.Skipped) ? "show" : "hide")+'">Skipped at</span>'
+            items += '<span class="act_sent_time_value '+((item.Skipped) ? "show" : "hide" )+'">'+parseDateToMoment(item.Skipped)+' Pacific</span>'
+
+            items += '<ul class="'+( (parseInt(item.opens) > 0 || parseInt(item.clicks) > 0 || parseInt(item.pageViews) > 0 ) ? "show" : "hide" )+'" >'
+            items += '<li><span>Open(s): </span>'+item.opens+' <span style="font-weight: 100;width: 115px;font-size: 9px;display:none;">(last opened on '+parseDateToMoment(item.lastOpenOn)+' )</span></li>';
+            items += '<li><span>Click(s): </span>'+item.clicks+'</li>'
+            items += '<li><span>Page View(s): </span>'+item.pageViews+'</li>'
+            items += '</ul>'
+            items += '</div>'
+            items += '</div>'
+            items += '</div>';
+            debugger;
+          }else if(item.type=="score"){
+            items += '<div class="single_action_wrap" style="background: #fff;padding: 10px 15px">';
+            items += '<div  class="autocomplete__item cc_steps_break autocomplete__item--disabled'+ ((i > 0) ? "hide":"" )+'">';
+            items += '<span class="cc_steps_break_title cc_steps_actions_title ">Perform the following action(s):</span>'
+            items += '</div>'
+            items += '<h4 style="background: transparent;width: 100%"><i class="mksicon-act_score" style="margin-right: 4px"></i>Score</h4>'
+            items += '<span class="act_subj_title">Score Change by : </span>'
+            items += '<span class="act_subj_title_value">'+item['changeBy']+'</span>'
+            items += '<br/>'
+            if(item['Score Update Due']){
+              items += '<span><span class="act_sent_time" style="margin-left: 0px">Score Update Due: </span>'
+              items += '<span class="act_sent_time_value">'+parseDateToMoment(item['Score Update Due'])+'</span></span>';
+            }
+            if(item['Score Updated On']){
+            items += '<span>'
+            items += '<span class="act_sent_time" style="margin-left: 0px">Score Update On: </span>'
+            items += '<span class="act_sent_time_value">'+parseDateToMoment(item['Score Updated On'])+'</span>'
+            items += '</span>'
+            }
+            items += '</div>'
+          }else if(item.type=="alert") {
+           
+            items += '<div class="single_action_wrap" style="background: #fff;padding: 10px 15px">'
+            items += '<div  class="autocomplete__item cc_steps_break autocomplete__item--disabled '+( (i > 0) ? "hide":"" )+'">';
+            items += '<span class="cc_steps_break_title cc_steps_actions_title">Perform the following action(s):</span>'
+            items += '</div>'
+            items += '<h4 style="background: transparent;width: 100%"><i class="mksicon-act_alert" style="margin-right : 4px"></i>View Sales Rep Alert</h4>'
+            items += '<span class="act_sent_time" style="margin-left: 0px">Send Alert : </span>'
+            items += '<span class="act_sent_time_value">'+( (item['Send Alert']) ? parseDateToMoment(item['Send Alert']) : parseDateToMoment(item['Sent']) )+' Pacific</span>'
+            items += '</div>'            
+          }
+        });
+        return items;
+      }
+
+        /*=NT generation=*/
+        var generateNurturetracks = function(nurtureTracks){
+           var ListItems = '<h3 class="cc_title_h3"><span class="mksicon-Nurture_Track"></span>Nurture Tracks</h3>';
+           $.each(nurtureTracks,function(key,list) {
+            ListItems += '<li class="mngList_li_wrap ">'
+            ListItems += '<div class="mks_mnglist_wrap mks_cc_wf_wrap">'
+            ListItems += '<span class="mksicon-Nurture_Track icon-cc"></span>'
+            ListItems += '<h4 class="cc_title_h4 triggerToggleOnh4" title="'+commonModule.decodeHTML(list.name)+'">'+ commonModule.decodeHTML(list.name)+'</h4>';
+            ListItems += '<div class="expand collapseable">'
+            ListItems += '<span class="collapseMsg">Click to expand</span>'
+            ListItems += '<span class="mksicon-ArrowNext"></span>'
+            ListItems += '</div>'
+            ListItems += '<div class="mks_cc_steps_wrapper">';
+            ListItems += generateNTMessages(list.messages,list)
+            ListItems += '</div>'
+            ListItems += '</div>'
+            ListItems += '</li>'
+           });
+           return ListItems;
+        }
+        var generateNTMessages = function(messages,ntObj){ 
+          var items ='';
+          $.each(messages,function(key,item){
+            items +='<div key={i} class="cc_steps_break_wraps">'
+            items +='<div  class="autocomplete__item cc_steps_break autocomplete__item--disabled">';
+            items +='<span class="cc_steps_break_title"> '+(item.label+" "+ (i+1)) +':</span>'
+            items +='<span class="'+((item.emailSent == "Y" && item.emailSkipped!="Y") ? "show" : "hide")+' cc_steps_break_time">'
+            items +='<span style="color : #fff">Email Sent </span> :'+  parseDateToMoment(item.emailSentTime) +' Pacific</span>';
+            items +='<span class="'+((item.emailDue == "Y") ? "show" : "hide")+' cc_steps_break_time">';
+            items +='<span style="color : #fff" >Email Due </span> :'+((item.emailDueTime) ? parseDateToMoment(item.emailDueTime) : "")+' Pacific</span>';
+            items +='<span class="'+((item.emailSkipped == "Y") ? "show" : "hide")+' cc_steps_break_time">';
+            items +='<span style="color : #fff">Email Skipped </span> : '+parseDateToMoment(item.emailSkippedTime)+' Pacific</span>';
+            items +='</div>'
+
+            items +='<div class="scf_o_right cc_action_icons_wrap '+((ntObj.ntStatus != "Completed") ? "show" : "hide")+'">';
+            items +='<ul class="top_manager_ul_wraps five">'
+
+            items +='<li data-tip="Click to play" >'
+            items +='<div class="scf_option_icon ripple top_manage_lists  '+((ntObj.ntStatus=="Completed") ? "hide" : "") +''+((ntObj.ntStatus == "play") ? "cc_disabled" : "")+' playPauseNurtureTrack" data-ntId="'+ntObj['trackId.encode']+'" data-ntType="play" >';
+            items +='<a href="#" style="text-decoration: unset">'
+            items +='<div class="wrap_scf_o_i">'
+            items +='<div class="wrap_scf_o_i_md">'
+            items +='<div class="scf_o_icon scf_o_edit  mksicon-Play mks_manageList_wrap"></div>'
+            items +='</div>'
+            items +='</div>'
+            items +='</a>'
+            items +='</div>'
+            items +='</li>'
+            items +='<li data-tip="Click to pause" class="mks_hideRightBorder">'
+                      
+            items +='<div class="scf_option_icon ripple top_manage_lists '+((ntObj.ntStatus=="Completed") ? "hide" : "")+''+((ntObj.ntStatus =="paused") ? "cc_disabled" : "")+' playPauseNurtureTrack" data-ntId="'+ntObj['trackId.encode']+'" data-ntType="pause" >'
+            items +='<a href="#" style="text-decoration: unset">'
+            items +='<div class="wrap_scf_o_i">'
+            items +='<div class="wrap_scf_o_i_md">'
+            items +='<div class="scf_o_icon scf_o_edit mksicon-Pause mks_manageList_wrap"></div>'
+            items +='</div>'
+            items +='</div>'
+            items +='</a>'
+            items +='</div>'
+            items +='</li>'
+
+
+
+            items +='<li data-tip="Add to list" style="visibility: hidden">'
+            items +='<div class="scf_option_icon ripple top_manage_lists">'
+            items +='<a href="#" style="textDecoration: unset">'
+            items +='<div class="wrap_scf_o_i">'
+            items +='<div class="wrap_scf_o_i_md">'
+            items +='<div class="scf_o_icon scf_o_edit mksicon-Pause mks_manageList_wrap"></div>'
+            items +='</div>'
+            items +='</div>'
+            items +='</a>'
+            items +='</div>'
+            items +='</li>'
+
+            items +='</ul>'
+            items +='</div>'
+            items +='<div class="mks_cc_action_wraper">'
+            items +='<div  class="autocomplete__item cc_steps_break autocomplete__item--disabled">'
+            items +='<span class="cc_steps_break_title cc_steps_actions_title">Perform the following action(s):'
+            items +='<span class="'+((ntObj.ntStatus=="Completed") ? "hide" : "")+'">';
+            debugger;
+            items +='<span style="position: relative;cursor:pointer;left: 50px;top: 3px" data-tip="Click to unskip step" data-ntId="'+ntObj['trackId.encode']+'" data-msgid="'+item['messageId.encode']+'" data-actType="unskip" class="skippNT '+((ntObj.ntStatus=="Completed") ? "hide" : "") +' '+  ((item.emailSkipped=="Y") ? '' : "cc_disabled")+' scf_o_icon scf_o_edit mksicon-CPlay mks_manageList_wrap"></span>'
+            items +='<span style="position: relative;cursor:pointer;left: 0px;top: 3px" data-tip="Click to skip step"   data-ntId="'+ntObj['trackId.encode']+'" data-msgid="'+item['messageId.encode']+'" data-actType="skip"  class="skippNT '+((ntObj.ntStatus=="Completed") ? "hide" : "") +' '+ ((item.emailSkipped=="N") ? '' : "cc_disabled")+ ' scf_o_icon scf_o_edit  mksicon-CPlayNext mks_manageList_wrap"></span>'
+                    
+            items +='</span>'
+            items +='</span>'
+            items +='</div>'
+            
+            items +='<div class="single_action_wrap">'
+
+            items +='<div class="cc_act_extra_details">'
+            items +='<span class="act_subj_title"><i class="mksicon-Mail"></i> Subject: </span>'
+            items +='<span class="act_subj_title_value">'+commonModule.decodeHTML(item.subject)+'</span>';
+            items +='<br/>';
+            if(item['dispatchType'] == "D"){
+              items +='<span><span class="act_sent_time" style="marginLeft: 0px">Dispatch Rule: </span>'
+              items +='<span class="act_sent_time_value">delay dispatch for '+item.dayLapse+' day(s)</span>  <br/></span>'
+            }
+
+            if(item['dispatchType'] == "S") {
+              items +='<span>'
+              items +='<span class="act_sent_time" style="marginLeft: 0px">Dispatch Rule: </span>';
+              items +='<span class="act_sent_time_value">scheduled for '+parseDateToMoment(item.scheduleDate)+' Pacific</span>';
+              items +='<br/>'
+              items +='</span>'
+            }
+
+            items +='<span class="act_sent_time">Time of Day: </span>'
+            items +='<span class="act_sent_time_value">'+((item.timeOfDay == -1) ? 'Instant' : item.timeOfDay+item.timeOfDayHrs+":"+item.timeOfDayMins+item.timeOfDayMins)+'</span>';
+            items +='<ul class="'+((item.emailDue == "Y") ? "hide" : "show")+'" >'
+            items +='<li><span>Open(s): </span>'+item.opens+'<span style="position : relative;font-weight: 100;width: 146px;float: right;top:2px;font-size: 9px" class="'+((item.lastOpenOn) ? "show" : "hide")+'">(last opened on '+parseDateToMoment(item.lastOpenOn)+')</span></li>'
+            items +='<li><span>Click(s): </span>'+item.clicks+'</li>'
+            items +='<li><span>Page View(s): </span>'+item.pageViews+'</li>'
+            items +='</ul>'
+            items +='</div>'
+            items +='</div>'
+            items +='</div>'
+            items +='</div>'
+          });
+          return items;
+        }
+        var skippNT = function(ntId,skipid,actType){
+          var bodyHtml = "Are you sure you want to " + actType + " nurturetrack for current subscriber?";
+          ccObj['ntSkippedObj'] = {ntId : ntId,skippedId : skipid,actionT : actType};
+          $('.courseCorrect_wrap').css('visibility','hidden');
+          dialogModule.dialogView({showTitle:'Skipped Action',childrenView : bodyHtml, additionalClass : 'nt_skipped_dialog_wrap',container : '.top_managerLists_wrappers',saveCallBack : saveSkippNT,buttonText:'Ok' })
+          $('.nt_skipped_dialog_wrap .dialogBox_close_btn').unbind('click');
+          $('.nt_skipped_dialog_wrap .dialogBox_close_btn').click(function(event){
+            $('.nt_skipped_dialog_wrap').remove();
+            $($('.OverLay').eq(0)).remove();
+            $('.courseCorrect_wrap').css('visibility','visible');
+            event.stopPropagation();
+          })
+        }
+        var saveSkippNT = function(){
+          console.log(ccObj['ntSkippedObj']);
+          var url = baseObject.baseUrl+'/io/trigger/saveNurtureData/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken+'&type=setCourseCorrectForSub';
+          var reqOj = {
+            type:'setCourseCorrectForSub'
+            ,subNum: baseObject.subNum
+            ,trackId: ccObj['ntSkippedObj'].ntId
+            ,action : ccObj['ntSkippedObj'].actionT
+            ,messageId : ccObj['ntSkippedObj'].skippedId
+            ,ukey:baseObject.users_details[0].userKey
+            ,isMobileLogin:'Y'
+            ,userId:baseObject.users_details[0].userId
+          }
+          commonModule.hideLoadingMask();
+          commonModule.showLoadingMask({message :  ccObj.ntSkippedObj.actionT+'ing nurture track...',container:'.nt_skipped_dialog_wrap'})
+          commonModule.saveData(url,reqOj,function(response){
+            debugger;
+            if(response[0]=="err"){
+              commonModule.ErrorAlert({message:response[1]})
+            }else{
+              commonModule.SuccessAlert({message :response[1]})
+              commonModule.hideLoadingMask();
+              commonModule.showLoadingMask({message : 'Updating course correct...', container : '.courseCorrect_wrap'})
+              getCourseCorrect();
+            }
+          });
+          $('.nt_skipped_dialog_wrap .dialogBox_close_btn').click();
+        }
+        /*=attach Events=*/
+        var attachedEvents = function(){
+          $('.triggerToggleOnh4,.collapseMsg').unbind('click');
+          $('.triggerToggleOnh4,.collapseMsg').on('click',function(event){
+            triggerToggleOnh4(event);
+          });
+          
+          $('.skippWF').unbind('click');
+          $('.skippWF').on('click',function(){
+            var wfid = $(this).attr('data-wfId');
+            var skipid = $(this).attr('data-skipId');
+            var actType = $(this).attr('data-actType');
+            skippWF(wfid,skipid,actType);
+            
+          });
+
+          $('.playPauseWorkFlows').unbind('click');
+          $('.playPauseWorkFlows').on('click',function(event){
+            var wfid = $(this).attr('data-wfid');
+            var actT = $(this).attr('data-wftype');
+            PlayPauseWorkFlows(wfid,actT,event)
+          });
+          $('.playPauseNurtureTrack').unbind('click');
+          $('.playPauseNurtureTrack').on('click',function(event){
+            var ntid = $(this).attr('data-ntid');
+            var actT = $(this).attr('data-nttype');
+            playPauseNurtureTrack(ntid,actT,event);
+          });
+
+          $('.skippNT').unbind('click');
+          $('.skippNT').on('click',function(event){
+            var ntId = $(this).attr('data-ntId');
+            var skipid = $(this).attr('data-msgid');
+            var actType = $(this).attr('data-actType');
+            skippNT(ntId,skipid,actType);
+            debugger;
+          })
+
+        } 
+          return {
+            showCCDialog : showCCDialog
+          }
        })();
        /*----- Notes Module ----*/
        var notesModule = (function(){
@@ -2013,9 +3346,11 @@
               $('#note_textarea').val('');
               getNotes()
               commonModule.hideLoadingMask();
+              
             })
           }
           var getNotes = function(){
+            commonModule.showLoadingMask({message : 'Loading notes...', container:'._mks_NotesWrap'})
             var Url = baseObject.baseUrl
                             +'/io/subscriber/comments/?BMS_REQ_TK='
                             + baseObject.users_details[0].bmsToken +'&type=getComments&subNum='+baseObject.subNum+'&ukey='+baseObject.users_details[0].userKey
@@ -2023,6 +3358,7 @@
             commonModule.getDataRequest(Url,generateNotes);
           }
           var generateNotes = function(data){
+            commonModule.showLoadingMask({message : 'Loading notes...', container:'._mks_NotesWrap'})
             if(parseInt(data.totalCount) > 0){
               var htmlObj = '';
               $('.notes_lists_wrap').find('.not-found').remove();
@@ -2070,6 +3406,7 @@
               $('.notes_lists_wrap').append('<p class="not-found">No tasks found.</p>')
                 $('.notes_collapse').addClass('hide');
             }
+            commonModule.hideLoadingMask();
             attachEvents()
           }
           var attachEvents = function(){
@@ -2209,6 +3546,7 @@
             }
            var requestObj = {}
            var basicAr = [];
+           commonModule.hideLoadingMask();
            commonModule.showLoadingMask({message:"Saving subscriber to salesforce...",container : '.mkssf_wrap_rendering'})
            $.each ($('.sf_basic_div_wrap input'),function(key,val){
             if(val.checked){
@@ -2377,6 +3715,7 @@
 
         } 
          var initApiCalls = function(){
+          commonModule.hideLoadingMask();
           commonModule.showLoadingMask({message:"Loading...",container : '.mkssf_wrap_rendering'})
           getSalesforceData();
           
@@ -2530,13 +3869,60 @@
           }
           var getUserTimeLine = function(nextOffset){
             //var offset = (nextOffset) ? nextOffset : $('.act_row_wrapper .act_row:last-child').attr('next-offset');
-  
+              getFutureUserTimeLine();
               var searchUrl = baseObject.baseUrl
                   + '/io/subscriber/getData/?BMS_REQ_TK='
                   + baseObject.users_details[0].bmsToken +'&type=timeline&isFuture=N&offset='+nextOffset+'&subNum='
                   + baseObject.subNum+'&ukey='+baseObject.users_details[0].userKey
                   + '&isMobileLogin=Y&userId='+baseObject.users_details[0].userId;
                   commonModule.getDataRequest(searchUrl,generateTimeLine);
+          }
+          var getFutureUserTimeLine = function(nextOffset){
+            //var offset = (nextOffset) ? nextOffset : $('.act_row_wrapper .act_row:last-child').attr('next-offset');
+  
+              var searchUrl = baseObject.baseUrl
+                  + '/io/subscriber/getData/?BMS_REQ_TK='
+                  + baseObject.users_details[0].bmsToken +'&type=timeline&isFuture=Y&offset=0&subNum='
+                  + baseObject.subNum+'&ukey='+baseObject.users_details[0].userKey
+                  + '&isMobileLogin=Y&userId='+baseObject.users_details[0].userId;
+                  commonModule.getDataRequest(searchUrl,generateFutureTimeLine);
+          }
+          var generateFutureTimeLine = function(data){
+            if(parseInt(data.totalCount) > 0){
+              $.each(data.activities[0],function(kye,activity){
+                if(activity[0].campaignType == "N" || activity[0].activityType == "WV"){
+                  CampaignCard(mapping[activity[0].activityType],activity[0],"isFuture");
+                }else if(activity[0].activityType == "SU"){
+                    SignupCard(mapping[activity[0].activityType],activity[0],"isFuture");
+                }else if(activity[0].campaignType == "T"){
+                    NurturetrackCard(mapping[activity[0].activityType],activity[0],"isFuture");          
+                }else if(activity[0].campaignType =="W"){
+                    WorkflowCard(mapping[activity[0].activityType],activity[0],"Y");
+                }else if (typeof (activity[0]['singleMessageId.encode']) !== "undefined") {
+                  if(activity[0].activityType=="MT"){
+                    mapping[activity[0].activityType]['color'] =  'green';
+                  }
+                  CampaignCard(mapping[activity[0].activityType],activity[0],"isFuture");
+               }else if(activity[0].activityType == "SC"){
+                  ScoreCard(mapping[activity[0].activityType],activity[0],"isFuture") 
+               }else if(activity[0].botActionType == "A"){
+                  AlertCard(mapping[activity[0].activityType],activity[0],"isFuture")
+               }else if(activity[0].campaignType == "B" || typeof(activity[0]["botId.encode"])!=="undefined"){
+                  AlertCard(mapping[activity[0].activityType],activity[0],"isFuture")
+              }else if( activity[0].activityType == "MM" || activity[0].activityType == "A"){
+                if(typeof(activity[0]["botId.encode"]) !== "undefined"){
+                                    //triggerType = {name: "Autobot", cssClass: ""};
+                                    console.log('Need to handle');
+                                }
+                                else{
+                                  WorkflowCard(mapping[activity[0].activityType],activity[0],"isFuture")
+                                }
+              }else if(typeof(activity[0]["botId.encode"])!=="undefined"){
+                AlertCard(mapping[activity[0].activityType],activity[0],"isFuture")
+              }
+              
+              });
+            }
           }
           var generateTimeLine = function(data){
             console.log(baseObject);
@@ -2628,19 +4014,25 @@
               campHTML +=  '<div class="btm-bar ">'
               campHTML +=  '<div class="datetime">'
               campHTML +=  ' <span class="this-event-type showtooltip" style="cursor: pointer" data-original-title="Click to view this event type only">'
-              campHTML +=  mapping.name;
+              campHTML +=  (type == "isFuture") ? "to be "+mapping.name.toLowerCase() :mapping.name;
               campHTML +=  '</span> at '+_formatedDate.time+', '+_formatedDate.date;
               campHTML +=  '</div>'
               campHTML +=  '<div class="camp_type">'
               campHTML +=  '<span class="showtooltip all-timelineFilter '+_hide+'" style="cursor: pointer" data-original-title="Click to view all Campaigns activities">'
               campHTML +=  '<i class="icon camp"></i>'
-              campHTML +=  (type) ? type : "Campaign";
+              campHTML +=  "Campaign";
+              // campHTML +=  (type && type != "isFuture") ? type : "Campaign";
               campHTML +=  '</span></div>'
               campHTML +=  '</div>'
               campHTML +='</div>';
-              $('.act_row_wrapper .act_row_body_wrap').append(campHTML);
+              if(type=="isFuture"){
+                $('.futureTimeCard').append(campHTML)
+              }else{
+                $('.act_row_wrapper .act_row_body_wrap').append(campHTML);
+              }
+              
           }
-          var ScoreCard = function(mapping,activity){
+          var ScoreCard = function(mapping,activity,type){
             console.log('Score Card');
             var scoreHTML = "";
             var displayicon = (mapping.icon) ? mapping.icon : 'mksicon-Mail';
@@ -2679,15 +4071,19 @@
             scoreHTML +=  '<div class="btm-bar ">'
             scoreHTML +=  '<div class="datetime">'
             scoreHTML +=  '<span class="this-event-type showtooltip" style="cursor: pointer" data-original-title="Click to view this event type only">'
-            scoreHTML +=   mapping.name;
+            scoreHTML +=   (type == "isFuture") ? "to be "+mapping.name.toLowerCase() :mapping.name;
             scoreHTML +=   '</span> at '+_formatedDate.time+','+_formatedDate.date;
             scoreHTML +=   '</div> '
             scoreHTML +=   '</div>'
             scoreHTML +=   '</div>'
-       
-          $('.act_row_wrapper .act_row_body_wrap').append(scoreHTML);
+            if(type=="isFuture"){
+              $('.futureTimeCard').append(scoreHTML)
+            }else{
+              $('.act_row_wrapper .act_row_body_wrap').append(scoreHTML);
+            }
+          
           }
-          var NurturetrackCard = function(mapping,activity){
+          var NurturetrackCard = function(mapping,activity,type){
             var displayicon = (mapping.icon) ? mapping.icon : 'mksicon-Mail';
             var _date = moment(commonModule.decodeHTML(activity.logTime), 'M/D/YYYY h:m a');
             var _formatedDate = {date: _date.format("DD MMM YYYY"), time: _date.format("hh:mm A")};
@@ -2704,7 +4100,7 @@
             ntHTML +=' <div class="btm-bar ">'
             ntHTML +=  '   <div class="datetime">'
             ntHTML +=    '      <span class="this-event-type showtooltip" style="cursor: pointer" data-original-title="Click to view this event type only">'
-            ntHTML +=  mapping.name
+            ntHTML +=  (type == "isFuture") ? "to be "+mapping.name.toLowerCase() :mapping.name;
             ntHTML +=    '</span> at '+_formatedDate.time+','+ _formatedDate.date
             ntHTML +=  ' </div>'
             ntHTML +=    '<div class="camp_type">'
@@ -2713,7 +4109,12 @@
             ntHTML +=    '</div>'
             ntHTML += '</div>'
             ntHTML += '</div>';
-             $('.act_row_wrapper .act_row_body_wrap').append(ntHTML);
+            if(type=="isFuture"){
+              $('.futureTimeCard').append(ntHTML)
+            }else{
+              $('.act_row_wrapper .act_row_body_wrap').append(ntHTML);
+            }
+             //$('.act_row_wrapper .act_row_body_wrap').append(ntHTML);
           }
           var SignupCard = function(mapping,activity){
             console.log(activity);
@@ -2742,7 +4143,7 @@
             signHTML +='</div>'
           }
 
-          var WorkflowCard = function(mapping,activity){
+          var WorkflowCard = function(mapping,activity,type){
             var displayicon = (mapping.icon) ? mapping.icon : 'mksicon-Mail';
             var _date = moment(commonModule.decodeHTML(activity.logTime), 'M/D/YYYY h:m a');
             var _formatedDate = {date: _date.format("DD MMM YYYY"), time: _date.format("hh:mm A")};
@@ -2776,7 +4177,7 @@
                   wfHTML += ' <div class="btm-bar ">'
                   wfHTML += ' <div class="datetime">'
                   wfHTML += '    <span class="this-event-type showtooltip" style="cursor: pointer" data-original-title="Click to view this event type only">'
-                  wfHTML += mapping.name
+                  wfHTML += (type == "isFuture") ? "to be "+mapping.name.toLowerCase() :mapping.name;
                   wfHTML += '    </span> at '+_formatedDate.time+', '+_formatedDate.date
                   wfHTML += '  </div>'
                   wfHTML += '<div class="camp_type">'
@@ -2786,9 +4187,14 @@
                   wfHTML += ' </div>'
                   wfHTML += ' </div>'
                   wfHTML += '</div>';
-                  $('.act_row_wrapper .act_row_body_wrap').append(wfHTML);
+                  if(type=="isFuture"){
+                    $('.futureTimeCard').append(wfHTML)
+                  }else{
+                    $('.act_row_wrapper .act_row_body_wrap').append(wfHTML);
+                  }
+                 // $('.act_row_wrapper .act_row_body_wrap').append(wfHTML);
           }
-          var AlertCard = function(mapping,activity){
+          var AlertCard = function(mapping,activity,type){
             var displayicon = (mapping.icon) ? mapping.icon : 'mksicon-Mail';
             var _date = moment(commonModule.decodeHTML(activity.logTime), 'M/D/YYYY h:m a');
             var _formatedDate = {date: _date.format("DD MMM YYYY"), time: _date.format("hh:mm A")};
@@ -2807,7 +4213,7 @@
             alertHTML += ' <div class="btm-bar ">'
             alertHTML += '    <div class="datetime">'
             alertHTML += '          <span class="this-event-type showtooltip" style="cursor: pointer" data-original-title="Click to view this event type only">'
-            alertHTML +=   mapping.name
+            alertHTML +=   (type == "isFuture") ? "to be "+mapping.name.toLowerCase() :mapping.name;
             alertHTML += '            </span> at '+_formatedDate.time+', '+_formatedDate.date;
             alertHTML += '     </div>'
             alertHTML += '     <div class="camp_type">'
@@ -2816,7 +4222,12 @@
             alertHTML += '      </div>'
             alertHTML += '  </div>'
             alertHTML += ' </div>';
-            $('.act_row_wrapper .act_row_body_wrap').append(alertHTML);
+            if(type=="isFuture"){
+              $('.futureTimeCard').append(alertHTML)
+            }else{
+              $('.act_row_wrapper .act_row_body_wrap').append(alertHTML);
+            }
+           //$('.act_row_wrapper .act_row_body_wrap').append(alertHTML);
           }
           var getServerTime = function(){
             var searchUrl = baseObject.baseUrl
@@ -2827,6 +4238,7 @@
             commonModule.getDataRequest(searchUrl,function(data){
                 var _date  = moment(commonModule.decodeHTML(data[0]),'YYYY-M-D H:m');
                 var _formatedDate = {date: _date.format("DD MMM YYYY"), time: _date.format("hh:mm A")};
+                baseObject['serverTime'] = _formatedDate;
                 $('.timestop.now span').text(_formatedDate.time+', '+_formatedDate.date)
             })
           }
@@ -2980,6 +4392,7 @@
           var Url = baseObject.baseUrl
                       +'/io/subscriber/setData/?BMS_REQ_TK='
                       + baseObject.users_details[0].bmsToken +'&type=addByEmailOnly';
+              
               commonModule.showLoadingMask({message:"Adding subscriber to list..",container : '.addContactListWrapper'});        
               var dataObj = {
                 "listNum": selectedListNum
@@ -2990,7 +4403,6 @@
               }
               commonModule.saveData(Url,dataObj,function(response){
                 commonModule.SuccessAlert({message :'Subscriber added to the list.'});
-                debugger;
                 commonModule.hideLoadingMask();
                 dialogModule.hideDialog();
               })
@@ -3087,210 +4499,7 @@
             getallLists : getallLists
           }
        })();
-       /*----- Common Module ----*/
-
-       var commonModule = (function(){
-                                var showLoadingMask = function(paramObj){
-                                  var loadingHtml = "";
-                                  loadingHtml += '<div class="loader-mask '+paramObj.extraClass+'">'
-                                  loadingHtml += '<div class="spinner">'
-                                  loadingHtml += '<div class="bounce1"></div>'
-                                  loadingHtml += '<div class="bounce2"></div>'
-                                  loadingHtml += '<div class="bounce3"></div>'
-                                  loadingHtml +=  '</div>'
-                                  loadingHtml +=   '<p>'+paramObj.message+'</p>'
-                                  loadingHtml +=    '</div>';
-                                  $(paramObj.container).append(loadingHtml);
-                                }
-
-                                var hideLoadingMask = function(paramObj){
-                                  $('.loader-mask').remove();
-                                }
-
-                                var extractEmailsFromBody = function(text){
-                                    //return text.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi);
-                                    return 'fahad';
-                                }
-
-                                var encodeHTML= function(str){
-                                 if (typeof (str) !== "undefined") {
-                                             str = str.replace(/:/g, "&#58;");
-                                             str = str.replace(/\'/g, "&#39;");
-                                             str = str.replace(/=/g, "&#61;");
-                                             str = str.replace(/\(/g, "&#40;");
-                                             str = str.replace(/\)/g, "&#41;");
-                                             str = str.replace(/</g, "&lt;");
-                                             str = str.replace(/>/g, "&gt;");
-                                             str = str.replace(/\"/g, "&quot;");
-                                             str = str.replace(/\‘/g, "&#8216;");
-                                             str = str.replace(//g, "");
-                                             // str = str.replace(/ /g,'+')
-                                         }
-                                         else {
-                                             str = "";
-                                         }
-                                         return str;
-                                }
-
-                                var decodeHTML= function (str,lineFeed){
-                                 //decoding HTML entites to show in textfield and text area
-                                        if (typeof (str) !== "undefined") {
-                                            str = str.replace(/&amp;/g, "&");
-                                            str = str.replace(/&#58;/g, ":");
-                                            str = str.replace(/&#39;/g, "\'");
-                                            str = str.replace(/&#40;/g, "(");
-                                            str = str.replace(/&#41;/g, ")");
-                                            str = str.replace(/&lt;/g, "<");
-                                            str = str.replace(/&gt;/g, ">");
-                                            str = str.replace(/&gt;/g, ">");
-                                            str = str.replace(/&#9;/g, "\t");
-                                            str = str.replace(/&nbsp;/g, " ");
-                                            str = str.replace(/&quot;/g, "\"");
-                                            str = str.replace(/&#8216;/g, "‘");
-                                            str = str.replace(/&#61;/g, "=");
-                                            str = str.replace(/%252B/g,' ');
-                                            str = str.replace(/\+/g, " ");
-                                            if (lineFeed) {
-                                                str = str.replace(/&line;/g, "\n");   // NEED TO DISCUSS THIS WITH UMAIR
-                                            }
-                                        }
-                                        else {
-                                            str = "";
-                                        }
-                                        return str;
-                               }
-
-                                var getDataRequest = function(url,callBack){
-                                  $('.debugDiv').html(url)
-                                  $.ajax({
-                                        url:url,
-                                        type:"GET",
-                                        success: function(data){
-                                          try{
-
-                                            if(data[0]!='err'){
-                                              $('.debugDiv').html(JSON.stringify(data))
-                                              var result = JSON.parse(data);
-
-                                              callBack(result);
-                                            }else{
-                                              if(data[1]=='SESSION_EXPIRED'){
-                                                // Show Alert and logout
-                                                  $('.mksicon-logout').trigger('click');
-                                                commonModule.ErrorAlert({message:data[1]});
-                                              }else{
-                                                //Just show Alert message
-                                                commonModule.ErrorAlert({message:data.errorDetail});
-                                              }
-                                            }
-                                          }catch(e){
-                                            $("#error").html(e.message);
-                                          }
-                                        }
-                                      });
-                                }
-
-                              var saveData = function(url,data,callBack){
-                                  $('.debugDiv').html('Creating The ACCount')
-                                  $.ajax({
-                                        url:url,
-                                        type:"POST",
-                                        data:data,
-                                        contentType:"application/x-www-form-urlencoded",
-                                        dataType:"json",
-                                        success: function(data){
-                                          try{
-                                            //$('.debugDiv').html(data)
-                                            if(data[1]=='SESSION_EXPIRED'){
-                                              // Show Alert and logout
-                                                $('.mksicon-logout').trigger('click');
-                                              commonModule.ErrorAlert({message:data[1]})
-                                            }else if(data.errorDetail){
-                                              //call alert
-                                              commonModule.ErrorAlert({message:data.errorDetail})
-                                              commonModule.hideLoadingMask();
-                                              return;
-                                            }
-                                            commonModule.hideLoadingMask();
-                                            $('.debugDiv').html('Created The ACCount')
-                                            //var jsonResponse = JSON.parse(data);
-                                            callBack(data);
-                                          }catch(e){
-                                            console.log(e);
-                                            $('.debugDiv').html(e.message);
-                                          }
-
-                                        }
-                                      });
-                                }
-
-                                var ErrorAlert = function(props) {
-                                  if (props.message) {
-                                              var inlineStyle = '0px';
-                                              var fixed_position = "fixed";
-                                              var cl = 'error';
-                                              var title = 'Error';
-                                              var icon  = 'mksicon-Close';
-                                              if (props && props.type == 'caution')
-                                              {
-                                                  cl = 'caution';
-                                                  title = 'Caution';
-                                              }
-                                              else if (props && props.type == 'Disabled')
-                                              {
-                                                  cl = 'caution';
-                                                  title = props.type;
-                                              }
-
-                                              var message_box = $('<div class="messagebox messsage_alert messagebox_ ' + cl + '" style=' + inlineStyle + '><span class="alert_icon '+icon+'"></span><h3>' + title + '</h3><p>' + props.message + '</p><a class="alert_close_icon mksicon-Close"></a></div> ');
-                                              $('.ms-welcome').append(message_box);
-
-                                                  setTimeout(function(){
-                                                    message_box.fadeOut("fast", function () {
-                                                        $(this).remove();
-                                                    })
-                                                  }, 4000);
-
-                                              message_box.find(".alert_close_icon").click(function (e) {
-                                                  message_box.fadeOut("fast", function () {
-                                                      $(this).remove();
-                                                  })
-                                                  e.stopPropagation()
-                                              });
-                                          }
-                                }
-
-                                var SuccessAlert = function(props) {
-                                  var message_box = $('<div class="global_messages messagebox success"><span class="alert_icon mksicon-Check"></span><h3>Success</h3><p>'+props.message+'</p><a class="alert_close_icon mksicon-Close"></a></div>')
-                                    $('.ms-welcome').append(message_box);
-                                    $(".global_messages").hide();
-                                    $(".global_messages").slideDown("medium", function () {
-                                        setTimeout('$(".global_messages").remove()', 4000);
-                                    });
-                                    $(".global_messages .alert_close_icon").click(function () {
-                                        $(".global_messages").fadeOut("fast", function () {
-                                            $(this).remove();
-                                        })
-                                  });
-                                }
-                               var setCookie = function (cname, cvalue, exdays) {
-                                  var d = new Date();
-                                  d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-                                  var expires = "expires="+d.toUTCString();
-                                  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-                               }
-                                return {
-                                  showLoadingMask: showLoadingMask,
-                                  hideLoadingMask: hideLoadingMask,
-                                  getDataRequest : getDataRequest,
-                                  saveData : saveData,
-                                  encodeHTML : encodeHTML,
-                                  decodeHTML : decodeHTML,
-                                  ErrorAlert : ErrorAlert,
-                                  SuccessAlert : SuccessAlert,
-                                  setCookie : setCookie
-                                };
-                           })();
+      
        $('#username').val('ahyan');
        } catch(e){
          console.log(e);

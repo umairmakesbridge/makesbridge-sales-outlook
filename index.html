@@ -19,7 +19,7 @@
 
 
     <link href="assets/css/skins/all.css" rel="stylesheet">
-    
+
     <!-- <link href="app.css" rel="stylesheet" type="text/css" /> -->
     <link href="assets/css/plugin_font_icon.css" rel="stylesheet" type="text/css" />
     <link href="assets/css/jquery.timepicker.min.css" rel="stylesheet" type="text/css" />
@@ -149,7 +149,7 @@
                   </div>
                 </div>
               </div>
-            
+
             <div class="top-header contact_found">
               <span class="click-label">Last 24 hrs: </span>
               <ul class="last24">
@@ -185,9 +185,31 @@
               <div class="container tasks_wrapper_dashboard hide">
                 <div class="D plc_marginbottom20 mks_task_lists_dash_wrapper">
                   <div class="contacts-switch">
-                    <div class="status_tgl">
+                    <div class="status_tgl" style="float:left;">
                       <a class="published today toggleTask active showtooltip">Todays Tasks</a>
                       <a class="draft all toggleTask undefined showtooltip">All Tasks</a>
+                    </div>
+                    <h3 class="" style="float:left;font-size: 11px;top: 15px;position: relative;font-weight: normal;left: 6px;">Show</h3>
+                    <div class="contacts-select-by" style="float: right;right: -14px;">
+                      <select style="width: 75px;">
+                        <option value="-1">All</option>
+                        <optgroup label="Priority">
+                          <option value="high">High</option>
+                          <option value="medium">Medium</option>
+                          <option value="low">Low</option>
+                        </optgroup>
+                        <optgroup label="Tasks Types">
+                          <option value="call">Call</option>
+                          <option value="email">Email</option>
+                          <option value="discovery">Discovery</option>
+                          <option value="lunch">Lunch</option>
+                          <option value="breakfast">Breakfast</option>
+                          <option value="meeting">Meeting</option>
+                          <option value="proposal">proposal</option>
+                          <option value="demo">Demo</option>
+                          <option value="first_touch">First Touch</option>
+                        </optgroup>
+                      </select>
                     </div>
                   </div>
                   <div class="content-wrapper undefined" style="">
@@ -195,32 +217,11 @@
                       <h2 class="total-count-head">
                         <strong class="badge total-count total-pending">1</strong><span class="total-text">task(s) for today</span>
                       </h2>
-                      <h3 class="">Show</h3>
-                      <div class="contacts-select-by">
-                        <select>
-                          <option value="-1">All</option>
-                          <optgroup label="Priority">
-                            <option value="high">High</option>
-                            <option value="medium">Medium</option>
-                            <option value="low">Low</option>
-                          </optgroup>
-                          <optgroup label="Tasks Types">
-                            <option value="call">Call</option>
-                            <option value="email">Email</option>
-                            <option value="discovery">Discovery</option>
-                            <option value="lunch">Lunch</option>
-                            <option value="breakfast">Breakfast</option>
-                            <option value="meeting">Meeting</option>
-                            <option value="proposal">proposal</option>
-                            <option value="demo">Demo</option>
-                            <option value="first_touch">First Touch</option>
-                          </optgroup>
-                        </select>
-                      </div>
+                     
                     </div>
 
                     <div class="task_status_P_wrapper  height90 height100"></div>
-                    
+
                   </div>
                   <div class="expand msk_collapse_tasks_P hide" style="background: rgb(255, 255, 255); margin: 5px 0px; padding: 5px 0px;">
                     <span>Click to expand</span>
@@ -231,7 +232,7 @@
                       <strong class="badge total-count total-complete">1</strong>
                       <span class="total-text">Completed task(s) of today</span>
                     </h2>
-                  
+
                   </span>
                 </div>
               </div>
@@ -507,6 +508,94 @@
                 =================================
                 -->
                 <div class="s_contact_found_wraper new_contact_false hide suppress_U">
+                    <div class="top-header contact_found top_managerLists_wrappers">
+                        <div class="scf_o_right">
+                          <ul class="top_manager_ul_wraps six">
+                            <li data-tip="Add to Sequence" class="addSequence tooltips" currentitem="false">
+                              <div class="scf_option_icon ripple top_manage_lists">
+                                <a href="#" style="text-decoration: none;" class="">
+                                  <div class="wrap_scf_o_i">
+                                    <div class="wrap_scf_o_i_md">
+                                      <div class="scf_o_icon scf_o_edit mksicon-act_workflow mks_manageList_wrap">
+                                      </div>
+                                    </div>
+                                  </div>
+      
+                                </a>
+                              </div>
+                              <span>Add to Sequence</span>
+                            </li>
+                              <li data-tip="Manage list subscription" class="tooltips" currentitem="false">
+                                <div class="scf_option_icon ripple top_manage_lists">
+                                  <a href="#" style="text-decoration: none;">
+                                    <div class="wrap_scf_o_i">
+                                      <div class="wrap_scf_o_i_md">
+                                        <div class="scf_o_icon scf_o_edit mksicon-ManageLists mks_manageList_wrap"></div>
+                                      </div>
+                                    </div>
+                                  </a>
+                                </div>
+                                <span>Manage list subscription</span>
+                              </li>
+                              <li data-tip="Add to list" class="tooltips" currentitem="false">
+                                <div class="scf_option_icon ripple top_manage_lists">
+                                  <a href="#" style="text-decoration: none;">
+                                    <div class="wrap_scf_o_i">
+                                      <div class="wrap_scf_o_i_md">
+                                        <div class="scf_o_icon scf_o_edit  mksicon-Addlist mks_manageList_wrap"></div></div></div>
+                                      </a>
+                                    </div>
+                                    <span>Add to list</span>
+                                  </li>
+                                  <li data-tip="Suppress contact" class="tooltips" currentitem="false">
+                                    <div class="scf_option_icon ripple top_manage_lists">
+                                      <a href="#" style="text-decoration: none;">
+                                        <div class="wrap_scf_o_i">
+                                          <div class="wrap_scf_o_i_md" style="padding: 3px 0px 0px;">
+                                            <div class="scf_o_icon scf_o_edit mksicon-User1 mks_manageList_wrap"></div>
+                                          </div>
+                                        </div>
+                                      </a>
+                                    </div>
+                                    <span>Suppress contact</span>
+                                  </li>
+                                  <li data-tip="Course Correct" class="mks_cc_li_wrap tooltips" currentitem="false">
+                                    <div class="scf_option_icon ripple top_manage_lists">
+                                      <a href="#" style="text-decoration: none;">
+                                        <div class="wrap_scf_o_i">
+                                          <div class="wrap_scf_o_i_md">
+                                            <div class="scf_o_icon scf_o_edit mksicon-course_correct mks_manageList_wrap"></div>
+                                          </div>
+                                        </div></a>
+                                      </div>
+                                      <span>Course Correct</span>
+                                    </li>
+                                    <li data-tip="Add to Salesforce" class="hide addSf sf_icons tooltips mks_hideRightBorder" currentitem="false">
+                                      <div class="scf_option_icon ripple top_manage_lists">
+                                        <a href="#" style="text-decoration: unset;">
+                                          <div class="wrap_scf_o_i">
+                                            <div class="wrap_scf_o_i_md" style="padding: 3px 0px 0px;">
+                                              <div class="scf_o_icon scf_o_edit mksicon-add_to_salesforce mks_manageList_wrap" style="padding-top: 0px;"></div>
+                                            </div>
+                                          </div>
+                                        </a>
+                                      </div>
+                                      <span>Add to Salesforce</span>
+                                    </li>
+                                    <li data-tip="Jump Salesforce" class="hide jumpSf tooltips sf_icons mks_hideRightBorder" currentitem="false">
+                                      <div class="scf_option_icon ripple top_manage_lists">
+                                        <a href="#" style="text-decoration: unset;">
+                                          <div class="wrap_scf_o_i">
+                                            <div class="wrap_scf_o_i_md">
+                                              <div class="scf_o_icon scf_o_edit mksicon-jump_to_salesforce_record mks_manageList_wrap" style="padding-top: 0px;"></div>
+                                            </div>
+                                          </div></a>
+                                        </div>
+                                        <span>Jump Salesforce</span>
+                                        </li>
+                                      </ul>
+                                    </div>
+                                  </div>
                   <div>
                     <span>
                       <div class="scf_option">
@@ -561,90 +650,7 @@
                     </div>
 
 
-                <div class="top-header contact_found top_managerLists_wrappers">
-                  <div class="scf_o_right">
-                    <ul class="top_manager_ul_wraps five">
-                      <li data-tip="Add to Sequence" class="addSequence tooltips" currentitem="false">
-                        <div class="scf_option_icon ripple top_manage_lists">
-                          <a href="#" style="text-decoration: none;" class="">
-                            <div class="wrap_scf_o_i">
-                              <div class="wrap_scf_o_i_md" style="padding: 3px 0px 0px;">
-                                <div class="scf_o_icon scf_o_edit mksicon-act_workflow mks_manageList_wrap">
-                                </div>
-                              </div>
-                            </div>
-                            
-                          </a>
-                        </div>
-                        <span>Add to Sequence</span>
-                      </li>
-                        <li data-tip="Manage list subscription" class="tooltips" currentitem="false">
-                          <div class="scf_option_icon ripple top_manage_lists">
-                            <a href="#" style="text-decoration: none;">
-                              <div class="wrap_scf_o_i">
-                                <div class="wrap_scf_o_i_md">
-                                  <div class="scf_o_icon scf_o_edit mksicon-ManageLists mks_manageList_wrap"></div>
-                                </div>
-                              </div>
-                            </a>
-                          </div>
-                          <span>Manage list subscription</span>
-                        </li>
-                        <li data-tip="Add to list" class="tooltips" currentitem="false">
-                          <div class="scf_option_icon ripple top_manage_lists">
-                            <a href="#" style="text-decoration: none;">
-                              <div class="wrap_scf_o_i">
-                                <div class="wrap_scf_o_i_md">
-                                  <div class="scf_o_icon scf_o_edit  mksicon-Addlist mks_manageList_wrap"></div></div></div>
-                                </a>
-                              </div>
-                              <span>Add to list</span>
-                            </li>
-                            <li data-tip="Suppress contact" class="tooltips" currentitem="false">
-                              <div class="scf_option_icon ripple top_manage_lists">
-                                <a href="#" style="text-decoration: none;">
-                                  <div class="wrap_scf_o_i">
-                                    <div class="wrap_scf_o_i_md" style="padding: 3px 0px 0px;">
-                                      <div class="scf_o_icon scf_o_edit mksicon-User1 mks_manageList_wrap"></div>
-                                    </div>
-                                  </div>
-                                </a>
-                              </div>
-                              <span>Suppress contact</span>
-                            </li>
-                            <li data-tip="Course Correct" class="hide mks_cc_li_wrap " currentitem="false">
-                              <div class="scf_option_icon ripple top_manage_lists">
-                                <a href="#" style="text-decoration: none;">
-                                  <div class="wrap_scf_o_i">
-                                    <div class="wrap_scf_o_i_md">
-                                      <div class="scf_o_icon scf_o_edit mksicon-course_correct mks_manageList_wrap"></div>
-                                    </div>
-                                  </div></a>
-                                </div>
-                              </li>
-                              <li data-tip="Add to Salesforce" class="hide addSf sf_icons mks_hideRightBorder" currentitem="false">
-                                <div class="scf_option_icon ripple top_manage_lists">
-                                  <a href="#" style="text-decoration: unset;">
-                                    <div class="wrap_scf_o_i">
-                                      <div class="wrap_scf_o_i_md" style="padding: 3px 0px 0px;">
-                                        <div class="scf_o_icon scf_o_edit mksicon-add_to_salesforce mks_manageList_wrap" style="padding-top: 0px;"></div>
-                                      </div>
-                                    </div>
-                                  </a>
-                                </div>
-                              </li>
-                              <li data-tip="Jump Salesforce" class="hide jumpSf sf_icons mks_hideRightBorder" currentitem="false">
-                                <div class="scf_option_icon ripple top_manage_lists">
-                                  <a href="#" style="text-decoration: unset;">
-                                    <div class="wrap_scf_o_i">
-                                      <div class="wrap_scf_o_i_md">
-                                        <div class="scf_o_icon scf_o_edit mksicon-jump_to_salesforce_record mks_manageList_wrap" style="padding-top: 0px;"></div>
-                                      </div>
-                                    </div></a></div>
-                                  </li>
-                                </ul>
-                              </div>
-                            </div>
+                
                             <div class="scf_tab_wrap">
                               <div class="scf_tab">
                                 <div class="tab">
@@ -660,7 +666,7 @@
 
                                       <div id="Tags" class="tabcontent mksph_cardbox">
                                         <h3>Tags</h3>
-                                        
+
                                         <a class="addTag mkb_btn mkb_greenbtn ">Add Tag</a>
                                         <span class="addTagWrapper" style="display: none;">
                                           <div class="autocomplete">
@@ -707,19 +713,207 @@
                                           </div>
                                         </div>
                                       </div>
-                                      <div id="SalesForce" class="hide tabcontent mkb_basicField_sf_wrap mksph_cardbox">
-                                        <span class="mkb_btn pull-left mkb_basic_edit mkb_sf_btn" style="display: none;">Update fields to Salesforce</span>
-                                        <div class="scfe_save_wrap disable_false" style="float: none; width: 200px; margin: 0px auto;">
-                                          <a class="scfe_ach" href="#">
-                                            <div class="scfe_save_t">
-                                              <span>Update fields to Salesforce</span>
+                                      <!-- Tasks -->
+                                      <div id="tasks" class="tabcontent mksph_cardbox">
+                                          <h3>Tasks</h3>
+                                          <div class="tasks_sort_by" style="display: inline-block;position: absolute;top: 11px;left: 73px;">
+                                              <select>
+                                                <option value="-1">All</option>
+                                                <optgroup label="Priority">
+                                                  <option value="high">High</option>
+                                                  <option value="medium">Medium</option>
+                                                  <option value="low">Low</option>
+                                                </optgroup>
+                                                <optgroup label="Tasks Types">
+                                                  <option value="call">Call</option>
+                                                  <option value="email">Email</option>
+                                                  <option value="discovery">Discovery</option>
+                                                  <option value="lunch">Lunch</option>
+                                                  <option value="breakfast">Breakfast</option>
+                                                  <option value="meeting">Meeting</option>
+                                                  <option value="proposal">proposal</option>
+                                                  <option value="demo">Demo</option>
+                                                  <option value="first_touch">First Touch</option>
+                                                </optgroup>
+                                              </select>
                                             </div>
-                                            <div class="scfe_save_i_md">
-                                              <div class="scfe_save_i mksicon-jump_to_salesforce_record" aria-hidden="true"></div>
+                                          <div style="position: relative;">
+                                            <span class="mkb_btn mkb_cf_btn pull-right mkb_greenbtn addTasks true" style="right: 0px; top: -38px;">Add New</span>
+  
+                                            <div class="content-wrapper height90 height130 task_expand_height mks_outlook_tasks_wrapper" style="position: relative;">
+                                              <div class="contact_found mks_tasks_lists_user task_status_P" style="padding: 10px 12px;">
+                                                <div class="cf_silhouette">
+                                                  <div class="cf_silhouette_text c_txt_s c_txt_s_blue">
+                                                    <i class="mksicon-Meeting mks-task-icons"></i>
+                                                  </div>
+                                                </div>
+                                                <div class="cf_email_wrap">
+                                                  <div class="cf_email">
+                                                    <p class="mkb_elipsis mkb_text_break" title="Meeting" style="width: 145px;">Meeting</p>
+                                                    <span class="ckvwicon">03 May 2018 02:58 PM</span>
+                                                  </div>
+                                                  <div class="cf_task_right">
+                                                    <span data-tip="high" class="mks_priority_icon mks_priority_high pclr12" currentitem="false">
+                                                      <i class="mksicon-Triangle_Up"></i>
+                                                      <div class="__react_component_tooltip place-top type-dark " data-id="tooltip"></div>
+                                                    </span>
+                                                    <span class="mkb_btn mkb_cf_btn pull-right mkb_greenbtn addCF show mkb_task_compBtn" style="top: 13px; right: 0px;">
+                                                      <i class="mksicon-Check"></i>Complete</span>
+                                                      <span class="mkb_tast_completed_btn mkb_btn mkb_cf_btn pull-right mkb_greenbtn addCF mkb_task_compBtn" style="top: 13px; right: 0px;">Completed</span>
+                                                    </div>
+                                                  </div>
+                                                  <div class="mks_task_edit_delete_wrap">
+                                                    <div class="cf_silhouette">
+                                                      <div class="cf_silhouette_text c_txt_s c_txt_s_blue">
+                                                        <i class="mksicon-Edit mks-task-icons"></i>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                  <div class="mks_task_edit_delete_wrap _mks_task_delete_task" style="left: 37px; width: 8%; background: transparent;">
+                                                    <div class="cf_silhouette">
+                                                      <div class="cf_silhouette_text c_txt_s c_txt_s_blue">
+                                                        <i class="mksicon-Delete mks-task-icons"></i>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                <div class="contact_found mks_tasks_lists_user task_status_P" style="padding: 10px 12px;">
+                                                  <div class="cf_silhouette">
+                                                    <div class="cf_silhouette_text c_txt_s c_txt_s_blue">
+                                                      <i class="mksicon-Lunch mks-task-icons"></i>
+                                                    </div>
+                                                  </div>
+                                                  <div class="cf_email_wrap">
+                                                    <div class="cf_email">
+                                                      <p class="mkb_elipsis mkb_text_break" title="Lunch" style="width: 145px;">Lunch</p>
+                                                      <span class="ckvwicon">03 May 2018 02:58 PM</span>
+                                                    </div>
+                                                    <div class="cf_task_right">
+                                                      <span data-tip="medium" class="mks_priority_icon mks_priority_medium pclr19" currentitem="false">
+                                                        <i class="mksicon-More"></i>
+                                                        <div class="__react_component_tooltip place-top type-dark " data-id="tooltip"></div>
+                                                      </span>
+                                                      <span class="mkb_btn mkb_cf_btn pull-right mkb_greenbtn addCF show mkb_task_compBtn" style="top: 13px; right: 0px;">
+                                                        <i class="mksicon-Check"></i>Complete</span>
+                                                        <span class="mkb_tast_completed_btn mkb_btn mkb_cf_btn pull-right mkb_greenbtn addCF mkb_task_compBtn" style="top: 13px; right: 0px;">Completed</span>
+                                                      </div>
+                                                    </div>
+                                                    <div class="mks_task_edit_delete_wrap">
+                                                      <div class="cf_silhouette">
+                                                        <div class="cf_silhouette_text c_txt_s c_txt_s_blue">
+                                                          <i class="mksicon-Edit mks-task-icons"></i></div>
+                                                        </div>
+                                                      </div>
+                                                      <div class="mks_task_edit_delete_wrap _mks_task_delete_task" style="left: 37px; width: 8%; background: transparent;">
+                                                        <div class="cf_silhouette">
+                                                          <div class="cf_silhouette_text c_txt_s c_txt_s_blue">
+                                                            <i class="mksicon-Delete mks-task-icons"></i></div>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+  
+                                                      <div class="contact_found mks_tasks_lists_user task_status_P" style="padding: 10px 12px;"><div class="cf_silhouette">
+                                                        <div class="cf_silhouette_text c_txt_s c_txt_s_blue">
+                                                          <i class="mksicon-Demo mks-task-icons"></i></div>
+                                                        </div>
+                                                        <div class="cf_email_wrap">
+                                                          <div class="cf_email">
+                                                            <p class="mkb_elipsis mkb_text_break" title="Demo" style="width: 145px;">Demo</p>
+                                                            <span class="ckvwicon">03 May 2018 02:58 PM</span>
+                                                          </div>
+                                                          <div class="cf_task_right">
+                                                            <span data-tip="low" class="mks_priority_icon mks_priority_low pclr9" currentitem="false">
+                                                              <i class="mksicon-Triangle_Down"></i>
+                                                              <div class="__react_component_tooltip place-top type-dark " data-id="tooltip"></div>
+                                                            </span>
+                                                            <span class="mkb_btn mkb_cf_btn pull-right mkb_greenbtn addCF show mkb_task_compBtn" style="top: 13px; right: 0px;">
+                                                              <i class="mksicon-Check"></i>Complete</span>
+                                                              <span class="mkb_tast_completed_btn mkb_btn mkb_cf_btn pull-right mkb_greenbtn addCF mkb_task_compBtn" style="top: 13px; right: 0px;">Completed</span>
+                                                            </div>
+                                                          </div>
+                                                          <div class="mks_task_edit_delete_wrap">
+                                                            <div class="cf_silhouette">
+                                                              <div class="cf_silhouette_text c_txt_s c_txt_s_blue">
+                                                                <i class="mksicon-Edit mks-task-icons"></i>
+                                                              </div>
+                                                            </div>
+                                                          </div>
+                                                          <div class="mks_task_edit_delete_wrap _mks_task_delete_task" style="left: 37px; width: 8%; background: transparent;">
+                                                            <div class="cf_silhouette">
+                                                              <div class="cf_silhouette_text c_txt_s c_txt_s_blue"><i class="mksicon-Delete mks-task-icons"></i>
+                                                              </div>
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                      <div class="expand hide msk_collapse_tasks">
+                                                        <span>Click to expand</span>
+                                                        <span class="mksicon-ArrowNext"></span>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                        
+                                      <!-- Notes  -->
+                                      <div id="notes" class="tabcontent mksph_cardbox">
+                                          <h3>Notes</h3>
+                                          <div class="_mks_NotesWrap">
+                                            <a class="mkb_btn mkb_cf_btn pull-right mkb_greenbtn show mkb_notes-save" style="color: rgb(255, 255, 255); top: -38px; right: -1px;">save</a>
+                                            <a class="mkb_btn mkb_cf_btn pull-right mkb_notes-close mks_cc_action_gray hide" style="color: rgb(255, 255, 255); top: -38px; right: -1px;">close</a>
+                                            <a class="mkb_btn mkb_cf_btn pull-right mkb_notes-update c_txt_s_blue hide" style="color: rgb(255, 255, 255); top: -38px; right: 56px;">update</a>
+                                            <textarea placeholder="Add your notes here" maxlength="500" id="note_textarea" style="min-height: 60px; font-size: 13px;"></textarea>
+                                            <div class="height90 height130  notes_lists_wrap">
+                                              <ul>
+  
+                                                  <li class="_mks_item">
+                                                    <div class="cf_silhouette">
+                                                      <div class="mks-notestEdit-wrap cf_silhouette_text c_txt_s pclr8 hide">
+                                                        <i class="mksicon-Edit mks-task-icons"></i></div>
+                                                        <div class="mks-notestDel-wrap cf_silhouette_text c_txt_s pclr12 hide">
+                                                          <i class="mksicon-Delete mks-task-icons"></i>
+                                                        </div>
+                                                        <div class="mks-notestNote-wrap cf_silhouette_text c_txt_s pclr15">
+                                                          <i class="mksicon-Notepad mks-task-icons"></i>
+                                                        </div>
+                                                      </div>
+                                                      <div class="cf_email_wrap">
+                                                        <div class="cf_email">
+                                                          <span class="mkb_text_break" title="Umair notes">Umair notes</span>
+                                                          <p>
+                                                            <strong>You</strong>made a note at 04:44 AM,27 Apr 2018
+                                                          </p>
+                                                        </div>
+                                                      </div>
+                                                    </li>
+                                                    <li class="_mks_item">
+                                                      <div class="cf_silhouette">
+                                                        <div class="mks-notestEdit-wrap cf_silhouette_text c_txt_s pclr8 hide">
+                                                          <i class="mksicon-Edit mks-task-icons"></i>
+                                                        </div>
+                                                        <div class="mks-notestDel-wrap cf_silhouette_text c_txt_s pclr12 hide">
+                                                          <i class="mksicon-Delete mks-task-icons"></i>
+                                                        </div>
+                                                        <div class="mks-notestNote-wrap cf_silhouette_text c_txt_s pclr15">
+                                                          <i class="mksicon-Notepad mks-task-icons"></i>
+                                                        </div>
+                                                      </div>
+                                                      <div class="cf_email_wrap">
+                                                        <div class="cf_email">
+                                                          <span class="mkb_text_break" title="new test needs to be dadeedtest 123 new test needs to be dadeetest 123new test needs to be dade">
+                                                            new test needs to be dadeedvtest 123 new test needs to be dadeed
+                                                          </span>
+                                                          <p><strong>You</strong>made a note at 09:14 AM,06 Apr 2018</p>
+                                                        </div>
+                                                      </div>
+                                                    </li>
+                                                  </ul>
+                                                </div>
+                                                <div class="expand hide notes_collapse">
+                                                  <span>Click to expand</span>
+                                                  <span class="mksicon-ArrowNext"></span>
+                                                </div>
+                                              </div>
                                             </div>
-                                          </a>
-                                        </div>
-                                      </div>
+                                      <div id="contactBFCO">   
                                       <div id="Contact" class="tabcontent mkb_basicField_wrap mksph_cardbox">
                                         <h3 style="margin-bottom: 15px;">Basic Fields</h3>
                                         <span class="mkb_btn mkb_basic_edit pull-right show">Edit</span>
@@ -822,203 +1016,18 @@
                                           <span class="mksicon-ArrowNext"></span>
                                         </div>
                                       </div>
-                                      <!-- Tasks -->
-                                      <div id="tasks" class="tabcontent mksph_cardbox">
-                                        <h3>Tasks</h3>
-                                        <div class="tasks_sort_by" style="display: inline-block;position: absolute;top: 11px;left: 73px;">
-                                            <select>
-                                              <option value="-1">All</option>
-                                              <optgroup label="Priority">
-                                                <option value="high">High</option>
-                                                <option value="medium">Medium</option>
-                                                <option value="low">Low</option>
-                                              </optgroup>
-                                              <optgroup label="Tasks Types">
-                                                <option value="call">Call</option>
-                                                <option value="email">Email</option>
-                                                <option value="discovery">Discovery</option>
-                                                <option value="lunch">Lunch</option>
-                                                <option value="breakfast">Breakfast</option>
-                                                <option value="meeting">Meeting</option>
-                                                <option value="proposal">proposal</option>
-                                                <option value="demo">Demo</option>
-                                                <option value="first_touch">First Touch</option>
-                                              </optgroup>
-                                            </select>
-                                          </div>
-                                        <div style="position: relative;">
-                                          <span class="mkb_btn mkb_cf_btn pull-right mkb_greenbtn addTasks true" style="right: 0px; top: -38px;">Add New</span>
-                                          
-                                          <div class="content-wrapper height90 height130 task_expand_height mks_outlook_tasks_wrapper" style="position: relative;">
-                                            <div class="contact_found mks_tasks_lists_user task_status_P" style="padding: 10px 12px;">
-                                              <div class="cf_silhouette">
-                                                <div class="cf_silhouette_text c_txt_s c_txt_s_blue">
-                                                  <i class="mksicon-Meeting mks-task-icons"></i>
+                                        <!-- Update salesforce button -->
+                                        <div id="SalesForce" class="hide tabcontent mkb_basicField_sf_wrap mksph_cardbox">
+                                            <span class="mkb_btn pull-left mkb_basic_edit mkb_sf_btn" style="display: none;">Update fields to Salesforce</span>
+                                            <div class="scfe_save_wrap disable_false" style="float: none; width: 200px; margin: 0px auto;">
+                                              <a class="scfe_ach" href="#">
+                                                <div class="scfe_save_t">
+                                                  <span>Update fields to Salesforce</span>
                                                 </div>
-                                              </div>
-                                              <div class="cf_email_wrap">
-                                                <div class="cf_email">
-                                                  <p class="mkb_elipsis mkb_text_break" title="Meeting" style="width: 145px;">Meeting</p>
-                                                  <span class="ckvwicon">03 May 2018 02:58 PM</span>
+                                                <div class="scfe_save_i_md">
+                                                  <div class="scfe_save_i mksicon-jump_to_salesforce_record" aria-hidden="true"></div>
                                                 </div>
-                                                <div class="cf_task_right">
-                                                  <span data-tip="high" class="mks_priority_icon mks_priority_high pclr12" currentitem="false">
-                                                    <i class="mksicon-Triangle_Up"></i>
-                                                    <div class="__react_component_tooltip place-top type-dark " data-id="tooltip"></div>
-                                                  </span>
-                                                  <span class="mkb_btn mkb_cf_btn pull-right mkb_greenbtn addCF show mkb_task_compBtn" style="top: 13px; right: 0px;">
-                                                    <i class="mksicon-Check"></i>Complete</span>
-                                                    <span class="mkb_tast_completed_btn mkb_btn mkb_cf_btn pull-right mkb_greenbtn addCF mkb_task_compBtn" style="top: 13px; right: 0px;">Completed</span>
-                                                  </div>
-                                                </div>
-                                                <div class="mks_task_edit_delete_wrap">
-                                                  <div class="cf_silhouette">
-                                                    <div class="cf_silhouette_text c_txt_s c_txt_s_blue">
-                                                      <i class="mksicon-Edit mks-task-icons"></i>
-                                                    </div>
-                                                  </div>
-                                                </div>
-                                                <div class="mks_task_edit_delete_wrap _mks_task_delete_task" style="left: 37px; width: 8%; background: transparent;">
-                                                  <div class="cf_silhouette">
-                                                    <div class="cf_silhouette_text c_txt_s c_txt_s_blue">
-                                                      <i class="mksicon-Delete mks-task-icons"></i>
-                                                    </div>
-                                                  </div>
-                                                </div>
-                                              </div>
-                                              <div class="contact_found mks_tasks_lists_user task_status_P" style="padding: 10px 12px;">
-                                                <div class="cf_silhouette">
-                                                  <div class="cf_silhouette_text c_txt_s c_txt_s_blue">
-                                                    <i class="mksicon-Lunch mks-task-icons"></i>
-                                                  </div>
-                                                </div>
-                                                <div class="cf_email_wrap">
-                                                  <div class="cf_email">
-                                                    <p class="mkb_elipsis mkb_text_break" title="Lunch" style="width: 145px;">Lunch</p>
-                                                    <span class="ckvwicon">03 May 2018 02:58 PM</span>
-                                                  </div>
-                                                  <div class="cf_task_right">
-                                                    <span data-tip="medium" class="mks_priority_icon mks_priority_medium pclr19" currentitem="false">
-                                                      <i class="mksicon-More"></i>
-                                                      <div class="__react_component_tooltip place-top type-dark " data-id="tooltip"></div>
-                                                    </span>
-                                                    <span class="mkb_btn mkb_cf_btn pull-right mkb_greenbtn addCF show mkb_task_compBtn" style="top: 13px; right: 0px;">
-                                                      <i class="mksicon-Check"></i>Complete</span>
-                                                      <span class="mkb_tast_completed_btn mkb_btn mkb_cf_btn pull-right mkb_greenbtn addCF mkb_task_compBtn" style="top: 13px; right: 0px;">Completed</span>
-                                                    </div>
-                                                  </div>
-                                                  <div class="mks_task_edit_delete_wrap">
-                                                    <div class="cf_silhouette">
-                                                      <div class="cf_silhouette_text c_txt_s c_txt_s_blue">
-                                                        <i class="mksicon-Edit mks-task-icons"></i></div>
-                                                      </div>
-                                                    </div>
-                                                    <div class="mks_task_edit_delete_wrap _mks_task_delete_task" style="left: 37px; width: 8%; background: transparent;">
-                                                      <div class="cf_silhouette">
-                                                        <div class="cf_silhouette_text c_txt_s c_txt_s_blue">
-                                                          <i class="mksicon-Delete mks-task-icons"></i></div>
-                                                        </div>
-                                                      </div>
-                                                    </div>
-                                                    
-                                                    <div class="contact_found mks_tasks_lists_user task_status_P" style="padding: 10px 12px;"><div class="cf_silhouette">
-                                                      <div class="cf_silhouette_text c_txt_s c_txt_s_blue">
-                                                        <i class="mksicon-Demo mks-task-icons"></i></div>
-                                                      </div>
-                                                      <div class="cf_email_wrap">
-                                                        <div class="cf_email">
-                                                          <p class="mkb_elipsis mkb_text_break" title="Demo" style="width: 145px;">Demo</p>
-                                                          <span class="ckvwicon">03 May 2018 02:58 PM</span>
-                                                        </div>
-                                                        <div class="cf_task_right">
-                                                          <span data-tip="low" class="mks_priority_icon mks_priority_low pclr9" currentitem="false">
-                                                            <i class="mksicon-Triangle_Down"></i>
-                                                            <div class="__react_component_tooltip place-top type-dark " data-id="tooltip"></div>
-                                                          </span>
-                                                          <span class="mkb_btn mkb_cf_btn pull-right mkb_greenbtn addCF show mkb_task_compBtn" style="top: 13px; right: 0px;">
-                                                            <i class="mksicon-Check"></i>Complete</span>
-                                                            <span class="mkb_tast_completed_btn mkb_btn mkb_cf_btn pull-right mkb_greenbtn addCF mkb_task_compBtn" style="top: 13px; right: 0px;">Completed</span>
-                                                          </div>
-                                                        </div>
-                                                        <div class="mks_task_edit_delete_wrap">
-                                                          <div class="cf_silhouette">
-                                                            <div class="cf_silhouette_text c_txt_s c_txt_s_blue">
-                                                              <i class="mksicon-Edit mks-task-icons"></i>
-                                                            </div>
-                                                          </div>
-                                                        </div>
-                                                        <div class="mks_task_edit_delete_wrap _mks_task_delete_task" style="left: 37px; width: 8%; background: transparent;">
-                                                          <div class="cf_silhouette">
-                                                            <div class="cf_silhouette_text c_txt_s c_txt_s_blue"><i class="mksicon-Delete mks-task-icons"></i>
-                                                            </div>
-                                                          </div>
-                                                        </div>
-                                                      </div>
-                                                    </div>
-                                                    <div class="expand hide msk_collapse_tasks">
-                                                      <span>Click to expand</span>
-                                                      <span class="mksicon-ArrowNext"></span>
-                                                    </div>
-                                                  </div>
-                                                </div>
-                                      <!-- Notes  -->
-                                      <div id="notes" class="tabcontent mksph_cardbox">
-                                        <h3>Notes</h3>
-                                        <div class="_mks_NotesWrap">
-                                          <a class="mkb_btn mkb_cf_btn pull-right mkb_greenbtn show mkb_notes-save" style="color: rgb(255, 255, 255); top: -38px; right: -1px;">save</a>
-                                          <a class="mkb_btn mkb_cf_btn pull-right mkb_notes-close mks_cc_action_gray hide" style="color: rgb(255, 255, 255); top: -38px; right: -1px;">close</a>
-                                          <a class="mkb_btn mkb_cf_btn pull-right mkb_notes-update c_txt_s_blue hide" style="color: rgb(255, 255, 255); top: -38px; right: 56px;">update</a>
-                                          <textarea placeholder="Add your notes here" maxlength="500" id="note_textarea" style="min-height: 60px; font-size: 13px;"></textarea>
-                                          <div class="height90 height130  notes_lists_wrap">
-                                            <ul>
-                                              
-                                                <li class="_mks_item">
-                                                  <div class="cf_silhouette">
-                                                    <div class="mks-notestEdit-wrap cf_silhouette_text c_txt_s pclr8 hide">
-                                                      <i class="mksicon-Edit mks-task-icons"></i></div>
-                                                      <div class="mks-notestDel-wrap cf_silhouette_text c_txt_s pclr12 hide">
-                                                        <i class="mksicon-Delete mks-task-icons"></i>
-                                                      </div>
-                                                      <div class="mks-notestNote-wrap cf_silhouette_text c_txt_s pclr15">
-                                                        <i class="mksicon-Notepad mks-task-icons"></i>
-                                                      </div>
-                                                    </div>
-                                                    <div class="cf_email_wrap">
-                                                      <div class="cf_email">
-                                                        <span class="mkb_text_break" title="Umair notes">Umair notes</span>
-                                                        <p>
-                                                          <strong>You</strong>made a note at 04:44 AM,27 Apr 2018
-                                                        </p>
-                                                      </div>
-                                                    </div>
-                                                  </li>
-                                                  <li class="_mks_item">
-                                                    <div class="cf_silhouette">
-                                                      <div class="mks-notestEdit-wrap cf_silhouette_text c_txt_s pclr8 hide">
-                                                        <i class="mksicon-Edit mks-task-icons"></i>
-                                                      </div>
-                                                      <div class="mks-notestDel-wrap cf_silhouette_text c_txt_s pclr12 hide">
-                                                        <i class="mksicon-Delete mks-task-icons"></i>
-                                                      </div>
-                                                      <div class="mks-notestNote-wrap cf_silhouette_text c_txt_s pclr15">
-                                                        <i class="mksicon-Notepad mks-task-icons"></i>
-                                                      </div>
-                                                    </div>
-                                                    <div class="cf_email_wrap">
-                                                      <div class="cf_email">
-                                                        <span class="mkb_text_break" title="new test needs to be dadeedtest 123 new test needs to be dadeetest 123new test needs to be dade">
-                                                          new test needs to be dadeedvtest 123 new test needs to be dadeed
-                                                        </span>
-                                                        <p><strong>You</strong>made a note at 09:14 AM,06 Apr 2018</p>
-                                                      </div>
-                                                    </div>
-                                                  </li>
-                                                </ul>
-                                              </div>
-                                              <div class="expand hide notes_collapse">
-                                                <span>Click to expand</span>
-                                                <span class="mksicon-ArrowNext"></span>
-                                              </div>
+                                              </a>
                                             </div>
                                           </div>
                                       <!-- Custom Fields  -->
@@ -1075,10 +1084,11 @@
                                         </div>
                                       </div>
                                     </div>
+                                  </div> 
                                   </span>
                                   <!--
                                     =================================
-                                    Starts : User Activity Time 
+                                    Starts : User Activity Time
                                     =================================
                                     -->
                                   <span class="tabs_content" id="mks_tab_activity" style="display: none;">
@@ -1104,7 +1114,7 @@
                                         </div>
                                         <div class="act_filter hide">
                                           <p>
-                                            <a href="#">show all</a> | 
+                                            <a href="#">show all</a> |
                                             <a href="#">advance filter</a>
                                           </p>
                                         </div>
@@ -1113,6 +1123,7 @@
                                       <div class="activity_content">
                                         <div class="new_activities current">
                                           <div class="act_row_wrapper">
+                                            <div class="futureTimeCard"></div>
                                             <div class="timestop now">
                                               <span>09 Apr 2018 ,03:04 AM</span>
                                               </div>
@@ -1221,7 +1232,7 @@
                                                                       </div>
                                                                     </div>
                                                                 </div>
-                                                               </div> 
+                                                               </div>
                                                           <div class="act_row green">
                                                             <span class="icon mksicon-ActSent"></span>
                                                             <h5><a>AU Course ADv2</a>
@@ -1271,12 +1282,12 @@
                                                             <div class="datetime">
                                                               <span class="this-event-type showtooltip" data-original-title="Click to view this event type only" style="cursor: pointer;">Alert</span> at 05:32 AM , 30 Jan 2018</div><div class="camp_type"><span class="showtooltip all-timelineFilter" data-original-title="Click to view all Campaigns activities" style="cursor: pointer;">
                                                                 <i class="icon wficon"></i>
-                                                                Workflow 
+                                                                Workflow
                                                               </span>
                                                             </div>
                                                           </div>
                                                         </div>
-                                                        
+
                                                         <div class="act_row green">
                                                           <span class="icon mksicon-ActSent"></span>
                                                           <h5>
@@ -1325,7 +1336,7 @@
                                   </span>
                                   <!--
                                     =================================
-                                    Ends : User Activity Time 
+                                    Ends : User Activity Time
                                     =================================
                                     -->
                                 </div>
