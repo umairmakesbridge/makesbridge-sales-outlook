@@ -1609,7 +1609,25 @@
           "meeting" : "mksicon-Meeting",
           "proposal" : "mksicon-Proposal",
           "demo"  : "mksicon-Demo",
-          "first_touch":"mksicon-First-Touch"
+          "first_touch":"mksicon-First-Touch",
+          "email" : "mksicon-Mail",
+          "lunch" : "mksicon-Lunch",
+          "discovery" : "mksicon-Discovery",
+          "call" : "mksicon-Phone",
+          "email" : "mksicon-Mail",
+          "breakfast" : "mksicon-Breakfast",
+          "meeting" : "mksicon-Meeting",
+          "proposal" : "mksicon-Proposal",
+          "demo"  : "mksicon-Demo",
+          "first_touch":"mksicon-First-Touch",
+          "webSeminarInvite" : "mksicon-Web_Seminar_Invite",
+          "connect" : "mksicon-Connect",
+          "introduction" : "mksicon-Shake_hands",
+          "firstMessage" : "mksicon-First_Message",
+          "secondMessage" : "mksicon-Second_Message",
+          "thirdMessage"  : "mksicon-Third_Message",
+          "pdf" : "mksicon-PDF",
+          "inviteToGroup" : "mksicon-Invite_to_Group"
         }
         var priorityIcons = {
           "low" : {"topClass":"mks_priority_low pclr9","icon" : "mksicon-Triangle_Down"},
@@ -1629,6 +1647,7 @@
         var showTasksDialog = function(type){
           var bodyHtml = ''
           bodyHtml += '<ul class="mks_ecc_wrap">';
+          bodyHtml += '<label>Basic Tasks</label>'
           bodyHtml += '<span><li class="mks_ecc_first_touch tooltips" data-tip="First Touch" data-value="first_touch" currentitem="false"><div class="mksicon-First-Touch"></div><span>First Touch</span></li></span>';
           bodyHtml += '<span><li class="mks_ecc_demo tooltips" data-tip="Demo" data-value="demo" currentitem="false"><div class="mksicon-Demo"></div><span>Demo</span></li></span>';
           bodyHtml += '<span><li class="mks_ecc_discovery tooltips" data-tip="Discovery" data-value="discovery" currentitem="false"><div class="mksicon-Discovery"></div><span>Discovery</span></li></span>';
@@ -1638,7 +1657,18 @@
           bodyHtml += '<span><li class="mks_ecc_breakfast tooltips" data-tip="Breakfast" data-value="breakfast" currentitem="false"><div class="mksicon-Breakfast"></div><span>Breakfast</span></li></span>';
           bodyHtml += '<span><li class="mks_ecc_meeting tooltips" data-tip="Meeting" data-value="meeting" currentitem="false"><div class="mksicon-Meeting"></div><span>Meeting</span></li></span>';
           bodyHtml += '<span><li class="mks_ecc_proposal tooltips" data-tip="Proposal" data-value="proposal" currentitem="false"><div class="mksicon-Proposal"></div><span>Proposal</span></li></span>';
-          bodyHtml += '</ul>'
+          bodyHtml += '</ul>';
+          bodyHtml += '<ul class="mks_ecc_wrap ecc_linkdin">';
+          bodyHtml += '<label>LinkedIn Tasks</label>';
+          bodyHtml += '<span><li class="mks_ecc_connect tooltips" data-tip="Connect" data-value="connect" currentitem="false"><div class="mksicon-Connect"></div><span>Connect</span></li></span>';
+          bodyHtml += '<span><li class="mks_ecc_introduction tooltips" data-tip="Introduction" data-value="introduction" currentitem="false"><div class="mksicon-Shake_hands"></div><span>Introduction</span></li></span>';
+          bodyHtml += '<span><li class="mks_ecc_firstMessage tooltips" data-tip="First Message" data-value="firstMessage" currentitem="false"><div class="mksicon-First_Message"></div><span>First Message</span></li></span>';
+          bodyHtml += '<span><li class="mks_ecc_secondMessage tooltips" data-tip="Second Message" data-value="secondMessage" currentitem="false"><div class="mksicon-Second_Message"></div><span>Second Message</span></li></span>';
+          bodyHtml += '<span><li class="mks_ecc_thirdMessage tooltips" data-tip="Third Message" data-value="thirdMessage" currentitem="false"><div class="mksicon-Second_Message"></div><span>Second Message</span></li></span>';
+          bodyHtml += '<span><li class="mks_ecc_pdf tooltips" data-tip="PDF" data-value="pdf" currentitem="false"><div class="mksicon-PDF"></div><span>PDF</span></li></span>';
+          bodyHtml += '<span><li class="mks_ecc_webSeminarInvite tooltips" data-tip="Web Seminar Invite" data-value="webSeminarInvite" currentitem="false"><div class="mksicon-Web_Seminar_Invite"></div><span>webSeminarInvite</span></li></span>';
+          bodyHtml += '<span><li class="mks_ecc_inviteToGroup tooltips" data-tip="Invite to Group" data-value="inviteToGroup" currentitem="false"><div class="mksicon-Invite_to_Group"></div><span>webSeminarInvite</span></li></span>';
+          bodyHtml += '</ul>';
           bodyHtml += '<input type="text" name="ckey" value="Call" id="input2" class="focusThis" data-required="required" placeholder="Enter task name *">'
           bodyHtml +='<span class="date_wrapper__mks"><input type="text" id="datepicker"></span>'
           bodyHtml +='<span class="timePicker_wrap"><input type="text" class="timepicker"/></span>'
@@ -1655,10 +1685,10 @@
           $('.taks_dialog_wrapper input.timepicker').timepicker('setTime', new Date());
 
           $('.taks_dialog_wrapper .mks_ecc_wrap li').on('click',function(){
-            if($(this).parents('.mks_ecc_wrap').find('li.active').attr('data-tip') == $('.taks_dialog_wrapper #input2').val().trim()){
+            if($('.mks_ecc_wrap').find('li.active').attr('data-tip') == $('.taks_dialog_wrapper #input2').val().trim()){
               $('.taks_dialog_wrapper #input2').val($(this).attr('data-tip'))
             }
-            $(this).parents('.mks_ecc_wrap').find('li').removeClass('active');
+            $('.mks_ecc_wrap').find('li').removeClass('active');
             
             $(this).addClass('active');
           });
@@ -2216,10 +2246,10 @@
           html +='</div>'
           html +='<p title="'+data.taskName+'" class="mkb_elipsis mkb_text_break"  style="display:block;width:145px;">'+data.taskName+'</p>'
           if($('.toggleTask.active').hasClass('all')){
-            html +=' <span class="ckvwicon mks_task_time" style="display: inline; position: absolute; top: 22px;left: 34px">'+generateDate(data.taskDate)+'</span>'
+            html +=' <span class="ckvwicon mks_task_time" style="display: inline; position: absolute; top: 22px;left: 34px">'+generateDate(data.updationTime)+'</span>'
             html +=' <span class="ckvwicon" style="position: absolute; top: 22px; display: inherit; left: 148px;">'+data.subscriberInfo['firstName']+" "+data.subscriberInfo['lastName'] +'</span>'
           }else{
-            html +=' <span class="ckvwicon mks_task_time" style="display: inline; position: absolute; top: 22px;left: 34px">'+generateTimeOnly(data.taskDate)+'</span>'
+            html +=' <span class="ckvwicon mks_task_time" style="display: inline; position: absolute; top: 22px;left: 34px">'+generateTimeOnly(data.updationTime)+'</span>'
             html +=' <span class="ckvwicon" style="position: absolute; top: 22px; display: inherit; left: 88px;">'+data.subscriberInfo['firstName']+" "+data.subscriberInfo['lastName'] +'</span>'
           }
           html +='</div>'
@@ -2250,10 +2280,10 @@
           html +=' <div class="__react_component_tooltip place-top type-dark " data-id="tooltip"></div>'
           html +=' <p title="'+data.taskName+'" style="display:block;width:145px;" class="mkb_elipsis mkb_text_break">'+data.taskName+'</p>'
           if($('.toggleTask.active').hasClass('all')){
-            html +=' <span class="ckvwicon mks_task_time" style="display: inline; position: absolute; top: 22px;left: 26px">'+generateDate(data.taskDate)+'</span>'
+            html +=' <span class="ckvwicon mks_task_time" style="display: inline; position: absolute; top: 22px;left: 26px">'+generateDate(data.updationTime)+'</span>'
             html +=' <span class="ckvwicon" style="position: absolute; top: 22px; display: inherit; left: 140px;">'+data.subscriberInfo['firstName']+" "+data.subscriberInfo['lastName'] +'</span>'
           }else{
-            html +=' <span class="ckvwicon mks_task_time" style="display: inline; position: absolute; top: 22px;left: 26px">'+generateTimeOnly(data.taskDate)+'</span>'
+            html +=' <span class="ckvwicon mks_task_time" style="display: inline; position: absolute; top: 22px;left: 26px">'+generateTimeOnly(data.updationTime)+'</span>'
             html +=' <span class="ckvwicon" style="position: absolute; top: 22px; display: inherit; left: 80px;">'+data.subscriberInfo['firstName']+" "+data.subscriberInfo['lastName'] +'</span>'
           }
           html +=' </div>'

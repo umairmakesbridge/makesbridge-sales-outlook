@@ -2494,7 +2494,7 @@ ul.mks_ecc_wrap span:last-child li {
   float: right;
   top: -39px;
   position: relative;
-  right: 111px;
+  right: 60px;
   border-radius: 50%;
 }
 .mks_priority_icon i{
@@ -2646,6 +2646,16 @@ left: 3px;
     background: #fff;
     margin-top: 30px;
     position: relative;
+}
+.ecc_linkdin .mks_ecc_connect {
+    padding: 6px 13px;
+}
+.mks_ecc_wrap label {
+    clear: both;
+    display: block;
+    padding-bottom: 4px;
+    font-size: 13px;
+    color: #616060;
 }
 .mks_task_lists_dash_wrapper .contacts-switch .status_tgl a.published.active,.mks_task_lists_dash_wrapper .contacts-switch .status_tgl a.draft.active {
     padding-left: 10px;
