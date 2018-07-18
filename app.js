@@ -1666,8 +1666,8 @@
           bodyHtml += '<span><li class="mks_ecc_secondMessage tooltips" data-tip="Second Message" data-value="secondMessage" currentitem="false"><div class="mksicon-Second_Message"></div><span>Second Message</span></li></span>';
           bodyHtml += '<span><li class="mks_ecc_thirdMessage tooltips" data-tip="Third Message" data-value="thirdMessage" currentitem="false"><div class="mksicon-Second_Message"></div><span>Second Message</span></li></span>';
           bodyHtml += '<span><li class="mks_ecc_pdf tooltips" data-tip="PDF" data-value="pdf" currentitem="false"><div class="mksicon-PDF"></div><span>PDF</span></li></span>';
-          bodyHtml += '<span><li class="mks_ecc_webSeminarInvite tooltips" data-tip="Web Seminar Invite" data-value="webSeminarInvite" currentitem="false"><div class="mksicon-Web_Seminar_Invite"></div><span>webSeminarInvite</span></li></span>';
-          bodyHtml += '<span><li class="mks_ecc_inviteToGroup tooltips" data-tip="Invite to Group" data-value="inviteToGroup" currentitem="false"><div class="mksicon-Invite_to_Group"></div><span>webSeminarInvite</span></li></span>';
+          bodyHtml += '<span><li class="mks_ecc_webSeminarInvite tooltips" data-tip="Web Seminar Invite" data-value="webSeminarInvite" currentitem="false"><div class="mksicon-Web_Seminar_Invite"></div><span>Web Seminar Invite</span></li></span>';
+          bodyHtml += '<span><li class="mks_ecc_inviteToGroup tooltips" data-tip="Invite to Group" data-value="inviteToGroup" currentitem="false"><div class="mksicon-Invite_to_Group"></div><span>Invite to Group</span></li></span>';
           bodyHtml += '</ul>';
           bodyHtml += '<input type="text" name="ckey" value="Call" id="input2" class="focusThis" data-required="required" placeholder="Enter task name *">'
           bodyHtml +='<span class="date_wrapper__mks"><input type="text" id="datepicker"></span>'
