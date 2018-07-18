@@ -2490,8 +2490,11 @@ ul.mks_ecc_wrap span:last-child li {
 .taks_dialog_wrapper .addBox_body{
     overflow-x: unset !important;
     overflow-y: unset !important;
+    max-height: 350px;
 }
-
+.dialogBox.addBox_wrapper_container.scfe_field.taks_dialog_wrapper{
+    top: 90px;
+}
 .mks_priority_icon{
   width: 19px;
   height: 19px;
