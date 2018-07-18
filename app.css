@@ -2487,6 +2487,11 @@ ul.mks_ecc_wrap span:last-child li {
   line-height: 24px !important;
 }
 
+.taks_dialog_wrapper .addBox_body{
+    overflow-x: unset !important;
+    overflow-y: unset !important;
+}
+
 .mks_priority_icon{
   width: 19px;
   height: 19px;

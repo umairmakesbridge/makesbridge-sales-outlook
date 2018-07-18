@@ -1815,7 +1815,7 @@
                     load_more +='<div class="LoadMore loading_false">Loading more...</div>'
                     load_more +='</div>'
                     load_more +='<div class="LoadMore-wrapper loadMore-tasksSub" data-offset="'+data.nextOffset+'">'
-                    load_more +='<div class="LoadMore"><span class="mksicon-Add"></span>Show more Activities</div>'
+                    load_more +='<div class="LoadMore"><span class="mksicon-Add"></span>Show more tasks</div>'
                     load_more +='</div>';
                     $('.mks_outlook_tasks_wrapper').append(load_more);
                 }else{
@@ -1865,7 +1865,7 @@
                     load_more +='<div class="LoadMore loading_false">Loading more...</div>'
                     load_more +='</div>'
                     load_more +='<div class="LoadMore-wrapper loadMore-tasksSub" data-offset="'+data.nextOffset+'">'
-                    load_more +='<div class="LoadMore"><span class="mksicon-Add"></span>Show more Activities</div>'
+                    load_more +='<div class="LoadMore"><span class="mksicon-Add"></span>Show more tasks</div>'
                     load_more +='</div>';
                     $('.mks_outlook_tasks_wrapper').append(load_more);
                   }else{
