@@ -1095,6 +1095,18 @@
                                      commonModule.hideLoadingMask();
                                 });
 
+                                $('#Contact span.mksicon-ArrowNext').unbind('click');
+                                $('#Contact span.mksicon-ArrowNext').on('click',function(){
+                                  if($(this).hasClass('arrow_make_down')){
+                                    $(this).removeClass('arrow_make_down');
+                                    $('#Contact .basic_expand_height').addClass('basic-content-hide');
+                                    $('.mkb_basic_edit,.basic_expand').hide();
+                                  }else{
+                                    $(this).addClass('arrow_make_down');
+                                    $('#Contact .basic_expand_height').removeClass('basic-content-hide');
+                                    $('.mkb_basic_edit,.basic_expand').show();
+                                  }
+                                });
                                
                           };
 
@@ -1275,6 +1287,19 @@
                             getSubscriberDetails();
                           }
                           var attachSubscriberEvents = function(){
+
+                            $('#Contact span.mksicon-ArrowNext').unbind('click');
+                                $('#Contact span.mksicon-ArrowNext').on('click',function(){
+                                  if($(this).hasClass('arrow_make_down')){
+                                    $(this).removeClass('arrow_make_down');
+                                    $('#Contact .basic_expand_height').addClass('basic-content-hide');
+                                    $('.mkb_basic_edit,.basic_expand').hide();
+                                  }else{
+                                    $(this).addClass('arrow_make_down');
+                                    $('#Contact .basic_expand_height').removeClass('basic-content-hide');
+                                    $('.mkb_basic_edit,.basic_expand').show();
+                                  }
+                                });
                               $('.mkb_basicField_wrap .mkb_basic_edit').on('click',function(event){
                                 var parentDiv = $(this).parent();
                                 $(this).addClass('hide');
@@ -1332,6 +1357,23 @@
                                 parentDiv.find('ul.customFields_ul li input').addClass('hide');
                                   $('.cf_expand').trigger('click');
                               });
+
+                              $('#custom-fields span.mksicon-ArrowNext').unbind('click');
+                                $('#custom-fields span.mksicon-ArrowNext').on('click',function(){
+                                  if($(this).hasClass('arrow_make_down')){
+                                    $(this).removeClass('arrow_make_down');
+                                    $('#custom-fields .scfe_field').addClass('basic-content-hide');
+                                    $('.addCF,.mkb_cf_edit_btn,.cf_expand').hide();
+                                    setTimeout(function(){$('.customField_ul_wraps').css('height','0px');},500)
+                                    
+                                  }else{
+                                    $(this).addClass('arrow_make_down');
+                                    $('#custom-fields .scfe_field').removeClass('basic-content-hide');
+                                    $('.addCF,.mkb_cf_edit_btn,.cf_expand').show();
+                                    $('.customField_ul_wraps').removeAttr('style');
+                                  }
+                                });
+
                               $('.edit_top_slider').on('click',function(event){
                                 $('.debugDiv').html('Edit Basic Fields ');
                                 $('.mkb_basicField_wrap .mkb_basic_edit').trigger('click');
@@ -1405,6 +1447,9 @@
                                     $(this).addClass('expand');
                                   }
                               });
+
+                              
+
                               $('.addTag').on('click',function(event){
                                   $(this).hide();
                                   $('.addTagWrapper').show();
@@ -1428,6 +1473,17 @@
                                 
                                  event.stopPropagation()
                               });
+                              $('#Tags span.mksicon-ArrowNext').on('click',function(){
+                                if($(this).hasClass('arrow_make_down')){
+                                  $(this).removeClass('arrow_make_down');
+                                  $('#Tags .tags-contents').addClass('tags-contents-hide');
+                                  $('.addTag').hide();
+                                }else{
+                                  $(this).addClass('arrow_make_down');
+                                  $('#Tags .tags-contents').removeClass('tags-contents-hide');
+                                  $('.addTag').show();
+                                }
+                              })
                               $('.addTagWrapper .scfe_close_wrap').on('click',function(){
                                   $(this).parents('.addTagWrapper').hide();
                                   $('.addTag').show();
@@ -1718,7 +1774,18 @@
                 $(this).addClass('expand');
               }
           });
-
+          $('#tasks span.mksicon-ArrowNext').unbind('click');
+          $('#tasks span.mksicon-ArrowNext').on('click',function(){
+            if($(this).hasClass('arrow_make_down')){
+              $(this).removeClass('arrow_make_down');
+              $('#tasks .mks_outlook_tasks_wrapper').addClass('tasks-content-hide');
+              $('.tasks_sort_by,.addTasks,.msk_collapse_tasks').hide();
+            }else{
+              $(this).addClass('arrow_make_down');
+              $('#tasks .mks_outlook_tasks_wrapper').removeClass('tasks-content-hide');
+              $('.tasks_sort_by,.addTasks,.msk_collapse_tasks').show();
+            }
+          });
           $('.loadMore-tasksSub').unbind('click');
           $('.loadMore-tasksSub').on('click',function(){
             loadedMoreTask = true;
@@ -3517,6 +3584,19 @@
                   $(this).addClass('expand');
                 }
             });
+            
+            $('#notes span.mksicon-ArrowNext').unbind('click');
+          $('#notes span.mksicon-ArrowNext').on('click',function(){
+            if($(this).hasClass('arrow_make_down')){
+              $(this).removeClass('arrow_make_down');
+              $('#notes .notes_lists_wrap').addClass('notes-content-hide');
+              $('#note_textarea,.mkb_notes-save,.notes_collapse').hide();
+            }else{
+              $(this).addClass('arrow_make_down');
+              $('#notes .notes_lists_wrap').removeClass('notes-content-hide');
+              $('#note_textarea,.mkb_notes-save,.notes_collapse').show();
+            }
+          });
           }
           var deleteNotes = function(){
             console.log(noteID);
