@@ -53,7 +53,7 @@
          $('.login-wrap').show();
          $('.new_contact_true,.create_new_contact_card').addClass('hide');
          $('.ms-welcome__main').hide();
-         
+
          // Update the value of the 'myKey' setting
          /*Office.context.roamingSettings.set('BMS_REQ_TK', '');
          Office.context.roamingSettings.set('userId', '');
@@ -67,11 +67,11 @@
 
       var _mailbox = Office.context.mailbox;
       var _settings = Office.context.roamingSettings;
-       
+
       // Obtains the current item.
        $("#error").html("mail box");
        try {
-          
+
           // parent.window.style.width = "400px";
        var item = _mailbox.item;
        var emailsHTML = "";
@@ -103,7 +103,7 @@
          $.each(emails,function(key,value) {
             allMsgEmails.push(value);
          });
-    
+
 
         var array = allMsgEmails;
         var uniqueAr = [];
@@ -200,7 +200,7 @@
 
           var getDataRequest = function(url,callBack){
             $('.debugDiv').html(url);
-            
+
             $.ajax({
                   url:url,
                   type:"GET",
@@ -478,7 +478,7 @@
                                             +'/io/salesforce/getData/?BMS_REQ_TK='
                                             + userDetails.bmsToken +'&type=status&ukey='+userDetails.userKey
                                             +'&isMobileLogin=Y&userId='+userDetails.userId;
-                            
+
                             commonModule.getDataRequest(searchUrl,function(data){
                               baseObject['isSalesforceUser'] = data.isSalesforceUser;
                             });
@@ -557,7 +557,7 @@
                                     wvEmails += '</div>'
                                     wvEmails += '<div class="clr"></div>'
                                     wvEmails += '</div>'
-                                  
+
                             });
                             $('.visitors_wraps').append(wvEmails);
                             $('.visitors_wraps .contact_found').on("click",function(event){
@@ -588,7 +588,7 @@
                                      ckEmails += '</div>'
                                     ckEmails +=  '<div class="clr"></div>'
                                     ckEmails += '</div>';
-                                 
+
                             });
                             $('.clicker_wraps').append(ckEmails);
                             //$('.visitors_wraps').addClass('hide');
@@ -611,12 +611,12 @@
                                 commonModule.showLoadingMask({message:"Loading user...",container : '.autoLoading'});
                                 loginAjaxCall({url:baseObject.baseUrl,username:username,password:password});
                               },500);
-                              
+
                             }else{
                               commonModule.hideLoadingMask();
                               $('.login-wrap').show();
                             }
-                            
+
                             $('#submitForm').click(function(event){
 
                               var username = $('#username').val();
@@ -660,7 +660,7 @@
                                   handleCancel();
                               })
                               $('.dialogBox_save_btn').on('click',function(){
-                                  
+
                                   handleSave(callBackEvent);
                               });
                               $('.dialogBox input').keypress(function(event){
@@ -704,7 +704,7 @@
                                  dialogHtml +=              '<span>'+btn+'</span>'
                                  dialogHtml +=            '</div>'
                                  dialogHtml +=            '<div class="scfe_save_i_md">'
-                                 dialogHtml +=                 '<div class="scfe_save_i" aria-hidden="true" data-icon="&#xe905;"></div>'                                              
+                                 dialogHtml +=                 '<div class="scfe_save_i" aria-hidden="true" data-icon="&#xe905;"></div>'
                                  dialogHtml +='</div>'
                                  dialogHtml +=         '</a>'
                                  dialogHtml +=    '</div>'
@@ -762,7 +762,7 @@
                 searchContact(event.currentTarget.value);
               }
            });
-           
+
            $('.show_tasks_list').on('click',function(){
              $('.toggleTask').removeClass('active');
              $('.toggleTask.today').addClass('active');
@@ -794,7 +794,7 @@
              $('.login-wrap').show();
              $('.new_contact_true,.create_new_contact_card').addClass('hide');
              $('.ms-welcome__main').hide();
-             
+
              $.removeCookie('userId');
              $.removeCookie('password');
              // Update the value of the 'myKey' setting
@@ -857,7 +857,7 @@
                       searchResultLi+=     '</div>'
                       searchResultLi+=     '<div class="clr"></div>'
                        searchResultLi+=  '</div>'
-                      
+
                        // console.log(value['subscriber'+(key+1)][0])
                      });
                       $('.search_results_single_value').append(searchResultLi);
@@ -909,7 +909,7 @@
                            +'&isMobileLogin=Y&userId='+baseObject.users_details[0].userId+'&isShareSearch='+$('.selectSharedContact').val();
 
            }
-           
+
 
           commonModule.getDataRequest(searchUrl,SubscriberModule.extractSubscriberDetails);
           //$('.debugDiv').html(responseData.totalCount)
@@ -931,7 +931,7 @@
               $('#cemail').removeClass('hasError');
             }
             if(isvalid){
-              
+
               var reqObj = {};
               reqObj['email']= $('#cemail').val();
               reqObj['ukey']=baseObject.users_details[0].userKey
@@ -957,7 +957,7 @@
               reqObj['isMobileLogin']='Y'
               reqObj['userId']=baseObject.users_details[0].userId;
              var url = baseObject.baseUrl+'/io/subscriber/setData/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken+'&type=addSubscriber';
-             commonModule.hideLoadingMask(); 
+             commonModule.hideLoadingMask();
              commonModule.showLoadingMask({message : 'Creating new contact...', container: '.mks_add_new_contact_wrap'})
              commonModule.saveData(url,reqObj,function(response){
               var email = $('#cemail').val();
@@ -1107,7 +1107,7 @@
                                     $('.mkb_basic_edit,.basic_expand').show();
                                   }
                                 });
-                               
+
                           };
 
                           var NewSubscriberCreated = function(data){
@@ -1134,10 +1134,10 @@
                               $('.debugDiv').html(searchUrl);
                               commonModule.getDataRequest(searchUrl,generateBasicCustomFields)
                               getAllTags(); // Get all tagss
-                             
+
                           }
                           var generateBasicCustomFields = function(data){
-                            
+
                             /*--- Calling User Timeline---*/
                             $('.activityLoading .not-found').text('Loading Timeline...')
                             activityModule.getUserTimeLine(0);
@@ -1152,8 +1152,8 @@
                               }, 800);
                             },1000)
                             }
-                            
-                            /*------Setting up User SF---------*/ 
+
+                            /*------Setting up User SF---------*/
                             console.log(baseObject);
                             baseObject['customFields'] = data.cusFldList;
                             baseObject['subscriberDetails'] =  data
@@ -1171,7 +1171,7 @@
                                 $('#SalesForce').addClass('hide');
                               }
                             }
-                            /*---------------*/ 
+                            /*---------------*/
                             $('.debugDiv').html(data.firstName);
                             $('.new_contact_false').removeClass('hide');
                             if(data.firstName){
@@ -1203,13 +1203,13 @@
                                custFieldLi +=   '<input class="hide" value="'+commonModule.decodeHTML(value[0][Object.keys(value[0])[0]])+'">';
                                custFieldLi +=   '</div>'
                                custFieldLi += '</li>'
-                                
+
                               });
                               $('ul.customFields_ul').append(custFieldLi);
                             }
                             $('.mks_tag_ul').html('')
                             if(data.tags){
-                              
+
                               $('.tags-not-found').hide();
                               $('.tags_content').removeClass('hide');
                               var tags = "";
@@ -1272,8 +1272,8 @@
                               commonModule.hideLoadingMask();
                               commonModule.showLoadingMask({message:"Updating contact...",container : '#contactBFCO'});
                             }
-                           
-                            
+
+
                           }
                           var updatedBasicAdvField = function(data){
                             $('.debugDiv').html('Hit After Updating');
@@ -1365,7 +1365,7 @@
                                     $('#custom-fields .scfe_field').addClass('basic-content-hide');
                                     $('.addCF,.mkb_cf_edit_btn,.cf_expand').hide();
                                     setTimeout(function(){$('.customField_ul_wraps').css('height','0px');},500)
-                                    
+
                                   }else{
                                     $(this).addClass('arrow_make_down');
                                     $('#custom-fields .scfe_field').removeClass('basic-content-hide');
@@ -1448,13 +1448,13 @@
                                   }
                               });
 
-                              
+
 
                               $('.addTag').on('click',function(event){
                                   $(this).hide();
                                   $('.addTagWrapper').show();
-                                 
-                                  
+
+
                                   setTimeout(function(){$('.addTagWrapper .focusThis').focus();
                                   try{
                                     jQuery('#addTagName').autocomplete({
@@ -1470,7 +1470,7 @@
                                    $('.ui-menu.ui-widget.ui-widget-content.ui-autocomplete').hide();
                                    $('.addTagWrapper .scfe_save_wrap .scfe_ach').trigger('click');
                                  }
-                                
+
                                  event.stopPropagation()
                               });
                               $('#Tags span.mksicon-ArrowNext').on('click',function(){
@@ -1562,11 +1562,11 @@
                                 $('#mks_tab_'+$(this).text().toLowerCase()).show();
                                 /*if($(this).text().toLowerCase()=="activity"){
                                   $('#mks_tab_'+$(this).text().toLowerCase()).find('.not-found').html('Loading activity timeline...');
-                                 
+
                                 }*/
                               })
                           };
-                          
+
                           var addNewCF  = function(){
 
 
@@ -1626,7 +1626,7 @@
                             });
                           }
                           var getAllTags = function(){
-                            
+
                             var searchUrl = baseObject.baseUrl
                             + '/io/user/getData/?BMS_REQ_TK='
                             + baseObject.users_details[0].bmsToken +'&type=allSubscriberTags&ukey='+baseObject.users_details[0].userKey
@@ -1638,9 +1638,9 @@
                               });
                               baseObject['allTags'] = allTagsArray
                               console.log(allTagsArray);
-                              
+
                             });
-                           
+
                           }
                           return {
                             init: init,
@@ -1657,16 +1657,6 @@
        /*----- Tasks Module ----*/
        var tasksModule = (function(){
         var mapicons = {
-          "lunch" : "mksicon-Lunch",
-          "discovery" : "mksicon-Discovery",
-          "call" : "mksicon-Phone",
-          "email" : "mksicon-Mail",
-          "breakfast" : "mksicon-Breakfast",
-          "meeting" : "mksicon-Meeting",
-          "proposal" : "mksicon-Proposal",
-          "demo"  : "mksicon-Demo",
-          "first_touch":"mksicon-First-Touch",
-          "email" : "mksicon-Mail",
           "lunch" : "mksicon-Lunch",
           "discovery" : "mksicon-Discovery",
           "call" : "mksicon-Phone",
@@ -1730,9 +1720,9 @@
           bodyHtml +='<span class="timePicker_wrap"><input type="text" class="timepicker"/></span>'
           bodyHtml +='<ul class="mks_priorty_wrap"><li class="mks_priotiry_low">Low</li><li class="mks_priotiry_medium active">Medium</li><li class="mks_priotiry_high">High</li></ul>'
           bodyHtml +='<textarea placeholder="Add notes about your task here" id="notes"></textarea>'
-        
+
           dialogModule.dialogView({showTitle: (type=='edit') ? 'Edit Task' : 'Add Task',childrenView : bodyHtml, additionalClass : 'taks_dialog_wrapper',container : '.customField_ul_wraps',saveCallBack : (type=='edit') ? updateTask :tasksModule.addNewTasks,initCallBack : tasksModule.attachTasksEvents });
-        } 
+        }
 
         var attachTasksEvents = function(){
           $( ".taks_dialog_wrapper #datepicker" ).datepicker();
@@ -1745,7 +1735,7 @@
               $('.taks_dialog_wrapper #input2').val($(this).attr('data-tip'))
             }
             $('.mks_ecc_wrap').find('li').removeClass('active');
-            
+
             $(this).addClass('active');
           });
           $('.taks_dialog_wrapper .mks_priorty_wrap li').on('click',function(){
@@ -1811,7 +1801,7 @@
             updateTask(true,taskId)
           });
         }
-        
+
         var addNewTasks = function(){
           var tasktype = $('.taks_dialog_wrapper .mks_ecc_wrap li.active').attr('data-value');
           var taskName = $('.taks_dialog_wrapper #input2').val();
@@ -1823,7 +1813,7 @@
           var newtaskDate = _date.format("MM-DD-YYYY");
           var timeDate = newtaskDate + " " + moment(taskTime, ["h:mm A"]).format("HH:mm")+":00";
           // type: "add";
-        
+
           var reqObj = {
             type: "add",
             subNum:  baseObject.subNum,
@@ -1859,7 +1849,7 @@
                 if(!loadedMoreTask){
                   $('.mks_outlook_tasks_wrapper').html('');
                 }
-               
+
                 $.each(data.taskList,function(key,val){
                   if(!loadedMoreTask){
                     if(key > 2){
@@ -1868,12 +1858,12 @@
                       $('.msk_collapse_tasks').addClass('hide');
                     }
                   }
-                  
-                  
+
+
                   $('.mks_outlook_tasks_wrapper').append(generateTask(val));
-                  
+
                 });
-                
+
                 $('.loadMore-tasksSub').remove();
                 $('.tasks_loading_mask_sub').remove();
                 if(data.nextOffset != "-1"){
@@ -1922,7 +1912,7 @@
                       $('.msk_collapse_tasks').addClass('hide');
                     }
                     $('.mks_outlook_tasks_wrapper').append(generateTask(val));
-                   
+
                   });
                   $('.loadMore-tasksSub').remove();
                   $('.tasks_loading_mask_sub').remove();
@@ -1946,7 +1936,7 @@
                 attachTasksEvents();
             });
           }
-         
+
         }
         var editTasks = function(taskid){
           console.log(taskid);
@@ -1968,7 +1958,7 @@
           var _date = moment(taskDate, 'MM-DD-YYYY')
           var newtaskDate = _date.format("MM-DD-YYYY");
           var timeDate = newtaskDate + " " + moment(taskTime, ["h:mm A"]).format("HH:mm")+":00";
-          
+
           var reqObj = {
             type: (isComplete) ? "complete" : "update",
             subNum:  baseObject.subNum,
@@ -1990,7 +1980,7 @@
           }
           console.log(selectedTask);
           commonModule.saveData(url,reqObj,function(response){
-            
+
             commonModule.hideLoadingMask();
             dialogModule.hideDialog();
             var url = baseObject.baseUrl+'/io/subscriber/subscriberTasks/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken+'&type=getAllTask&orderBy=updationTime&order=asc&offset=0&bucket=20&ukey='+baseObject.users_details[0].userKey+'&isMobileLogin=Y&userId='+baseObject.users_details[0].userId;
@@ -2000,7 +1990,7 @@
             }else{
               commonModule.SuccessAlert({message : 'Task updated successfully'})
             }
-            
+
           })
         }
         var showTaskDialogEdit = function(task){
@@ -2020,7 +2010,7 @@
         }
         var generateTask = function(data){
           var htmlObj = '';
-          var dateObj = generateDateObj(data.taskDate); 
+          var dateObj = generateDateObj(data.taskDate);
           var user = (data.taskAddedBy == baseObject.users_details[0].userId) ? "You" : data.taskAddedBy;
           htmlObj += '<div class="contact_found mks_tasks_lists_user task_status_'+data.status+'" style="padding: 10px 12px;">'
           htmlObj += '<div class="cf_silhouette">'
@@ -2096,7 +2086,7 @@
           commonModule.showLoadingMask({message:"Deleting task...",container : '.dialogBox'})
           var url = baseObject.baseUrl+'/io/subscriber/subscriberTasks/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken;
           commonModule.saveData(url,reqObj,function(response){
-            
+
             if(response.success){
               commonModule.hideLoadingMask();
               commonModule.SuccessAlert({message :response.success})
@@ -2129,12 +2119,12 @@
             var url = baseObject.baseUrl+'/io/subscriber/subscriberTasks/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken;
             commonModule.saveData(url,reqObj,generateDashTasks)
           }
-          
+
         }
         var getTasksDashBoradByPT = function(option){
          var fromDate= moment().format("MM-DD-YYYY");
          var toDate= moment().format("MM-DD-YYYY");
-          
+
           if($('.toggleTask.active').hasClass('all')){
             //https://test.bridgemailsystem.com/pms/io/subscriber/subscriberTasks/?BMS_REQ_TK=El0915vN5rOLp8t4MmWdC72pT9jWoQ&type=getAllTask&orderBy=updationTime&offset=0&bucket=20&sortType=priority&sortOrderBy=desc&sortBy=low
             var url = baseObject.baseUrl+'/io/subscriber/subscriberTasks/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken+'&type=getAllTask&orderBy=updationTime&offset=0&bucket=20&sortType=prioritySingle&sortOrderBy=desc&sortBy='+option+'&ukey='+baseObject.users_details[0].userKey+'&isMobileLogin=Y&userId='+baseObject.users_details[0].userId;
@@ -2158,7 +2148,7 @@
           //https://test.bridgemailsystem.com/pms/io/subscriber/subscriberTasks/?BMS_REQ_TK=El0915vN5rOLp8t4MmWdC72pT9jWoQ&type=getAllTask&orderBy=updationTime&offset=0&bucket=20&sortType=taskTypeSingle&sortOrderBy=desc&sortBy=email
           var fromDate= moment().format("MM-DD-YYYY");
          var toDate= moment().format("MM-DD-YYYY");
-          
+
           if($('.toggleTask.active').hasClass('all')){
             var url = baseObject.baseUrl+'/io/subscriber/subscriberTasks/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken+'&type=getAllTask&orderBy=updationTime&offset=0&bucket=20&sortType=taskTypeSingle&sortOrderBy=desc&sortBy='+option+'&ukey='+baseObject.users_details[0].userKey+'&isMobileLogin=Y&userId='+baseObject.users_details[0].userId;
           }else{
@@ -2176,11 +2166,11 @@
             compArray = [];
             pendArray = [];
           }
-         
+
           commonModule.showLoadingMask({message:'Loading tasks...',container:'#tasks'});
           if(parseInt(data.totalCount) > 0){
             $('.task-loading-nof').addClass('hide');
-            
+
             $.each(data.taskList,function(key,value){
               console.log(value);
               if(value.status=="C"){
@@ -2193,10 +2183,10 @@
             });
             $('.mks_task_lists_dash_wrapper .total-pending').html(pendArray.length)
             $('.mks_task_lists_dash_wrapper .total-complete').html(compArray.length)
-        
+
             $('.mks_task_lists_dash_wrapper .searchBar').removeClass('hide');
             $('.tasks_wrapper_dashboard .mks_task_lists_dash_wrapper .content-wrapper').removeClass('hide');
-            
+
             $('._mks_completed_tasks .total-count-head').removeClass('hide');
             $('.mks_task_lists_dash_wrapper .task_status_P_wrapper .task_status_P').remove();
             $('.mks_task_lists_dash_wrapper .task_status_P_wrapper').append(pendinTask);
@@ -2207,7 +2197,7 @@
             }
             $('.mks_task_lists_dash_wrapper .contact_found._mks_lists_tasks._mks_complete_tasks').remove();
             $('.mks_task_lists_dash_wrapper ._mks_completed_tasks').append(completeTask);
-            
+
             if(completeTask.length > 0){
               $('.mks_task_lists_dash_wrapper ._mks_completed_tasks').removeClass('hide');
             }
@@ -2288,7 +2278,7 @@
             commonModule.hideLoadingMask();
             commonModule.showLoadingMask({message : 'Loading subscriber...',container:$('.makesbridge_plugin')})
             attachedEvents.searchEmailInMks(subEmail,isShared);
-           
+
           })
             /*===========*/
           }else{
@@ -2413,12 +2403,12 @@
           getTasksByPT : getTasksByPT
         }
        })();
-       
+
        /*----- Course Correct Module ----*/
        var courseModule = (function(){
          var ccObj = {
           showHideSkip : 'show',
-          skippedObjAr : [], 
+          skippedObjAr : [],
          };
          var basicFields = {
             "{{EMAIL_ADDR}}" : "Email",
@@ -2454,7 +2444,7 @@
             getCourseCorrect();
           };
           var saveCourseCorrect = function(){
-            // not needed as course correct doesn't have save data 
+            // not needed as course correct doesn't have save data
 
           }
           var getCourseCorrect = function(){
@@ -2466,11 +2456,11 @@
             var workFlowHTML ='';
             $('#mks_cc_ul_wrap').html('<p class="not-found">Loading course correct...</p>');
             commonModule.getDataRequest(Url,function(jsonResponse){
-              
+
               if(Object.keys(jsonResponse.Workflows[0]).length !=0){
                 workflowObj = generateSingleObjectWF(jsonResponse.Workflows[0]);
                 workFlowHTML = generateCCWorkFlow(workflowObj);
-                
+
                 $('#mks_cc_ul_wrap').html('');
                 $('#mks_cc_ul_wrap').append(workFlowHTML);
                 setTimeout(function(){commonModule.hideLoadingMask()},500);
@@ -2501,18 +2491,18 @@
               debugger;
               attachedEvents();
             });
-            
+
           }
           /*=WORKFLOWS of CC=*/
           var generateSingleObjectWF = function(serverJsonWF){
             var newObject = []
-  
+
             // 1. generate WF
             $.each(serverJsonWF,function(key,val){
                 var stepArray = [];
                   //2. generate StepsWF
                 $.each(val[0].steps[0],function(key,val){
-  
+
                   var optionArr = [];
                   // 3. Generate Options array
                   $.each(val[0].options[0],function(key,value){
@@ -2534,12 +2524,12 @@
                     value[0].basicRules = basicRuleArr;
                     value[0].actions = actionsArr;
                     value[0].advanceRules = advanceRulesArr;
-  
+
                     optionArr.push(value[0]);
                   })
                   val[0].options = optionArr;
                   stepArray.push(val[0]);
-  
+
                 });
                 val[0].steps = stepArray;
                 newObject.push(val[0]);
@@ -2567,7 +2557,7 @@
               }else{
                 ListItems +='<div class="scf_o_right cc_action_icons_wrap"}>'
               }
-              
+
               ListItems +='<ul class="top_manager_ul_wraps five">'
               if(list.isSubscriberManuallyAdded=="N" ){
                 var isHide = "hide";
@@ -2591,7 +2581,7 @@
               ListItems +='</div>'
               ListItems +='<span class="subscriber_cc_tooltips" style="width: 241px;word-wrap: break-word;height: 29px;line-height: 13px;font-size: 10px;left: 49px;padding:3px;">Subscriber was manually added to this Workflow Step 1 (override all steps) on '+list.subscriberManuallyAddedTime+' Pacific</span></li>'
               ListItems +='<li data-tip="Click to play" >'
-              ListItems +='<div data-wfid='+list['workflow.encode']+' data-wftype="play" class="scf_option_icon ripple top_manage_lists playPauseWorkFlows '+((list.workflowStatus=="Completed") ? "hide" : "" )+' '+((list.workflowStatus) ? "" : "cc_disabled" )+' " >' //'+ 
+              ListItems +='<div data-wfid='+list['workflow.encode']+' data-wftype="play" class="scf_option_icon ripple top_manage_lists playPauseWorkFlows '+((list.workflowStatus=="Completed") ? "hide" : "" )+' '+((list.workflowStatus) ? "" : "cc_disabled" )+' " >' //'+
               ListItems +='<a href="#" style="text-decoration: unset">'
               ListItems +='<div class="wrap_scf_o_i">'
               ListItems +='<div class="wrap_scf_o_i_md">'
@@ -2645,7 +2635,7 @@
               items +='</div>'
               items +='<div class="cc_steps_options_wrap">'+generateOptions(item.options,{workflowId : wfId,skipped: item.skipped,skippedId:item.stepId,stepSkipped:item.stepSkipped},"skipped")+'</div>'
               items +='</div>'
-              
+
             } else if(item.stepCompleted && item.label != "DO NOTHING") {
               items +='<div class="cc_steps_break_wraps">'
               items +='<div  class="autocomplete__item cc_steps_break autocomplete__item--disabled">'
@@ -2663,7 +2653,7 @@
               items +='<div class="cc_steps_options_wrap">'+generateOptions(item.options,{workflowId : wfId,skipped: item.skipped,skippedId:item.stepId,stepSkipped:item.nextAction},"nextAction")+'</div>'
               items +='</div>'
             }else if(item.label == "DO NOTHING"){
-              
+
               items +='<div class="cc_steps_break_wraps">'
               items +='<div  class="autocomplete__item cc_steps_break autocomplete__item--disabled">'
               items +='<span class="cc_steps_break_title">Step '+(i+1)+':</span>'
@@ -2687,7 +2677,7 @@
             $('div.collapseable').removeClass('collapse');
             $('div.collapseable').addClass('expand');
             $('div.collapseable').find('.collapseMsg').text('Click to expand')
-  
+
             $(event.currentTarget).parents('div.mks_cc_wf_wrap').find('.collapseable').removeClass('expand');
             $(event.currentTarget).parents('div.mks_cc_wf_wrap').find('.collapseable').addClass('collapse');
             $(event.currentTarget).parents('div.mks_cc_wf_wrap').find('.collapseable').find('.collapseMsg').text('Click to collapse');
@@ -2697,7 +2687,7 @@
         var showToggle = function(event){
           //let stepFlag = this.state.showStepsFlag;
           $('div.mks_cc_wf_wrap').removeClass('cc_show_details');
-  
+
           //let collapseExpand = this.state.collapseExpand;
           if($(event.currentTarget).hasClass('collapse')){
             $(event.currentTarget).removeClass('collapse');
@@ -2734,11 +2724,11 @@
               if(list.advanceRuleDetail){
                 ListItems +='<div className="cc_option_action_rule_wrap cc_option_adv_rule_wrap">'+generateAdvanceRules(list.advanceRules,list.advanceRuleDetail[0])+'</div>'
               }
-             
+
               ListItems +='<div className="cc_option_action_rule_wrap">'+generateActionRules(list.actions)+'</div>';
               ListItems +='</div>'
             })
-           
+
           } else if(skippedObj=='doNothing'){
             $.each(options,function(key,list){
                 if(key > 0){
@@ -2749,7 +2739,7 @@
               ListItems += checkStateStep(skippedObj.stepSkipped)
               ListItems += '<span data-tip="Click to unskip step" class="'+ccObj.showHideSkip+' '+((skippedObj.skipped=="false") ? "cc_disabled" : "") +' scf_o_icon scf_o_edit mksicon-CPlay mks_manageList_wrap skippWF"></span>'
               ListItems += '<span data-tip="Click to skip step"   class="'+ccObj.showHideSkip+' '+(skippedObj.skipped=="true") ? "cc_disabled" : "" +' scf_o_icon scf_o_edit  mksicon-CPlayNext mks_manageList_wrap skippWF"></span>'
-          
+
               ListItems += '</span>'
               ListItems += '<div class="cc_option_basic_rule_wrap">'+generateBasicRules(list.basicRules)+'</div>'
 
@@ -2786,11 +2776,11 @@
               ListItems +='<div class="cc_option_basic_rule_wrap">'+generateBasicRules(list.basicRules,list.applyRuleCount)+'</div>'
               ListItems +='<div class="cc_option_action_rule_wrap">'+generateAdvanceRules(list.advanceRules,list.advanceRuleDetail[0])+'</div>'
               ListItems +='<div class="cc_option_action_rule_wrap">'+generateActionRules(list.actions)+'</div>';
-              
-              
+
+
               ListItems +='</div>'
             })
-            
+
           }
 
           return ListItems;
@@ -2803,10 +2793,10 @@
             console.log(_formatedDate)
             return _formatedDateN;
           }
-  
+
         }
         var skippWF = function(wfid,skipid,actType){
-         
+
           if($(event.currentTarget).hasClass('cc_disabled')){
             return false;
           }
@@ -2937,7 +2927,7 @@
           ,ukey:baseObject.users_details[0].userKey
           ,isMobileLogin:'Y'
           ,userId:baseObject.users_details[0].userId
-        } 
+        }
         commonModule.saveData(url,object,function(response){
           commonModule.hideLoadingMask();
           if(response[0]=="success"){
@@ -3016,7 +3006,7 @@
             ListItems += '<br/><br/>'
             ListItems += '</div>'
           })
-          return ListItems;              
+          return ListItems;
         }else{
           return "";
         }
@@ -3075,7 +3065,7 @@
                 items +='</div>';
               }
               if(item.type=="W"){
-                
+
                 items +='<div className="mks_cc_action_wraper">'
                   items +='<span style="textTransform: none;font-size: 12px; color: rgb(2, 175, 239)" class="cc_steps_break_title cc_steps_actions_title '+((i > 0) ? "hide":"") +'">'+orAll+' of the advanced filters below were met:</span>'
                   items +=' <div class="single_action_wrap">'
@@ -3099,7 +3089,7 @@
                 items +='</div>'
                 items +='</div>'
                 items +='</div>'
-              } 
+              }
               if(item.type=="L"){
                 items +='<div class="mks_cc_action_wraper">'
                 items +='<span style="textTransform: none;font-size: 12px;color: rgb(2, 175, 239)" class="cc_steps_break_title cc_steps_actions_title '+((i > 0) ? "hide":"" )+'">'+orAll+' of the advanced filters below were met:</span>'
@@ -3132,7 +3122,7 @@
         listItem +='<span class="cc_steps_break_time">Action Taken : '+list[0]['Action Taken']+'</span>';
         listItem +='</div>'
         listItem +='</div>';
-        return listItem; 
+        return listItem;
       }
       var generateListNames = function(lists){
         var listName = lists.split(',');
@@ -3140,7 +3130,7 @@
         $.each(listName,function(key,list){
           ListItems += '<option class="mngList_li_wrap ">'+list+'</option>';
         });
-        
+
         return ListItems;
       }
       var generateActionRules = function(actions){
@@ -3201,7 +3191,7 @@
             }
             items += '</div>'
           }else if(item.type=="alert") {
-           
+
             items += '<div class="single_action_wrap" style="background: #fff;padding: 10px 15px">'
             items += '<div  class="autocomplete__item cc_steps_break autocomplete__item--disabled '+( (i > 0) ? "hide":"" )+'">';
             items += '<span class="cc_steps_break_title cc_steps_actions_title">Perform the following action(s):</span>'
@@ -3209,7 +3199,7 @@
             items += '<h4 style="background: transparent;width: 100%"><i class="mksicon-act_alert" style="margin-right : 4px"></i>View Sales Rep Alert</h4>'
             items += '<span class="act_sent_time" style="margin-left: 0px">Send Alert : </span>'
             items += '<span class="act_sent_time_value">'+( (item['Send Alert']) ? parseDateToMoment(item['Send Alert']) : parseDateToMoment(item['Sent']) )+' Pacific</span>'
-            items += '</div>'            
+            items += '</div>'
           }
         });
         return items;
@@ -3235,7 +3225,7 @@
            });
            return ListItems;
         }
-        var generateNTMessages = function(messages,ntObj){ 
+        var generateNTMessages = function(messages,ntObj){
           var items ='';
           $.each(messages,function(key,item){
             items +='<div key={i} class="cc_steps_break_wraps">'
@@ -3264,7 +3254,7 @@
             items +='</div>'
             items +='</li>'
             items +='<li data-tip="Click to pause" class="mks_hideRightBorder">'
-                      
+
             items +='<div class="scf_option_icon ripple top_manage_lists '+((ntObj.ntStatus=="Completed") ? "hide" : "")+''+((ntObj.ntStatus =="paused") ? "cc_disabled" : "")+' playPauseNurtureTrack" data-ntId="'+ntObj['trackId.encode']+'" data-ntType="pause" >'
             items +='<a href="#" style="text-decoration: unset">'
             items +='<div class="wrap_scf_o_i">'
@@ -3299,11 +3289,11 @@
             debugger;
             items +='<span style="position: relative;cursor:pointer;left: 50px;top: 3px" data-tip="Click to unskip step" data-ntId="'+ntObj['trackId.encode']+'" data-msgid="'+item['messageId.encode']+'" data-actType="unskip" class="skippNT '+((ntObj.ntStatus=="Completed") ? "hide" : "") +' '+  ((item.emailSkipped=="Y") ? '' : "cc_disabled")+' scf_o_icon scf_o_edit mksicon-CPlay mks_manageList_wrap"></span>'
             items +='<span style="position: relative;cursor:pointer;left: 0px;top: 3px" data-tip="Click to skip step"   data-ntId="'+ntObj['trackId.encode']+'" data-msgid="'+item['messageId.encode']+'" data-actType="skip"  class="skippNT '+((ntObj.ntStatus=="Completed") ? "hide" : "") +' '+ ((item.emailSkipped=="N") ? '' : "cc_disabled")+ ' scf_o_icon scf_o_edit  mksicon-CPlayNext mks_manageList_wrap"></span>'
-                    
+
             items +='</span>'
             items +='</span>'
             items +='</div>'
-            
+
             items +='<div class="single_action_wrap">'
 
             items +='<div class="cc_act_extra_details">'
@@ -3384,14 +3374,14 @@
           $('.triggerToggleOnh4,.collapseMsg').on('click',function(event){
             triggerToggleOnh4(event);
           });
-          
+
           $('.skippWF').unbind('click');
           $('.skippWF').on('click',function(){
             var wfid = $(this).attr('data-wfId');
             var skipid = $(this).attr('data-skipId');
             var actType = $(this).attr('data-actType');
             skippWF(wfid,skipid,actType);
-            
+
           });
 
           $('.playPauseWorkFlows').unbind('click');
@@ -3416,7 +3406,7 @@
             debugger;
           })
 
-        } 
+        }
           return {
             showCCDialog : showCCDialog
           }
@@ -3443,7 +3433,7 @@
               $('#note_textarea').val('');
               getNotes()
               commonModule.hideLoadingMask();
-              
+
             })
           }
           var getNotes = function(){
@@ -3483,7 +3473,7 @@
                 htmlObj += '<strong>'+user+' </strong> made a note at '+format.time+', '+format.date+'</p>'
                 htmlObj += '</div>'
                 htmlObj += '</div>'
-                htmlObj += '</li>' 
+                htmlObj += '</li>'
               })
               $('.notes_lists_wrap ul').html(htmlObj);
               $('.notes_lists_wrap ul').removeClass('hide');
@@ -3515,18 +3505,18 @@
              $('#note_textarea').val('');
             })
 
-            //Delete 
+            //Delete
             $('.mks-notestDel-wrap').unbind('click');
             $('.mks-notestDel-wrap').on('click',function(){
               noteID = $(this).attr('data-id');
                 var bodyHtml = '<p>Are you sure you want to delete this note?</p>';
               dialogModule.dialogView({showTitle:'Delete Note',childrenView : bodyHtml, additionalClass : 'addToSuppressWrapper',container : '.top_managerLists_wrappers',saveCallBack : deleteNotes,buttonText:'Delete' })
             });
-            // Edit 
+            // Edit
             $('.mks-notestEdit-wrap').unbind('click');
             $('.mks-notestEdit-wrap').on('click',function(){
               noteID = $(this).attr('data-id');
-              
+
               $.each(notesArry,function(key,value){
                 if(value['commentId.encode'] == noteID){
                   noteObj = value;
@@ -3537,7 +3527,7 @@
               $('.mkb_notes-close').removeClass('hide');
               $('.mkb_notes-save').addClass('hide');
               $('.mkb_notes-update').removeClass('hide');
-              
+
             });
             // Update
             $('.mkb_notes-update').unbind('click');
@@ -3562,7 +3552,7 @@
                 }
               })
             });
-            // collapse 
+            // collapse
             $('.notes_collapse').unbind('click');
             $('.notes_collapse').on('click',function(event){
                 $('.debugDiv').html('collapse clicked')
@@ -3584,7 +3574,7 @@
                   $(this).addClass('expand');
                 }
             });
-            
+
             $('#notes span.mksicon-ArrowNext').unbind('click');
           $('#notes span.mksicon-ArrowNext').on('click',function(){
             if($(this).hasClass('arrow_make_down')){
@@ -3625,7 +3615,7 @@
           return {
             saveNotes : saveNotes,
             getNotes : getNotes,
-           
+
           }
        })();
        /*----- Salesforce Module ----*/
@@ -3645,7 +3635,7 @@
               commonModule.ErrorAlert({message:'Sales Rep must be selected'});
                 return false;
             }
-      
+
             if(!baseObject.subscriberDetails.lastName){
               commonModule.ErrorAlert({message:'Please update contact Last name.'});
               return false;
@@ -3680,7 +3670,7 @@
           requestObj['BasicField'] = basicAr.toString();
           requestObj['salesStatus'] =  saveObject.addAsVal;
           requestObj['source'] = saveObject.source;
-          requestObj['rule'] = saveObject['ruleVal'] 
+          requestObj['rule'] = saveObject['ruleVal']
           requestObj['ruleId']= saveObject['ruleIdVal']
           requestObj['salesRep'] = saveObject.salesRep;
           requestObj['type']   = 'addToSf';
@@ -3700,9 +3690,9 @@
             commonModule.SuccessAlert({message :response[1]});
                 commonModule.hideLoadingMask();
                 dialogModule.hideDialog();
-          }) 
+          })
          }
-         
+
          var showAddToSF = function(){
           var bodyHtml = ''
           bodyHtml += ' <div class="Rendering mkssf_wrap_rendering">';
@@ -3770,7 +3760,7 @@
           bodyHtml += ' <h4 class="mskLogog_bluetext">Custom Field(s)</h4></div>'
           bodyHtml += ' <div class="sf_contact_contact_fields hide"><h4 class="mskLogog_bluetext">Custom Field(s)</h4>'
           bodyHtml += ' </div></div>';
-          
+
           dialogModule.dialogView({showTitle:'Add to salesfroce',childrenView : bodyHtml, additionalClass : 'increase_dialog_size_sf',container : '.top_managerLists_wrappers',saveCallBack : addToSF,initCallBack : initApiCalls });
           event.stopPropagation();
          }
@@ -3782,11 +3772,11 @@
           $.each(baseObject.customFields[0],function(key,value){
               customFieldsArr.push(value[0]);
           });
-          
+
           console.log(customFieldsArr);
 
           var cfhtml='';
-          // Lead Custom Fields 
+          // Lead Custom Fields
           $('.sf_lead_custom_fields .sf_cf_div_wrap').remove();
           $.each(customFieldsArr,function(key,val){
             cfhtml += '<div class="sf_cf_div_wrap">'
@@ -3799,11 +3789,11 @@
             });
             cfhtml += '</select>';
             cfhtml += '</div>';
-          
+
           });
           $('.sf_lead_custom_fields').append(cfhtml);
-          // Contact Custom Fields 
-          
+          // Contact Custom Fields
+
           $('.sf_contact_contact_fields').append(cfhtml);
 
           // Attached event with custom fields
@@ -3818,23 +3808,23 @@
               $(this).parent().find('.sf_cus_span2').addClass('hide');
               $(this).parent().find('select').addClass('hide');
             }
-            
+
             event.stopPropagation();
             return false;
           })
 
-        } 
+        }
          var initApiCalls = function(){
           commonModule.hideLoadingMask();
           commonModule.showLoadingMask({message:"Loading...",container : '.mkssf_wrap_rendering'})
           getSalesforceData();
-          
+
           initAttachEvents();
-         } 
+         }
          var initAttachEvents = function(){
            console.log("Time to attach events");
            $('.sf_lead_owner_div_wrap').eq(0).click();
-           // Change first wf  
+           // Change first wf
            $('#first_wf_drop_down').on('change',function(event){
             if(event.currentTarget.value == "contact"){
               $('.sf_leads_owner').addClass('hide');
@@ -3853,7 +3843,7 @@
            });
            // On click of radio buttons for leads
            $('.sf_leads_owner div.sf_lead_owner_div_wrap,.sf_contacts_owner div.sf_cont_owner_div_wrap').on('click',function(event){
-   
+
             $('.sf_leads_owner div.sf_lead_owner_div_wrap select,.sf_contacts_owner div.sf_cont_owner_div_wrap select').addClass('hide');
              var $e = $(event.currentTarget);
              $e.find('input').prop("checked", true);
@@ -3867,19 +3857,19 @@
            // Change of mkssf_sales_rule
            $('.mkssf_sales_rule').on('change',function(event){
              event.preventDefault();
-             saveObject['salesRep'] = $(this).val(); 
+             saveObject['salesRep'] = $(this).val();
            })
            $('.mkssf_lead_rule').on('change',function(event){
              event.preventDefault();
-             saveObject['ruleIdVal'] = $(this).val(); 
+             saveObject['ruleIdVal'] = $(this).val();
            });
            $('.mks_sf_source').on('change',function(event){
-            saveObject['source'] = $(this).val(); 
+            saveObject['source'] = $(this).val();
            });
 
-          
+
          }
-        
+
          var getSalesforceData = function(){
           var Url = baseObject.baseUrl
                     +'/io/salesforce/getData/?BMS_REQ_TK='
@@ -3888,7 +3878,7 @@
             commonModule.getDataRequest(Url,function(res){
               if(res){
                 var jsonResponse =  res;
-                
+
                 if(jsonResponse.sfContactCustomFields.length > 0 || jsonResponse.sfLeadCustomFields.length > 0 || jsonResponse.source.length > 0){
                   addToSalesForceObj['sfContactCustomFields'] =  (jsonResponse.sfContactCustomFields.length > 0) ? jsonResponse.sfContactCustomFields : []
                   addToSalesForceObj['sfLeadCustomFields'] =  (jsonResponse.sfLeadCustomFields.length > 0) ? jsonResponse.sfLeadCustomFields : [],
@@ -3899,7 +3889,7 @@
                 commonModule.hideLoadingMask()
                 getSalesrep()
               }
-              
+
             });
             var getSalesrep = function(){
               var salesRepsArray =[];
@@ -3913,16 +3903,16 @@
                             $.each(jsonResponse.salesreps[0],function(key,value){
                                 salesRepsArray.push(value[0]);
                             });
-              
+
                             console.log(salesRepsArray);
-              
+
                               salesReps = salesRepsArray
                               generatesSFDropDowns();
-                             
+
                           }
                         })
             }
-            
+
            var generatesSFDropDowns = function(){
               $.each(addToSalesForceObj.source, function(key,value){
                 $('.mkssf_wrap_rendering .mks_sf_source').append('<option value="'+value+'">'+value+'</option>');
@@ -3989,7 +3979,7 @@
           }
           var getFutureUserTimeLine = function(nextOffset){
             //var offset = (nextOffset) ? nextOffset : $('.act_row_wrapper .act_row:last-child').attr('next-offset');
-  
+
               var searchUrl = baseObject.baseUrl
                   + '/io/subscriber/getData/?BMS_REQ_TK='
                   + baseObject.users_details[0].bmsToken +'&type=timeline&isFuture=Y&offset=0&subNum='
@@ -4005,7 +3995,7 @@
                 }else if(activity[0].activityType == "SU"){
                     SignupCard(mapping[activity[0].activityType],activity[0],"isFuture");
                 }else if(activity[0].campaignType == "T"){
-                    NurturetrackCard(mapping[activity[0].activityType],activity[0],"isFuture");          
+                    NurturetrackCard(mapping[activity[0].activityType],activity[0],"isFuture");
                 }else if(activity[0].campaignType =="W"){
                     WorkflowCard(mapping[activity[0].activityType],activity[0],"Y");
                 }else if (typeof (activity[0]['singleMessageId.encode']) !== "undefined") {
@@ -4014,7 +4004,7 @@
                   }
                   CampaignCard(mapping[activity[0].activityType],activity[0],"isFuture");
                }else if(activity[0].activityType == "SC"){
-                  ScoreCard(mapping[activity[0].activityType],activity[0],"isFuture") 
+                  ScoreCard(mapping[activity[0].activityType],activity[0],"isFuture")
                }else if(activity[0].botActionType == "A"){
                   AlertCard(mapping[activity[0].activityType],activity[0],"isFuture")
                }else if(activity[0].campaignType == "B" || typeof(activity[0]["botId.encode"])!=="undefined"){
@@ -4030,7 +4020,7 @@
               }else if(typeof(activity[0]["botId.encode"])!=="undefined"){
                 AlertCard(mapping[activity[0].activityType],activity[0],"isFuture")
               }
-              
+
               });
             }
           }
@@ -4046,7 +4036,7 @@
              if(!flag){
               $('#Activity .act_row_body_wrap').html('');
              }
-             
+
 
              $.each(data.activities[0],function(kye,activity){
               if(activity[0].campaignType == "N" || activity[0].activityType == "WV"){
@@ -4054,7 +4044,7 @@
               }else if(activity[0].activityType == "SU"){
                   SignupCard(mapping[activity[0].activityType],activity[0]);
               }else if(activity[0].campaignType == "T"){
-                  NurturetrackCard(mapping[activity[0].activityType],activity[0]);          
+                  NurturetrackCard(mapping[activity[0].activityType],activity[0]);
               }else if(activity[0].campaignType =="W"){
                   WorkflowCard(mapping[activity[0].activityType],activity[0]);
               }else if (typeof (activity[0]['singleMessageId.encode']) !== "undefined") {
@@ -4063,7 +4053,7 @@
                 }
                 CampaignCard(mapping[activity[0].activityType],activity[0]);
              }else if(activity[0].activityType == "SC"){
-                ScoreCard(mapping[activity[0].activityType],activity[0]) 
+                ScoreCard(mapping[activity[0].activityType],activity[0])
              }else if(activity[0].botActionType == "A"){
                 AlertCard(mapping[activity[0].activityType],activity[0])
              }else if(activity[0].campaignType == "B" || typeof(activity[0]["botId.encode"])!=="undefined"){
@@ -4079,7 +4069,7 @@
             }else if(typeof(activity[0]["botId.encode"])!=="undefined"){
               AlertCard(mapping[activity[0].activityType],activity[0])
             }
-            
+
             });
             var _date = moment(commonModule.decodeHTML(baseObject.creationDate), 'YYYY-M-D H:m');
             var _formatedDate = {date: _date.format("DD MMM YYYY"), time: _date.format("hh:mm A")};
@@ -4096,8 +4086,8 @@
               $('.LoadMore').parent().hide();
               $('.show_signup').removeClass('hide');
             }
-            
-            
+
+
           }
 
           var CampaignCard = function(mapping,activity,type){
@@ -4140,7 +4130,7 @@
               }else{
                 $('.act_row_wrapper .act_row_body_wrap').append(campHTML);
               }
-              
+
           }
           var ScoreCard = function(mapping,activity,type){
             console.log('Score Card');
@@ -4191,7 +4181,7 @@
             }else{
               $('.act_row_wrapper .act_row_body_wrap').append(scoreHTML);
             }
-          
+
           }
           var NurturetrackCard = function(mapping,activity,type){
             var displayicon = (mapping.icon) ? mapping.icon : 'mksicon-Mail';
@@ -4370,7 +4360,7 @@
           var Url = baseObject.baseUrl
                   +'/io/subscriber/setData/?BMS_REQ_TK='
                   + baseObject.users_details[0].bmsToken;
-                  
+
           var dataObj = {
             'type':'suppress'
             ,"subNum": baseObject.subNum
@@ -4394,17 +4384,17 @@
         var workflowId = '';
         var getWorkflowLists= function(){
             var lists = [];
-            
+
             var bodyHtml = '<p>Loading sequences...</p>';
                 dialogModule.dialogView({showTitle:'Add to Sequence',childrenView : bodyHtml, additionalClass : 'addToSequenceDWrapper',container : '.top_managerLists_wrappers',saveCallBack : saveSubsriberToSequence,buttonText : 'Add' });
             var Url = baseObject.baseUrl
                       +'/io/workflow/getWorkflowData/?BMS_REQ_TK='
                       + baseObject.users_details[0].bmsToken +'&type=get&isManualAddition=Y&isMobileLogin=Y&userId='+baseObject.users_details[0].userId;
-                      
-                commonModule.getDataRequest(Url,generateWFLists); 
+
+                commonModule.getDataRequest(Url,generateWFLists);
         }
         var init = function(){
-          
+
           // console.log('Any events needs to attached here');
           // $('.icheckinput').iCheck({
           //   radioClass: 'iradio_square',
@@ -4415,7 +4405,7 @@
 
         var saveSubsriberToSequence = function(){
             console.log('Save Workflow called');
-            
+
             if($('.workflow_wrap_rendering select[name=selector]').val() == "-1"){
               commonModule.ErrorAlert({message:"Please select sequence"});
             }else{
@@ -4423,7 +4413,7 @@
               var Url = baseObject.baseUrl
                       +'/io/workflow/saveWorkflowData/?BMS_REQ_TK='
                       + baseObject.users_details[0].bmsToken +'&type=addtoworkflow';
-                      
+
               var dataObj = {
                   "workflowId" : $('.workflow_wrap_rendering select').find(':selected').attr('data-encode'),
                   "stepOrder"  : "1",
@@ -4437,9 +4427,9 @@
                 commonModule.hideLoadingMask();
                 dialogModule.hideDialog();
               })
-              
+
             }
-           
+
         }
         var generateWFLists = function(data){
           console.log('Generate lists of response');
@@ -4468,24 +4458,24 @@
              container : '.top_managerLists_wrappers',
              saveCallBack : saveSubsriberToList,
             buttonText : 'Add' });
-           
+
              //https://test.bridgemailsystem.com/pms/io/list/getListData/?BMS_REQ_TK=c7jJ1hJuurtB3BmDSvlO1XHDinnjMF&type=all
               var Url = baseObject.baseUrl
                       +'/io/list/getListData/?BMS_REQ_TK='
                       + baseObject.users_details[0].bmsToken +'&type=all&isMobileLogin=Y&userId='+baseObject.users_details[0].userId;
               console.log('Calling subscriber lists');
-              commonModule.getDataRequest(Url,generateSubLists); 
-                
+              commonModule.getDataRequest(Url,generateSubLists);
+
           }
           var generateSubLists = function(data){
             console.log(data);
             var listLi = "";
               $.each(data.lists[0],function(key,value){
-              listLi += '<li class="mngList_li_wrap">';              
-              listLi += '<div class="mks_mnglist_wrap">';  
-              listLi += '<input type="radio" name="list" value="'+value[0]['listNumber.encode']+'"/>';            
-              listLi += '<h4 title="'+value[0].name+'">'+commonModule.decodeHTML(value[0].name)+'</h4>';                        
-              listLi += '</div></li>';              
+              listLi += '<li class="mngList_li_wrap">';
+              listLi += '<div class="mks_mnglist_wrap">';
+              listLi += '<input type="radio" name="list" value="'+value[0]['listNumber.encode']+'"/>';
+              listLi += '<h4 title="'+value[0].name+'">'+commonModule.decodeHTML(value[0].name)+'</h4>';
+              listLi += '</div></li>';
               });
 
             $('.addContactListWrapper .addBox_body').html('<div><input type="text" placeholder="Search lists" id="searchListInput" /></div><ul class="subsriberList-wrap">'+listLi+'</ul>');
@@ -4502,8 +4492,8 @@
           var Url = baseObject.baseUrl
                       +'/io/subscriber/setData/?BMS_REQ_TK='
                       + baseObject.users_details[0].bmsToken +'&type=addByEmailOnly';
-              
-              commonModule.showLoadingMask({message:"Adding subscriber to list..",container : '.addContactListWrapper'});        
+
+              commonModule.showLoadingMask({message:"Adding subscriber to list..",container : '.addContactListWrapper'});
               var dataObj = {
                 "listNum": selectedListNum
                 ,"emails":baseObject.email
@@ -4528,7 +4518,7 @@
                 a = li[i].getElementsByTagName("h4")[0];
                 if (a.innerText.toLowerCase().indexOf(filter) > -1) {
                     li[i].style.display = "";
-                } 
+                }
             }
             highlightSearchText(input.value)
         }
@@ -4537,7 +4527,7 @@
           $.each($('ul.subsriberList-wrap li h4'),function(key,val){
             $(val).removeHighlight().highlight(searchTextvalue);
           })
-  
+
         }
           var init = function(){
             $('ul.subsriberList-wrap li').on('click',function(event){
@@ -4547,7 +4537,7 @@
             $('#searchListInput').on('keyup',function(event){
               searchFunc()
             })
-          } 
+          }
           return {
             init : init,
             getallLists : getallLists
@@ -4563,8 +4553,8 @@
                       +'/io/subscriber/getData/?BMS_REQ_TK='
                       + baseObject.users_details[0].bmsToken +'&type=getListInfo&subNum='+baseObject.subNum+'&isMobileLogin=Y&userId='+baseObject.users_details[0].userId;
 
-              commonModule.getDataRequest(Url,generateMLists); 
-              
+              commonModule.getDataRequest(Url,generateMLists);
+
           }
 
           var init = function(){
@@ -4574,15 +4564,15 @@
           var generateMLists = function(data){
             var listLi = "";
             $.each(data.listInfo[0],function(key,value){
-            listLi += '<li class="mngList_li_wrap">';              
-            listLi += '<div class="mks_mnglist_wrap">';              
-            listLi += '<h4 title="'+value[0].listName+'">'+value[0].listName+'</h4>';              
+            listLi += '<li class="mngList_li_wrap">';
+            listLi += '<div class="mks_mnglist_wrap">';
+            listLi += '<h4 title="'+value[0].listName+'">'+value[0].listName+'</h4>';
             listLi += '<select data-listnum="'+value[0].listNumber+'" class="list-action">';
 
-            listLi += (value[0].status == "S") ? '<option selected="selected" value="S">Subscribe</option>': '<option selected="selected" value="S">Subscribe</option>';              
-            listLi +=  (value[0].status == "U") ? '<option selected="selected" value="U">Unsubscribe</option>' :'<option value="U">Unsubscribe</option>';              
-            listLi += (value[0].status == "R") ? '<option selected="selected" value="R">Remove</option>' : '<option value="R">Remove</option>';              
-            listLi += '</select></div></li>';              
+            listLi += (value[0].status == "S") ? '<option selected="selected" value="S">Subscribe</option>': '<option selected="selected" value="S">Subscribe</option>';
+            listLi +=  (value[0].status == "U") ? '<option selected="selected" value="U">Unsubscribe</option>' :'<option value="U">Unsubscribe</option>';
+            listLi += (value[0].status == "R") ? '<option selected="selected" value="R">Remove</option>' : '<option value="R">Remove</option>';
+            listLi += '</select></div></li>';
             });
 
             $('.manageListWrapper .addBox_body').html('<ul class="manageList-wrap">'+listLi+'</ul>');
@@ -4609,14 +4599,14 @@
             getallLists : getallLists
           }
        })();
-      
+
        $('#username').val('ahyan');
        } catch(e){
          console.log(e);
          $("#error").html(e);
        }
 
-      
+
    });
 };
 
