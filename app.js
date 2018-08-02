@@ -979,7 +979,8 @@
                                 $('.mks_wrap_step3,.new_contact_true,.create_new_contact_card').removeClass('hide');
                                 $('.mks_wrap_step2').addClass('hide');
                                 $('.mksph_back').removeClass('hide');
-                                  $('.new_contact_false').addClass('hide');
+                                commonModule.hideLoadingMask();
+                                $('.new_contact_false').addClass('hide');
                                 init()
                               }else{
                                 $('.debugDiv').html(resObj.subscriberList[0].subscriber1[0].subNum);
