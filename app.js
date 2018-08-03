@@ -1466,6 +1466,7 @@
                                   }
                                 },500);
                               });
+
                               $('.tag__input_mks').keypress(function(event){
                                  if(event.which == 13){
                                    $('.ui-menu.ui-widget.ui-widget-content.ui-autocomplete').hide();
@@ -1474,6 +1475,7 @@
 
                                  event.stopPropagation()
                               });
+                              $('#Tags span.mksicon-ArrowNext').unbind('click');
                               $('#Tags span.mksicon-ArrowNext').on('click',function(){
                                 if($(this).hasClass('arrow_make_down')){
                                   $(this).removeClass('arrow_make_down');
@@ -1484,7 +1486,7 @@
                                   $('#Tags .tags-contents').removeClass('tags-contents-hide');
                                   $('.addTag').show();
                                 }
-                              })
+                              });
                               $('.addTagWrapper .scfe_close_wrap').on('click',function(){
                                   $(this).parents('.addTagWrapper').hide();
                                   $('.addTag').show();
