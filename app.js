@@ -4005,7 +4005,7 @@
                   if(activity[0].activityType=="MT"){
                     mapping[activity[0].activityType]['color'] =  'green';
                   }
-                  CampaignCard(mapping[activity[0].activityType],activity[0],"isFuture");
+                  CampaignCard(mapping[activity[0].activityType],activity[0],"isFuture","Single Message");
                }else if(activity[0].activityType == "SC"){
                   ScoreCard(mapping[activity[0].activityType],activity[0],"isFuture")
                }else if(activity[0].botActionType == "A"){
@@ -4054,7 +4054,7 @@
                 if(activity[0].activityType=="MT"){
                   mapping[activity[0].activityType]['color'] =  'green';
                 }
-                CampaignCard(mapping[activity[0].activityType],activity[0]);
+                CampaignCard(mapping[activity[0].activityType],activity[0],"","Single Message");
              }else if(activity[0].activityType == "SC"){
                 ScoreCard(mapping[activity[0].activityType],activity[0])
              }else if(activity[0].botActionType == "A"){
@@ -4093,12 +4093,14 @@
 
           }
 
-          var CampaignCard = function(mapping,activity,type){
+          var CampaignCard = function(mapping,activity,type,emailType){
               var campHTML="";
               var displayicon = (mapping.icon) ? mapping.icon : 'mksicon-Mail';
               var _hide = (activity.pageTitle) ? "hide" : "";
               var _date = moment(commonModule.decodeHTML(activity.logTime), 'M/D/YYYY h:m a');
+              var _emailType = (emailType)?emailType : "Campaign"
               var _formatedDate = {date: _date.format("DD MMM YYYY"), time: _date.format("hh:mm A")};
+              debugger;
               campHTML += '<div class="act_row '+mapping.color+'">';
               campHTML += '<span class="icon '+displayicon+'"></span>';
               campHTML += '<h5>'
@@ -4123,7 +4125,7 @@
               campHTML +=  '<div class="camp_type">'
               campHTML +=  '<span class="showtooltip all-timelineFilter '+_hide+'" style="cursor: pointer" data-original-title="Click to view all Campaigns activities">'
               campHTML +=  '<i class="icon camp"></i>'
-              campHTML +=  "Campaign";
+              campHTML +=  _emailType;
               // campHTML +=  (type && type != "isFuture") ? type : "Campaign";
               campHTML +=  '</span></div>'
               campHTML +=  '</div>'
