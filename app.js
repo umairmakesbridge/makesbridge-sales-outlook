@@ -4115,6 +4115,10 @@
               campHTML +=  '<a style="color:#5c9bb5;" href="'+commonModule.decodeHTML(activity.pageURL)+'" target="_blank">'+commonModule.decodeHTML(activity.pageURL)+'</a>';
               campHTML +=   '</div>'
               }
+              if(activity.url){
+                campHTML += '<span class="infotxt " style="margin:0;padding:0;"><strong>Url :</strong> <a class="mkb_elipsis" target="_blank" title="'+commonModule.decodeHTML(activity.url)+'" href="'+commonModule.decodeHTML(activity.url)+'" style="color: #5C9BB5;width: 227px;display: block;">'+commonModule.decodeHTML(activity.url)+'</a></span>';
+              }
+              
               campHTML += '</div>'
               campHTML +=  '<div class="btm-bar ">'
               campHTML +=  '<div class="datetime">'
