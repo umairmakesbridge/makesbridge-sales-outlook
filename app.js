@@ -4172,8 +4172,8 @@
             }
              if(activity.botActionType) {
             scoreHTML += '<div class="infotxt">'
-            scoreHTML += '<strong class="'+_subjecLabel+'">Bot Name</strong>'
             scoreHTML += '<a>'+commonModule.decodeHTML(activity.botLabel,true)+'</a>';
+            scoreHTML += '<strong class="'+_subjecLabel+'">Autobot Name</strong>';
             scoreHTML += '</div> ';
             }
             scoreHTML +=  '</div>'
