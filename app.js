@@ -4183,6 +4183,10 @@
             scoreHTML +=   (type == "isFuture") ? "to be "+mapping.name.toLowerCase() :mapping.name;
             scoreHTML +=   '</span> at '+_formatedDate.time+','+_formatedDate.date;
             scoreHTML +=   '</div> '
+            scoreHTML +=    '<div class="camp_type">'
+            scoreHTML +=     '      <span class="showtooltip all-timelineFilter" style="cursor: pointer" data-original-title="Click to view all Campaigns activities">'
+            scoreHTML +=     '       Autobot</span>'
+            scoreHTML +=    '</div>'
             scoreHTML +=   '</div>'
             scoreHTML +=   '</div>'
             if(type=="isFuture"){
