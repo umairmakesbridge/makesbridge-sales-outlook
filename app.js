@@ -11,7 +11,7 @@
   Office.initialize = function (reason) {
     $(document).ready(function () {
       $("#run").html("init");
-
+      var accessToken = "";
       /*var value = Office.context.roamingSettings.get('BMS_REQ_TK');
       $('.debugDivL').html(value);
       if(value){
@@ -23,6 +23,22 @@
 
       // $('.debugDivL').html(document.cookie);
       // Get the current value of the 'myKey' setting
+      function fetchToken(){
+            Office.context.mailbox.getCallbackTokenAsync({isRest: true}, function(result){
+              if (result.status === "succeeded") {
+                  accessToken = result.value;
+
+                  // Use the access token
+                  console.log(accessToken)
+
+              } else {
+                // Handle the error
+              }
+            });
+            setTimeout(fetchToken,1000*60*10) // Call after 10 min
+       }
+       
+       fetchToken();
 
       /*=======Append Emails to Body after grabbing======*/
       function appendArray(uniqueAr){
@@ -241,7 +257,7 @@
                       //$('.debugDiv').html(data)
                       if(data[1]=='SESSION_EXPIRED'){
                         // Show Alert and logout
-                          $('.mksicon-logout').trigger('click');
+                        $('.mksicon-logout').trigger('click');
                         commonModule.ErrorAlert({message:data[1]})
                       }else if(data.errorDetail){
                         //call alert
@@ -1684,6 +1700,7 @@
           "medium" : {"topClass":"mks_priority_medium pclr19","icon" : "mksicon-More"}
         }
         var taskId = '';
+        var outlookId = '';
         var TaskObj = null;
         var selectedTask = '';
         var loadedMore = false;
@@ -1722,7 +1739,9 @@
           bodyHtml +='<span class="date_wrapper__mks"><input type="text" id="datepicker"></span>'
           bodyHtml +='<span class="timePicker_wrap"><input type="text" class="timepicker"/></span>'
           bodyHtml +='<ul class="mks_priorty_wrap"><li class="mks_priotiry_low">Low</li><li class="mks_priotiry_medium active">Medium</li><li class="mks_priotiry_high">High</li></ul>'
-          bodyHtml +='<textarea placeholder="Add notes about your task here" id="notes"></textarea>'
+          bodyHtml +='<label><input type="checkbox" name="syncoutlookcalender" class="outlook-checkbox" id="syncoutlookcalender" /><span class="mks-googlesync-text">Create/Update task on Outlook Calendar </span></label>'
+          bodyHtml +='<span class="mks-duration-text" style="padding-left:5px;">with Duration of</span><input type="number" name="input_duration" class="task_duration" min="5" value="30" disable="disabled" /><span class="mks-duration-text"> mins</span>'
+          bodyHtml +='<textarea class="task-notes-area" placeholder="Add notes about your task here" id="notes"></textarea>'
 
           dialogModule.dialogView({showTitle: (type=='edit') ? 'Edit Task' : 'Add Task',childrenView : bodyHtml, additionalClass : 'taks_dialog_wrapper',container : '.customField_ul_wraps',saveCallBack : (type=='edit') ? updateTask :tasksModule.addNewTasks,initCallBack : tasksModule.attachTasksEvents });
         }
@@ -1791,7 +1810,7 @@
           $('.mks_task_edit_delete_wrap').unbind('click');
           $('.mks_task_edit_delete_wrap').on('click',function(){
             if($(this).hasClass('_mks_task_delete_task')){
-              deleteTasks($(this).attr('dat-id'))
+              deleteTasks($(this).attr('dat-id'),$(this).attr('dat-outlook-id'))
             }else{
               editTasks($(this).attr('dat-id'))
             }
@@ -1803,44 +1822,125 @@
             commonModule.showLoadingMask({message : 'Marking task completed...',container : '#tasks'});
             updateTask(true,taskId)
           });
+          
+          $(".taks_dialog_wrapper .outlook-checkbox").change(function(){
+              if($(this).prop("checked")){
+                  $(".taks_dialog_wrapper .task_duration").attr("disabled",false);
+              }
+              else{
+                  $(".taks_dialog_wrapper .task_duration").attr("disabled",true);
+              }
+          })
+          
         }
 
         var addNewTasks = function(){
-          var tasktype = $('.taks_dialog_wrapper .mks_ecc_wrap li.active').attr('data-value');
-          var taskName = $('.taks_dialog_wrapper #input2').val();
-          var taskDate = $('.taks_dialog_wrapper #datepicker').val();
-          var taskTime = $('.taks_dialog_wrapper .timepicker').val();
-          var taskPriorty = $('.taks_dialog_wrapper .mks_priorty_wrap li.active').text().toLowerCase();
-          var taskNotes = commonModule.encodeHTML($('.taks_dialog_wrapper #notes').val());
-          var _date = moment(taskDate, 'MM-DD-YYYY')
-          var newtaskDate = _date.format("MM-DD-YYYY");
-          var timeDate = newtaskDate + " " + moment(taskTime, ["h:mm A"]).format("HH:mm")+":00";
-          // type: "add";
-
-          var reqObj = {
-            type: "add",
-            subNum:  baseObject.subNum,
-            tasktype: tasktype,
-            name: taskName,
-            taskDate: timeDate,
-            priority: taskPriorty,
-            notes: taskNotes,
-            ukey: baseObject.users_details[0].userKey,
-            isMobileLogin:'Y',
-            userId:baseObject.users_details[0].userId
-          }
-          commonModule.hideLoadingMask();
-          commonModule.showLoadingMask({message:"Saving task...",container : '.taks_dialog_wrapper'})
-          var url = baseObject.baseUrl+'/io/subscriber/subscriberTasks/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken;
-          commonModule.saveData(url,reqObj,function(response){
-            commonModule.hideLoadingMask();
-            if(response[0]=="err"){
-              commonModule.ErrorAlert({message :response[1]});
-              return false;
+            if($(".taks_dialog_wrapper .outlook-checkbox").prop("checked")){
+             commonModule.hideLoadingMask();
+             commonModule.showLoadingMask({message:"Creating Task on Calender...",container : '.taks_dialog_wrapper'})  
+              createOutlookTask()
             }
-            commonModule.SuccessAlert({message :response.success});
-            dialogModule.hideDialog();
-            getTasks();
+            else{
+                createTaskLocal();
+            }
+        }
+        var createTaskLocal = function(calenderId){
+            var tasktype = $('.taks_dialog_wrapper .mks_ecc_wrap li.active').attr('data-value');
+            var taskName = $('.taks_dialog_wrapper #input2').val();
+            var taskDate = $('.taks_dialog_wrapper #datepicker').val();
+            var taskTime = $('.taks_dialog_wrapper .timepicker').val();
+            var taskPriorty = $('.taks_dialog_wrapper .mks_priorty_wrap li.active').text().toLowerCase();
+            var taskNotes = commonModule.encodeHTML($('.taks_dialog_wrapper #notes').val());
+            var _date = moment(taskDate, 'MM-DD-YYYY')
+            var newtaskDate = _date.format("MM-DD-YYYY");
+            var timeDate = newtaskDate + " " + moment(taskTime, ["h:mm A"]).format("HH:mm")+":00";
+            // type: "add";
+
+            var reqObj = {
+              type: "add",
+              subNum:  baseObject.subNum,
+              tasktype: tasktype,
+              name: taskName,
+              taskDate: timeDate,
+              priority: taskPriorty,
+              notes: taskNotes,
+              ukey: baseObject.users_details[0].userKey,
+              isMobileLogin:'Y',
+              userId:baseObject.users_details[0].userId
+            }
+            if(calenderId){
+                reqObj["outlookCalendar"] = calenderId;
+            }
+            commonModule.hideLoadingMask();
+            commonModule.showLoadingMask({message:"Saving task...",container : '.taks_dialog_wrapper'})
+            var url = baseObject.baseUrl+'/io/subscriber/subscriberTasks/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken;
+            commonModule.saveData(url,reqObj,function(response){
+              commonModule.hideLoadingMask();
+              if(response[0]=="err"){
+                commonModule.ErrorAlert({message :response[1]});
+                return false;
+              }
+              commonModule.SuccessAlert({message :response.success});
+              dialogModule.hideDialog();
+              getTasks();
+            });
+        }
+        var createOutlookTask = function(taskUpdate){
+            var taskName = $('.taks_dialog_wrapper #input2').val();
+            var taskDate = $('.taks_dialog_wrapper #datepicker').val();
+            var taskTime = $('.taks_dialog_wrapper .timepicker').val();
+            var taskDuration = parseInt($('.taks_dialog_wrapper .task_duration').val());
+            var taskNotes = commonModule.encodeHTML($('.taks_dialog_wrapper #notes').val());   
+            var timezone = moment.tz.guess();
+            var _date = moment(taskDate, 'MM-DD-YYYY');
+            var newtaskDate = _date.format("YYYY-MM-DD");
+            var endDateTime = moment(newtaskDate+" "+moment(taskTime, ["h:mm A"]).format("HH:mm")+":00");
+              var _data ={
+                    "Subject": taskName,
+                    "Body": {
+                      "ContentType": "HTML",
+                      "Content": taskNotes
+                    },
+                    "Start": {
+                        "DateTime": newtaskDate + "T" + moment(taskTime, ["h:mm A"]).format("HH:mm")+":00",
+                        "TimeZone":timezone
+                    },
+                    "End": {
+                        "DateTime": endDateTime.add(taskDuration, 'minutes').format("YYYY-MM-DDTHH:mm:00"),
+                        "TimeZone":timezone
+                    },
+                    "Attendees": [   
+                    ]
+                  };
+          var jsonData = JSON.stringify(_data);
+          $.ajax({
+                type: "POST",
+                url: "https://outlook.office.com/api/v2.0/me/events",
+                data: jsonData,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                headers: { 'Authorization': 'Bearer ' + accessToken },
+                success: function(data){
+                    commonModule.hideLoadingMask();
+                    console.log(data);
+                    if(!taskUpdate){
+                        createTaskLocal(data.Id);
+                    }
+                    else{
+                        updateTaskLocal(false,false,data.Id)
+                    }
+                },
+                failure: function(errMsg) {
+                    commonModule.hideLoadingMask();
+                    console.log(errMsg);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    commonModule.hideLoadingMask();
+                    var result = jqXHR.responseJSON;
+                    if(result && result.error){
+                        commonModule.ErrorAlert({message:"Outlook Calender Error: "+result.error.message});
+                    }
+                }
           });
         }
         var getTasks = function(url){
@@ -1951,7 +2051,7 @@
           });
           return false;
         }
-        var updateTask = function(isComplete,taskId){
+         var updateTaskLocal = function(isComplete,taskId, eventId){
           var tasktype = $('.taks_dialog_wrapper .mks_ecc_wrap li.active').attr('data-value');
           var taskName = $('.taks_dialog_wrapper #input2').val();
           var taskDate = $('.taks_dialog_wrapper #datepicker').val();
@@ -1975,6 +2075,9 @@
             userId:baseObject.users_details[0].userId,
             taskId : (taskId) ? taskId : selectedTask['taskId.encode'],
           }
+          if(eventId){
+              reqObj["outlookCalendar"]=eventId;
+          }
           var url = baseObject.baseUrl+'/io/subscriber/subscriberTasks/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken;
           if(isComplete){
             commonModule.showLoadingMask({message:"Completing task...",container : '.taks_dialog_wrapper'})
@@ -1983,7 +2086,6 @@
           }
           console.log(selectedTask);
           commonModule.saveData(url,reqObj,function(response){
-
             commonModule.hideLoadingMask();
             dialogModule.hideDialog();
             var url = baseObject.baseUrl+'/io/subscriber/subscriberTasks/?BMS_REQ_TK='+baseObject.users_details[0].bmsToken+'&type=getAllTask&orderBy=updationTime&order=asc&offset=0&bucket=20&ukey='+baseObject.users_details[0].userKey+'&isMobileLogin=Y&userId='+baseObject.users_details[0].userId;
@@ -1996,6 +2098,91 @@
 
           })
         }
+        var updateOutlookCalender = function(isComplete, taskId, eventId){
+            var taskName = $('.taks_dialog_wrapper #input2').val();
+            var taskDate = $('.taks_dialog_wrapper #datepicker').val();
+            var taskTime = $('.taks_dialog_wrapper .timepicker').val();
+            var taskDuration = parseInt($('.taks_dialog_wrapper .task_duration').val());
+            var taskNotes = commonModule.encodeHTML($('.taks_dialog_wrapper #notes').val());   
+            var timezone = moment.tz.guess();
+            var _date = moment(taskDate, 'MM-DD-YYYY');
+            var newtaskDate = _date.format("YYYY-MM-DD");
+            var endDateTime = moment(newtaskDate+" "+moment(taskTime, ["h:mm A"]).format("HH:mm")+":00");
+              var _data ={
+                    "Subject": taskName,
+                    "Body": {
+                      "ContentType": "HTML",
+                      "Content": taskNotes
+                    },
+                    "Start": {
+                        "DateTime": newtaskDate + "T" + moment(taskTime, ["h:mm A"]).format("HH:mm")+":00",
+                        "TimeZone":timezone
+                    },
+                    "End": {
+                        "DateTime": endDateTime.add(taskDuration, 'minutes').format("YYYY-MM-DDTHH:mm:00"),
+                        "TimeZone":timezone
+                    },                    
+                    "Attendees": [                      
+                    ]
+                  };
+          var jsonData = JSON.stringify(_data);
+          commonModule.hideLoadingMask();
+          commonModule.showLoadingMask({message:"Updating Task on Calender...",container : '.taks_dialog_wrapper'}) 
+          $.ajax({
+                type: "PATCH",
+                url: "https://outlook.office.com/api/v2.0/me/events/"+eventId,
+                data: jsonData,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                headers: { 'Authorization': 'Bearer ' + accessToken },
+                success: function(data){
+                    commonModule.hideLoadingMask();
+                    console.log(data);
+                    updateTaskLocal(isComplete,taskId, eventId)
+                },
+                failure: function(errMsg) {
+                    commonModule.hideLoadingMask();
+                    console.log(errMsg);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                    commonModule.hideLoadingMask();
+                    var result = jqXHR.responseJSON;
+                    if(result && result.error){
+                        commonModule.ErrorAlert({message:"Outlook Calender Error: "+result.error.message});
+                    }
+                }
+          });
+        }
+        var updateTask = function(isComplete,taskId){
+           try{
+                var isOutlookSync = $('.taks_dialog_wrapper .outlook-checkbox').prop("checked");
+                var eventId = $('.taks_dialog_wrapper .outlook-checkbox').data("eventId");
+                console.log("Task Id = "+taskId)
+                if(!isComplete){
+                     if(isOutlookSync){
+                       if(eventId){
+                          updateOutlookCalender(isComplete, taskId , eventId)
+                       }
+                       else{
+                          createOutlookTask(true)
+                       }
+                     }
+                     else{
+                         updateTaskLocal(isComplete,taskId)
+                     }
+                   }
+                 else{
+                   updateTaskLocal(isComplete,taskId,false)
+                 }
+             }
+             catch(e){
+                 console.log(e);
+             }
+        }
+        
+       
+        
         var showTaskDialogEdit = function(task){
           showTasksDialog('edit');
           $('.taks_dialog_wrapper #input2').val(task.taskName);
@@ -2010,6 +2197,35 @@
           $('.taks_dialog_wrapper .timepicker').val(timeNow);
           $('.taks_dialog_wrapper .mks_priorty_wrap li.mks_priotiry_'+task.priority).addClass('active');
           $('.taks_dialog_wrapper .notes').val(task.notes)
+          if(task.outlookCalendar){
+              $('.taks_dialog_wrapper .outlook-checkbox').prop("checked",true);
+              $('.taks_dialog_wrapper .outlook-checkbox').data("eventId",task.outlookCalendar);
+          }else{
+              $('.taks_dialog_wrapper .outlook-checkbox').prop("checked",false);
+          }
+          
+          $.ajax({
+                type: "GET",
+                url: "https://outlook.office.com/api/v2.0/me/events/"+task.outlookCalendar,                
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                headers: { 'Authorization': 'Bearer ' + accessToken },
+                success: function(data){                   
+                    console.log(data);
+                    var startTime = moment(data.Start.DateTime);
+                    var endTime = moment(data.End.DateTime);
+                    var minDuration = endTime.diff(startTime, 'minutes');
+                    console.log(minDuration);
+                    $(".taks_dialog_wrapper .task_duration").val(minDuration)
+                    
+                },
+                failure: function(errMsg) {                    
+                    console.log(errMsg);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);                    
+                }
+          });
         }
         var generateTask = function(data){
           var htmlObj = '';
@@ -2045,7 +2261,7 @@
           htmlObj += '</div>'
           htmlObj += '</div>'
           htmlObj += '</div>'
-          htmlObj += '<div class="mks_task_edit_delete_wrap _mks_task_delete_task" style="left: 37px; width: 8%; background: transparent;" dat-id="'+data['taskId.encode']+'">'
+          htmlObj += '<div class="mks_task_edit_delete_wrap _mks_task_delete_task" style="left: 37px; width: 8%; background: transparent;" dat-id="'+data['taskId.encode']+'" dat-outlook-id="'+data['outlookCalendar']+'">'
           htmlObj += '<div class="cf_silhouette">'
           htmlObj += '<div class="cf_silhouette_text c_txt_s c_txt_s_blue">'
           htmlObj += '<i class="mksicon-Delete mks-task-icons"></i>'
@@ -2070,10 +2286,35 @@
           var format = {date: _date.format("DD MMM YYYY"), time: _date.format("hh:mm A")};
           return format.time;
         }
-        var deleteTasks = function(taskID){
+        var deleteTasks = function(taskID,outlookID){
           taskId = taskID
+          outlookId = outlookID;
           var bodyHtml = '<p>Are you sure you want to delete the task?</p>';
           dialogModule.dialogView({showTitle:'Delete Task',childrenView : bodyHtml, additionalClass : 'addToSuppressWrapper',container : '.top_managerLists_wrappers',saveCallBack : taskDeleteOps,buttonText:'Delete' })
+        }
+        var deleteOutlookCalenderTask = function(){
+            if(outlookId){
+                    $.ajax({
+                       type: "DELETE",
+                       url: "https://outlook.office.com/api/v2.0/me/events/"+outlookId,                       
+                       contentType: "application/json; charset=utf-8",
+                       dataType: "json",
+                       headers: { 'Authorization': 'Bearer ' + accessToken },
+                       success: function(data){                           
+                           console.log(data);                           
+                       },
+                       failure: function(errMsg) {                           
+                           console.log(errMsg);
+                       },
+                       error: function(jqXHR, textStatus, errorThrown) {
+                           console.log(jqXHR);        
+                           var result = jqXHR.responseJSON;
+                           if(result && result.error){
+                               commonModule.ErrorAlert({message:"Outlook Calender Error: "+result.error.message});
+                           }
+                       }
+                 });
+            }
         }
         var taskDeleteOps = function(){
           console.log(taskId);
@@ -2093,8 +2334,9 @@
             if(response.success){
               commonModule.hideLoadingMask();
               commonModule.SuccessAlert({message :response.success})
-              dialogModule.hideDialog();
+              dialogModule.hideDialog();              
               getTasks()
+              deleteOutlookCalenderTask();
             }
           });
         }
@@ -4100,7 +4342,7 @@
               var _date = moment(commonModule.decodeHTML(activity.logTime), 'M/D/YYYY h:m a');
               var _emailType = (emailType)?emailType : "Campaign"
               var _formatedDate = {date: _date.format("DD MMM YYYY"), time: _date.format("hh:mm A")};
-              debugger;
+              
               campHTML += '<div class="act_row '+mapping.color+'">';
               campHTML += '<span class="icon '+displayicon+'"></span>';
               campHTML += '<h5>'

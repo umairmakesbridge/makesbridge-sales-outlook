@@ -2716,13 +2716,7 @@ left: 3px;
     display: block;
     width: 215px;
 }
-#notes {
-    font-size: 100%;
-    /* font-family: arial,sans-serif; */
-    /* width:100%; */
-    margin: 1px;
 
-}
 .date_wrapper__mks, .timePicker_wrap{
     display: inline-block;
     width: 122px;
@@ -4615,3 +4609,33 @@ div#Tags,div#tasks,div#notes,div#custom-fields{
       padding: 0;
       margin: 0;
   }
+  .mks-googlesync-text{
+    font-size:12px;
+    font-weight: bold;
+    padding-left:5px;
+  }
+  .mks-duration-text{
+    font-size:12px;
+    font-weight: bold;   
+   }
+   .scfe_field input.task_duration{
+        width:40px;
+        margin-right: 5px;   
+        margin-left:5px;
+        border: 1px solid rgb(221, 221, 221);   
+        color: #474747;
+        background: #fff;
+        padding:4px 4px 4px 4px;
+        font-size: 12px;
+        text-align: center;
+}
+ .scfe_field  input.outlook-checkbox{
+    width:auto;
+    padding:5px;    
+}
+.task-notes-area{
+    width: 235px;
+    height: 30px;
+    font-size: 100%;
+    margin: 10px 1px 1px 1px;
+}
